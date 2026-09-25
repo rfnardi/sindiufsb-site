@@ -1,0 +1,9 @@
+---
+# Índice lido pelo CMS para listar os posts com título e data sem abrir
+# arquivo por arquivo. Público como o resto do site: só dados já publicados.
+permalink: /cms/indice-posts.json
+eleventyExcludeFromCollections: true
+---
+[{% for post in collections.posts %}
+  {"arquivo": {{ post.inputPath | replace("./", "") | dump | safe }}, "titulo": {{ post.data.title | dump | safe }}, "data": {{ post.date | dataIso | dump | safe }}, "url": {{ post.url | dump | safe }}}{% if not loop.last %},{% endif %}{% endfor %}
+]

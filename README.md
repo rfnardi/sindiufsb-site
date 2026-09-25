@@ -27,7 +27,7 @@ HTML pronto.
 - Eleventy 3 (`eleventy.config.js`); layouts em `_includes/`, dados fixos
   (menu, contatos) em `_data/site.js`.
 - Categorias: as etiquetas (`tags`) de cada post, traduzidas em
-  `_data/categorias.js`. Post sem etiqueta conhecida cai em "Geral". Os links
+  `dados/categorias.json` (lido também pelo CMS). Post sem etiqueta conhecida cai em "Geral". Os links
   antigos `/search/label/NOME` redirecionam para `/categoria/slug/`.
 - `paginas/ficha-de-filiacao.njk` + `assets/js/ficha.js`: formulário de
   filiação (centros de formação por campus em `CENTROS_POR_CAMPUS`),

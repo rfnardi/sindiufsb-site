@@ -1,0 +1,52 @@
+[
+  {
+    "etiqueta": "CONVOCAÇÃO DE ASSEMBLEIA",
+    "rotulo": "Convocações",
+    "slug": "convocacoes"
+  },
+  {
+    "etiqueta": "NOTÍCIAS",
+    "rotulo": "Notícias",
+    "slug": "noticias"
+  },
+  {
+    "etiqueta": "BOLETIM SINDIUFSB",
+    "rotulo": "Boletim SindiUFSB",
+    "slug": "boletim"
+  },
+  {
+    "etiqueta": "GREVE 2024",
+    "rotulo": "Greve 2024",
+    "slug": "greve-2024"
+  },
+  {
+    "etiqueta": "BOLETIM DE GREVE",
+    "rotulo": "Boletins de greve",
+    "slug": "boletins-de-greve"
+  },
+  {
+    "etiqueta": "ELEIÇÕES",
+    "rotulo": "Eleições",
+    "slug": "eleicoes"
+  },
+  {
+    "etiqueta": "PAUTAS LOCAIS",
+    "rotulo": "Pautas locais",
+    "slug": "pautas-locais"
+  },
+  {
+    "etiqueta": "Mesa local de negociação permanente",
+    "rotulo": "Mesa de negociação",
+    "slug": "mesa-de-negociacao"
+  },
+  {
+    "etiqueta": "EaD",
+    "rotulo": "EaD",
+    "slug": "ead"
+  },
+  {
+    "etiqueta": "FILIE-SE",
+    "rotulo": "Filiação",
+    "slug": "filiacao"
+  }
+]

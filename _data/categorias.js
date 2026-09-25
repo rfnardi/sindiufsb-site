@@ -1,18 +1,12 @@
-// Etiquetas do Blogger → categorias do site. A ordem aqui é a da lateral.
-// "CAPA" era o marcador do slider antigo e não vira categoria; post sem
-// etiqueta cai em "Geral".
-const MAPA = [
-  { etiqueta: 'CONVOCAÇÃO DE ASSEMBLEIA', rotulo: 'Convocações', slug: 'convocacoes' },
-  { etiqueta: 'NOTÍCIAS', rotulo: 'Notícias', slug: 'noticias' },
-  { etiqueta: 'BOLETIM SINDIUFSB', rotulo: 'Boletim SindiUFSB', slug: 'boletim' },
-  { etiqueta: 'GREVE 2024', rotulo: 'Greve 2024', slug: 'greve-2024' },
-  { etiqueta: 'BOLETIM DE GREVE', rotulo: 'Boletins de greve', slug: 'boletins-de-greve' },
-  { etiqueta: 'ELEIÇÕES', rotulo: 'Eleições', slug: 'eleicoes' },
-  { etiqueta: 'PAUTAS LOCAIS', rotulo: 'Pautas locais', slug: 'pautas-locais' },
-  { etiqueta: 'Mesa local de negociação permanente', rotulo: 'Mesa de negociação', slug: 'mesa-de-negociacao' },
-  { etiqueta: 'EaD', rotulo: 'EaD', slug: 'ead' },
-  { etiqueta: 'FILIE-SE', rotulo: 'Filiação', slug: 'filiacao' },
-];
+// Etiquetas dos posts → categorias do site. A tabela mora em
+// dados/categorias.json porque o CMS (repositório privado sindiufsb-blog) lê
+// o mesmo arquivo pela API do GitHub para montar o seletor; fica fora de
+// _data para não virar um segundo dado global de mesmo nome. A ordem do JSON
+// é a da lateral. "CAPA" era o marcador do slider antigo e não vira
+// categoria; post sem etiqueta conhecida cai em "Geral".
+import fs from 'node:fs';
+
+const MAPA = JSON.parse(fs.readFileSync(new URL('../dados/categorias.json', import.meta.url), 'utf8'));
 const GERAL = { etiqueta: null, rotulo: 'Geral', slug: 'geral' };
 
 function doPost(tags) {
