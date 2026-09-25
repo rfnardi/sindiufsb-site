@@ -1,0 +1,233 @@
+---
+title: "FICHA DE FILIAÇÃO SINDIUFSB"
+date: "2021-05-03T21:44:00Z"
+updated: "2026-09-09T13:09:42.685Z"
+permalink: "/p/ficha-de-filiacao.html"
+blogger_id: "7808985292424502975"
+---
+
+<style>
+  .sindi-container {
+    max-width: 650px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    border-top: 6px solid #002777;
+  }
+  .sindi-img-topo { width: 100%; height: auto; margin-bottom: 25px; border-radius: 6px; display: block; }
+  .sindi-img-rodape { width: 100%; height: auto; margin-top: 35px; border-radius: 6px; display: block; }
+  .sindi-header { text-align: center; margin-bottom: 30px; }
+  .sindi-header h2 { color: #e22535; font-size: 32px; margin: 0 0 5px 0; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+  .sindi-header h3 { color: #002777; font-size: 18px; margin: 0; font-weight: 600; letter-spacing: 2px; }
+  .sindi-form-group { margin-bottom: 20px; }
+  .sindi-form-group label { display: block; margin-bottom: 8px; color: #444; font-weight: 600; font-size: 14px; }
+  .sindi-form-group input,
+  .sindi-form-group select {
+    width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px;
+    box-sizing: border-box; font-size: 15px; background-color: #f9fafb; transition: all 0.3s ease;
+  }
+  .sindi-form-group input:focus,
+  .sindi-form-group select:focus {
+    border-color: #002777; background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 39, 119, 0.1); outline: none;
+  }
+  /* Campo com valor único: continua ativo (para ser enviado), mas sinaliza que não há escolha a fazer */
+  .sindi-form-group select.sindi-unico {
+    background-color: #eef2f7; color: #555; border-style: dashed; cursor: default;
+  }
+  .sindi-hint { display: block; margin-top: 6px; font-size: 12.5px; color: #6b7280; font-weight: 400; }
+  .sindi-checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  /* O tema do Blogger aplica "appearance:none" a todo input, o que apaga o
+     desenho nativo da caixa de marcação: ela fica invisível e sem indicar se
+     está marcada. As linhas abaixo devolvem a aparência padrão. */
+  .sindi-checkbox-group input[type="checkbox"] {
+    -webkit-appearance: checkbox !important;
+    -moz-appearance: checkbox !important;
+    appearance: checkbox !important;
+    width: 18px !important;
+    height: 18px;
+    min-width: 18px;
+    margin: 0;
+    padding: 0;
+    accent-color: #e22535;
+    cursor: pointer;
+    flex: 0 0 auto;
+  }
+  .sindi-checkbox-group label { cursor: pointer; }
+  .sindi-checkbox-group label { margin-bottom: 0; }
+  .sindi-info-box {
+    background-color: #eef2f7;
+    border-left: 4px solid #002777;
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #333;
+  }
+  .sindi-info-box h4 { margin: 0 0 10px 0; color: #002777; font-size: 15px; }
+  .sindi-info-box p { margin: 0 0 8px 0; line-height: 1.5; }
+  .sindi-info-box a { color: #e22535; font-weight: 600; }
+  .sindi-row { display: flex; gap: 20px; }
+  .sindi-col { flex: 1; }
+  .sindi-btn {
+    background-color: #e22535; color: #fff; border: none; padding: 16px; width: 100%;
+    font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 1px; transition: background 0.3s; margin-top: 15px;
+  }
+  .sindi-btn:hover { background-color: #002777; }
+  .sindi-btn:disabled { background-color: #9ca3af; cursor: not-allowed; }
+  .sindi-message {
+    display: none; background-color: #008037; color: white; padding: 15px;
+    border-radius: 6px; text-align: center; margin-top: 20px; font-weight: bold;
+  }
+  @media (max-width: 600px) {
+    .sindi-row { flex-direction: column; gap: 0; }
+    .sindi-container { padding: 20px; }
+  }
+</style>
+
+<div class="sindi-container">
+
+  <img alt="Banner Sindi UFSB" class="sindi-img-topo" src="/imagens/sindi-ufsb-6ce09c2a.png" />
+
+  <div class="sindi-header">
+    <h2>FILIE-SE AGORA</h2>
+    <h3>SindiUFSB</h3>
+  </div>
+
+  <form id="sindiForm">
+    <div class="sindi-form-group">
+      <label for="nome">Nome Completo</label>
+      <input id="nome" name="nome" required type="text" />
+    </div>
+
+    <div class="sindi-row">
+      <div class="sindi-form-group sindi-col">
+        <label for="cpf">CPF</label>
+        <input id="cpf" name="cpf" placeholder="000.000.000-00" required type="text" />
+      </div>
+      <div class="sindi-form-group sindi-col">
+        <label for="siape">Matrícula (SIAPE)</label>
+        <input id="siape" name="siape" placeholder="Número do SIAPE" required type="text" />
+      </div>
+    </div>
+
+    <div class="sindi-row">
+      <div class="sindi-form-group sindi-col">
+        <label for="email">E-mail para contato</label>
+        <input id="email" name="email" placeholder="email@exemplo.com" required type="email" />
+      </div>
+      <div class="sindi-form-group sindi-col">
+        <label for="segundo_email">Segundo e-mail (opcional)</label>
+        <input id="segundo_email" name="segundo_email" placeholder="email@exemplo.com" type="email" />
+      </div>
+    </div>
+
+    <div class="sindi-form-group">
+      <label for="endereco">Endereço completo (cidade, estado e CEP)</label>
+      <input id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade, estado, CEP" required type="text" />
+    </div>
+
+    <div class="sindi-row">
+      <div class="sindi-form-group sindi-col">
+        <label for="celular">Celular (WhatsApp)</label>
+        <input id="celular" name="celular" placeholder="(00) 00000-0000" required type="text" />
+      </div>
+      <div class="sindi-form-group sindi-col">
+        <label for="campus">Campus / Lotação</label>
+        <select id="campus" name="campus" required>
+          <option value="">Selecione seu campus...</option>
+          <option value="Campus Jorge Amado">Campus Jorge Amado</option>
+          <option value="Campus Paulo Freire">Campus Paulo Freire</option>
+          <option value="Campus Sosígenes Costa">Campus Sosígenes Costa</option>
+          <option value="Campus Maria Filipa">Campus Maria Filipa</option>
+        </select>
+      </div>
+    </div>
+
+    <label style="display:block;margin-bottom:8px;color:#444;font-weight:600;font-size:14px;">Categoria Docente</label>
+
+    <div class="sindi-row">
+      <div class="sindi-form-group sindi-col">
+        <label for="classe">Classe</label>
+        <select id="classe" name="classe" required>
+          <option value="">Selecione...</option>
+          <option value="A">Classe A — Professor Assistente</option>
+          <option value="B">Classe B — Professor Adjunto</option>
+          <option value="C">Classe C — Professor Associado</option>
+          <option value="D">Classe D — Professor Titular</option>
+          <option value="E">Professor Titular-Livre (cargo isolado)</option>
+        </select>
+      </div>
+      <div class="sindi-form-group sindi-col" id="nivel_group">
+        <label for="nivel">Nível</label>
+        <select id="nivel" name="nivel" required disabled>
+          <option value="">Selecione a classe primeiro</option>
+        </select>
+        <span class="sindi-hint" id="nivel_hint">O nível aparece assim que você escolher a classe.</span>
+      </div>
+    </div>
+
+    <div class="sindi-row">
+      <div class="sindi-form-group sindi-col">
+        <label for="titulacao">Titulação</label>
+        <select id="titulacao" name="titulacao" required disabled>
+          <option value="">Selecione a classe primeiro</option>
+        </select>
+      </div>
+      <div class="sindi-form-group sindi-col">
+        <label for="regime_trabalho">Regime de trabalho</label>
+        <select id="regime_trabalho" name="regime_trabalho" required>
+          <option value="">Selecione...</option>
+          <option value="20 horas">20 horas</option>
+          <option value="40 horas">40 horas</option>
+          <option value="Dedicação Exclusiva (DE)">Dedicação Exclusiva (DE)</option>
+        </select>
+      </div>
+    </div>
+
+    <input type="hidden" id="categoria_docente" name="categoria_docente" />
+
+    <div class="sindi-row">
+      <div class="sindi-form-group sindi-col">
+        <label for="area_formacao">Área de formação</label>
+        <input id="area_formacao" name="area_formacao" placeholder="Ex: Ciências Sociais" required type="text" />
+      </div>
+      <div class="sindi-form-group sindi-col">
+        <label for="centro_formacao">Centro de Formação/IHAC</label>
+        <input id="centro_formacao" name="centro_formacao" placeholder="Ex: IHAC, CFCH, CFAV..." required type="text" />
+      </div>
+    </div>
+
+    <div class="sindi-info-box">
+      <h4>Contribuição mensal</h4>
+      <p>A segunda parte do processo de filiação ao sindicato é a contribuição mensal (1% sobre VB + RT), feita via transferência/depósito/PIX na conta do sindicato:</p>
+      <p><strong>Sindiufsb - Seção Sindical ANDES-SN</strong><br/>
+      Banco do Brasil<br/>
+      Ag: 2489-9 · CC: 66076-0</p>
+      <p id="valor_contribuicao_display" style="font-weight:600;color:#002777;">Preencha Classe, Nível, Titulação e Regime de trabalho acima para ver o valor da sua contribuição.</p>
+      <p>Só é necessário enviar o comprovante de depósito no primeiro mês de contribuição. Formatos aceitos: PDF ou imagem, até 1MB.</p>
+    </div>
+
+    <input type="hidden" id="valor_contribuicao" name="valor_contribuicao" />
+
+    <div class="sindi-form-group">
+      <label for="comprovante">Comprovante de depósito (PDF ou imagem, até 1MB)</label>
+      <input id="comprovante" name="comprovante" type="file" accept=".pdf,.jpg,.jpeg,.png" />
+    </div>
+
+    <div class="sindi-checkbox-group">
+      <input id="aceita_whatsapp" name="aceita_whatsapp" type="checkbox" />
+      <label for="aceita_whatsapp">Aceito participar de um grupo de WhatsApp de informes da SindiUFSB</label>
+    </div>
+
+    <button class="sindi-btn" id="submitBtn" type="submit">Filiar-se agora</button>
+    <div class="sindi-message" id="successMessage">Formulário enviado com sucesso! O Sindicato entrará em contato.</div>
+  </form>
+
+  <img alt="Rodapé Sindi UFSB" class="sindi-img-rodape" src="/imagens/sindi-ufsb-1-77e86cad.png" />
+
+</div>
