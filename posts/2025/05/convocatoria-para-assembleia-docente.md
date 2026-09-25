@@ -2,6 +2,8 @@
 title: "Convocatória para Assembleia Docente 16/05/25"
 date: "2025-05-14T17:46:00.002Z"
 updated: "2025-05-14T17:48:18.325Z"
+tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
 permalink: "/2025/05/convocatoria-para-assembleia-docente.html"
 blogger_id: "1071991819460851534"
 ---

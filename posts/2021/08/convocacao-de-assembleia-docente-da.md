@@ -3,6 +3,7 @@ title: "Convocação de Assembleia docente da UFSB - 13/08 às 16h"
 date: "2021-08-10T15:40:00.009Z"
 updated: "2021-10-25T12:06:14.225Z"
 tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
   - "NOTÍCIAS"
 permalink: "/2021/08/convocacao-de-assembleia-docente-da.html"
 blogger_id: "6890857203197040396"

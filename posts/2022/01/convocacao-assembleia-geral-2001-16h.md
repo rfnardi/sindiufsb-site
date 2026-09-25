@@ -3,6 +3,7 @@ title: "CONVOCAÇÃO - ASSEMBLEIA GERAL (20/01 - 16h)"
 date: "2022-01-10T15:02:00.009Z"
 updated: "2022-06-03T15:54:40.483Z"
 tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
   - "NOTÍCIAS"
 permalink: "/2022/01/convocacao-assembleia-geral-2001-16h.html"
 blogger_id: "1945487963529787585"

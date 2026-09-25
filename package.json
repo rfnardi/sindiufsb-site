@@ -1,0 +1,15 @@
+{
+  "name": "sindiufsb-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "eleventy && pagefind --site _site",
+    "start": "eleventy --serve",
+    "busca": "pagefind --site _site"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6",
+    "@11ty/eleventy-plugin-rss": "^2.0.4",
+    "pagefind": "^1.5.2"
+  }
+}

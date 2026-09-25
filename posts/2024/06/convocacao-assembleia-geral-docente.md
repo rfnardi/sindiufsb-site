@@ -2,6 +2,8 @@
 title: "[Convocação] Assembleia Geral Docente - 05/06/2024"
 date: "2024-06-03T09:44:00.003Z"
 updated: "2024-06-03T09:44:42.816Z"
+tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
 permalink: "/2024/06/convocacao-assembleia-geral-docente.html"
 blogger_id: "7326073584405559891"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "DOCUMENTOS"
+title: "Documentos"
 date: "2021-05-03T23:11:00Z"
 updated: "2023-04-12T18:59:58.558Z"
 permalink: "/p/documentos.html"

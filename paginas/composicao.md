@@ -1,5 +1,5 @@
 ---
-title: "COMPOSIÇÃO ATUAL"
+title: "Composição atual"
 date: "2020-11-04T17:04:00.002Z"
 updated: "2026-08-06T03:10:15.121Z"
 permalink: "/p/composicao.html"

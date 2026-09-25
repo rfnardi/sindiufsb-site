@@ -1,0 +1,16 @@
+<ul class="menu">
+  <li><a href="/" {% if page.url == "/" %}aria-current="page"{% endif %}>Início</a></li>
+  <li class="com-submenu">
+    <details>
+      <summary>O sindicato</summary>
+      <ul>
+        {% for item in site.menuSindicato %}<li><a href="{{ item.url }}">{{ item.texto }}</a></li>{% endfor %}
+      </ul>
+    </details>
+  </li>
+  <li><a href="/noticias/" {% if "/noticias/" in page.url or "/categoria/" in page.url %}aria-current="page"{% endif %}>Notícias</a></li>
+  <li><a href="/p/documentos.html" {% if page.url == "/p/documentos.html" %}aria-current="page"{% endif %}>Documentos</a></li>
+  <li><a href="/p/contato.html" {% if page.url == "/p/contato.html" %}aria-current="page"{% endif %}>Contato</a></li>
+  <li><a class="menu-busca" href="/busca/" aria-label="Buscar no site"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span class="so-movel">Buscar</span></a></li>
+  <li><a class="botao botao-verde" href="/p/ficha-de-filiacao.html">Filie-se</a></li>
+</ul>

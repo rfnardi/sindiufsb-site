@@ -1,0 +1,15 @@
+---
+layout: base.njk
+---
+{%- set cats = tags | categoriasDoPost -%}
+<article class="artigo" data-pagefind-body>
+  <header class="cabecalho-pagina">
+    <p class="categorias-post">{% for c in cats %}<a href="/categoria/{{ c.slug }}/">{{ c.rotulo }}</a>{% endfor %}</p>
+    <h1>{{ title }}</h1>
+    <p class="meta"><time datetime="{{ page.date | dataIso }}">{{ page.date | dataLonga }}</time></p>
+  </header>
+  <div class="texto">
+    {{ content | safe }}
+  </div>
+</article>
+<nav class="voltar" aria-label="Navegação"><a href="/noticias/">Todas as notícias</a></nav>

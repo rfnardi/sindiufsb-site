@@ -2,6 +2,8 @@
 title: "ADIADA - Convocatória Assembleia Geral Docente 17/11/25"
 date: "2025-11-13T13:38:00.004Z"
 updated: "2025-11-14T21:28:15.368Z"
+tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
 permalink: "/2025/11/convocatoria-assembleia-geral-docente.html"
 blogger_id: "3286504340432854360"
 ---

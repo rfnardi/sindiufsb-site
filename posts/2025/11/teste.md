@@ -2,6 +2,8 @@
 title: "Convocatória Assembleia Geral Docente 01/12/25"
 date: "2025-11-27T17:29:00.004Z"
 updated: "2025-11-27T17:32:06.611Z"
+tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
 permalink: "/2025/11/teste.html"
 blogger_id: "7684520064111182508"
 ---

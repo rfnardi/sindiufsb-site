@@ -2,6 +2,8 @@
 title: "Convocatória Assembleia Geral Docente 31/10/25"
 date: "2025-10-29T10:58:00.003Z"
 updated: "2025-10-29T15:17:43.234Z"
+tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
 permalink: "/2025/10/convocatoria-assembleia-geral-docente.html"
 blogger_id: "1353980755219695584"
 ---

@@ -1,0 +1,50 @@
+---
+layout: base.njk
+title: Início
+---
+{% from "cards.njk" import card %}
+{%- set destaque = collections.posts[0] -%}
+{%- set imgDestaque = destaque.content | primeiraImagem -%}
+{%- set catDestaque = (destaque.data.tags | categoriasDoPost)[0] -%}
+
+<section class="hero">
+  <div class="hero-interno">
+    <h1>Docentes da UFSB organizados por direitos, carreira e universidade pública</h1>
+    <p>A SindiUFSB é a seção sindical do ANDES-SN na UFSB. Nossa força está na participação de cada colega, nas assembleias e nos campi.</p>
+    <p class="hero-acoes">
+      <a class="botao botao-contorno" href="/p/composicao.html">Conheça a diretoria</a>
+      <a class="botao botao-verde" href="/p/ficha-de-filiacao.html">Filie-se</a>
+    </p>
+  </div>
+</section>
+
+<div class="colunas">
+  <div class="principal">
+    <header class="titulo-secao">
+      <h2>Últimas notícias</h2>
+      <a href="/noticias/">Ver todas as notícias</a>
+    </header>
+
+    <article class="destaque">
+      <div class="destaque-texto">
+        <p class="card-categoria"><a href="/categoria/{{ catDestaque.slug }}/">{{ catDestaque.rotulo }}</a></p>
+        <h3><a href="{{ destaque.url }}">{{ destaque.data.title }}</a></h3>
+        <p class="meta"><time datetime="{{ destaque.date | dataIso }}">{{ destaque.date | dataLonga }}</time></p>
+        <p class="card-resumo">{{ destaque.content | resumo(240) }}</p>
+        <a class="botao botao-claro" href="{{ destaque.url }}">Ler notícia completa</a>
+      </div>
+      <div class="destaque-imagem">
+        {% if imgDestaque %}<img src="{{ imgDestaque }}" alt="">{% else %}
+        <svg viewBox="0 0 64 64" width="96" height="96" aria-hidden="true"><rect x="14" y="8" width="36" height="48" rx="2" fill="none" stroke="currentColor" stroke-width="4"/><path d="M22 22h20M22 31h20M22 40h12" stroke="currentColor" stroke-width="4"/></svg>{% endif %}
+      </div>
+    </article>
+
+    <div class="grade-cards">
+      {%- for post in collections.posts.slice(1, 5) -%}
+        {{ card(post, "escuro" if loop.index == 3 else "claro") }}
+      {%- endfor %}
+    </div>
+  </div>
+
+  {% include "lateral.njk" %}
+</div>

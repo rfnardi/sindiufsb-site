@@ -2,6 +2,8 @@
 title: "Convocação de Assembleia Docente - 11/08/26"
 date: "2026-08-07T13:23:31.403Z"
 updated: "2026-08-07T13:24:56.726Z"
+tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
 permalink: "/2026/08/convocacao-de-assembleia-docente-110826.html"
 blogger_id: "1622008028252105983"
 ---

@@ -2,6 +2,8 @@
 title: "Convocatória Assembleia Geral Docente 09/02/2026"
 date: "2026-02-06T19:44:00.002Z"
 updated: "2026-02-06T19:45:43.082Z"
+tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
 permalink: "/2026/02/convocatoria-assembleia-geral-docente.html"
 blogger_id: "5279576730098972887"
 ---

@@ -1,0 +1,20 @@
+---
+layout: base.njk
+title: Notícias
+pagination:
+  data: collections.posts
+  size: 12
+  alias: posts
+permalink: "/noticias/{% if pagination.pageNumber > 0 %}pagina/{{ pagination.pageNumber + 1 }}/{% endif %}"
+---
+{% from "cards.njk" import linhaLista, paginacao %}
+<div class="colunas">
+  <div class="principal">
+    <header class="titulo-secao"><h1>Notícias</h1></header>
+    <ul class="lista-posts">
+      {% for post in posts %}{{ linhaLista(post) }}{% endfor %}
+    </ul>
+    {{ paginacao(pagination) }}
+  </div>
+  {% include "lateral.njk" %}
+</div>

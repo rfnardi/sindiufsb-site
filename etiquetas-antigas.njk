@@ -1,0 +1,17 @@
+---
+# Links antigos do Blogger (/search/label/NOME) redirecionam para a
+# categoria nova. O GitHub Pages não tem redirecionamento no servidor, então
+# é uma página mínima com meta refresh.
+pagination:
+  data: collections.etiquetasBlogger
+  size: 1
+  alias: categoria
+permalink: "/search/label/{{ categoria.etiqueta }}/index.html"
+eleventyExcludeFromCollections: true
+---
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>{{ categoria.rotulo }} · SindiUFSB</title>
+<meta http-equiv="refresh" content="0; url=/categoria/{{ categoria.slug }}/">
+<link rel="canonical" href="/categoria/{{ categoria.slug }}/">
+</head><body><p>Esta página mudou para <a href="/categoria/{{ categoria.slug }}/">{{ categoria.rotulo }}</a>.</p></body></html>

@@ -1,0 +1,15 @@
+---
+layout: base.njk
+title: Buscar
+permalink: /busca/
+---
+<div class="pagina-estreita">
+  <header class="cabecalho-pagina"><h1>Buscar no site</h1></header>
+  <link rel="stylesheet" href="/pagefind/pagefind-ui.css">
+  <div id="busca"></div>
+  <noscript><p>A busca precisa de JavaScript. Você também pode navegar pelas <a href="/noticias/">notícias</a>.</p></noscript>
+  <script src="/pagefind/pagefind-ui.js"></script>
+  <script>
+    new PagefindUI({ element: '#busca', baseUrl: '{{ "/" | url }}', showImages: false, translations: { placeholder: 'Assembleia, greve, carreira…' } });
+  </script>
+</div>

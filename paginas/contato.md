@@ -1,5 +1,5 @@
 ---
-title: "CONTATO"
+title: "Contato"
 date: "2021-05-03T23:34:00Z"
 updated: "2021-07-19T15:33:32.604Z"
 permalink: "/p/contato.html"

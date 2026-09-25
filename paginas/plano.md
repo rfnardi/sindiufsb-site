@@ -1,5 +1,5 @@
 ---
-title: "PLANO DE GESTÃO"
+title: "Plano de gestão"
 date: "2020-11-04T17:04:00.005Z"
 updated: "2022-09-19T16:24:08.585Z"
 permalink: "/p/plano.html"

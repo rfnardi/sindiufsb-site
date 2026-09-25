@@ -1,0 +1,139 @@
+---
+title: "Ficha de filiação"
+date: "2021-05-03T21:44:00Z"
+permalink: "/p/ficha-de-filiacao.html"
+blogger_id: "7808985292424502975"
+layout: base.njk
+---
+{#- Os name= são o contrato com o doPost do back-end (legado/boas-vindas no
+    repositório do CMS) e os id= são usados por assets/js/ficha.js. -#}
+<div class="pagina-estreita">
+  <header class="cabecalho-pagina">
+    <h1>Filie-se à SindiUFSB</h1>
+    <p class="linha-fina">A filiação tem duas partes: esta ficha e a primeira contribuição mensal. Leva uns cinco minutos.</p>
+  </header>
+
+  <form id="sindiForm" class="ficha">
+    <fieldset>
+      <legend>Seus dados</legend>
+      <div class="campo">
+        <label for="nome">Nome completo</label>
+        <input id="nome" name="nome" required type="text" autocomplete="name">
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label for="cpf">CPF</label>
+          <input id="cpf" name="cpf" placeholder="000.000.000-00" required type="text" inputmode="numeric">
+        </div>
+        <div class="campo">
+          <label for="siape">Matrícula SIAPE</label>
+          <input id="siape" name="siape" required type="text" inputmode="numeric">
+        </div>
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label for="email">E-mail para contato</label>
+          <input id="email" name="email" placeholder="email@exemplo.com" required type="email" autocomplete="email">
+        </div>
+        <div class="campo">
+          <label for="segundo_email">Segundo e-mail <span class="opcional">(opcional)</span></label>
+          <input id="segundo_email" name="segundo_email" placeholder="email@exemplo.com" type="email">
+        </div>
+      </div>
+      <div class="campo">
+        <label for="endereco">Endereço completo</label>
+        <input id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade, estado, CEP" required type="text" autocomplete="street-address">
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label for="celular">Celular (WhatsApp)</label>
+          <input id="celular" name="celular" placeholder="(00) 00000-0000" required type="tel" autocomplete="tel">
+        </div>
+        <div class="campo">
+          <label for="campus">Campus / lotação</label>
+          <select id="campus" name="campus" required>
+            <option value="">Selecione seu campus</option>
+            <option value="Campus Jorge Amado">Campus Jorge Amado</option>
+            <option value="Campus Paulo Freire">Campus Paulo Freire</option>
+            <option value="Campus Sosígenes Costa">Campus Sosígenes Costa</option>
+            <option value="Campus Maria Filipa">Campus Maria Filipa</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Carreira docente</legend>
+      <div class="linha">
+        <div class="campo">
+          <label for="classe">Classe</label>
+          <select id="classe" name="classe" required>
+            <option value="">Selecione</option>
+            <option value="A">Classe A — Professor Assistente</option>
+            <option value="B">Classe B — Professor Adjunto</option>
+            <option value="C">Classe C — Professor Associado</option>
+            <option value="D">Classe D — Professor Titular</option>
+            <option value="E">Professor Titular-Livre (cargo isolado)</option>
+          </select>
+        </div>
+        <div class="campo" id="nivel_group">
+          <label for="nivel">Nível</label>
+          <select id="nivel" name="nivel" required disabled>
+            <option value="">Selecione a classe primeiro</option>
+          </select>
+          <span class="dica" id="nivel_hint">O nível aparece assim que você escolher a classe.</span>
+        </div>
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label for="titulacao">Titulação</label>
+          <select id="titulacao" name="titulacao" required disabled>
+            <option value="">Selecione a classe primeiro</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="regime_trabalho">Regime de trabalho</label>
+          <select id="regime_trabalho" name="regime_trabalho" required>
+            <option value="">Selecione</option>
+            <option value="20 horas">20 horas</option>
+            <option value="40 horas">40 horas</option>
+            <option value="Dedicação Exclusiva (DE)">Dedicação Exclusiva (DE)</option>
+          </select>
+        </div>
+      </div>
+      <input type="hidden" id="categoria_docente" name="categoria_docente">
+      <div class="linha">
+        <div class="campo">
+          <label for="area_formacao">Área de formação</label>
+          <input id="area_formacao" name="area_formacao" placeholder="Ex.: Ciências Sociais" required type="text">
+        </div>
+        <div class="campo">
+          <label for="centro_formacao">Centro de Formação / IHAC</label>
+          <input id="centro_formacao" name="centro_formacao" placeholder="Ex.: IHAC, CFCH, CFAV" required type="text">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Contribuição mensal</legend>
+      <p>A contribuição é de 1% sobre VB + RT, por transferência, depósito ou PIX para a conta do sindicato:</p>
+      <p class="conta"><strong>Sindiufsb - Seção Sindical ANDES-SN</strong><br>
+        Banco do Brasil · Agência 2489-9 · Conta corrente 66076-0</p>
+      <p id="valor_contribuicao_display" class="valor">Preencha classe, nível, titulação e regime de trabalho para ver o valor da sua contribuição.</p>
+      <input type="hidden" id="valor_contribuicao" name="valor_contribuicao">
+      <div class="campo">
+        <label for="comprovante">Comprovante do primeiro depósito <span class="opcional">(PDF ou imagem, até 1 MB)</span></label>
+        <input id="comprovante" name="comprovante" type="file" accept=".pdf,.jpg,.jpeg,.png">
+        <span class="dica">Só é preciso enviar o comprovante no primeiro mês.</span>
+      </div>
+      <div class="caixa-marcar">
+        <input id="aceita_whatsapp" name="aceita_whatsapp" type="checkbox">
+        <label for="aceita_whatsapp">Quero entrar no grupo de informes da SindiUFSB no WhatsApp</label>
+      </div>
+    </fieldset>
+
+    <button class="botao botao-verde" id="submitBtn" type="submit">Filiar-se agora</button>
+    <div class="aviso-sucesso" id="successMessage" role="status">Ficha enviada. Você vai receber um e-mail de boas-vindas, e a diretoria entrará em contato.</div>
+  </form>
+</div>
+<script src="/assets/js/ficha.js" defer></script>

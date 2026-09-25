@@ -10,7 +10,7 @@ blogger_id: "6654624534606025770"
 
 ![](/imagens/card-assembleia-17-04-25-a006edbf.jpg)
 
-A Diretoria do Sindicato Docente da Universidade Federal do Sul da Bahia SindiUFSB, com inscrição no CNPJ nº 26.682.334/0001-86, Seção Sindical do ANDES/SN, no uso de suas atribuições legais e estatutárias, convoca todos/as/es docentes da UFSB para a **Assembleia Geral Docente** a ser realizada em **17/04/2025 (quinta-feira)** às **8h30min** em primeira chamada e às **9h00min** em segunda e última chamada com qualquer quórum**,** com a seguinte **pauta**:
+A Diretoria do Sindicato Docente da Universidade Federal do Sul da Bahia SindiUFSB, com inscrição no CNPJ nº 26.682.334/0001-86, Seção Sindical do ANDES/SN, no uso de suas atribuições legais e estatutárias, convoca todos/as/es docentes da UFSB para a **Assembleia Geral Docente** a ser realizada em **17/04/2025 (quinta-feira)** às **8h30min** em primeira chamada e às **9h00min** em segunda e última chamada com qualquer quórum, com a seguinte **pauta**:
 
 **1\. Informes;**
 

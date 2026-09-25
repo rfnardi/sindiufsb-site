@@ -2,6 +2,8 @@
 title: "Convocatória Assembleia Geral Docente 18/07/25"
 date: "2025-07-16T12:09:00Z"
 updated: "2025-07-16T12:09:13.708Z"
+tags:
+  - "CONVOCAÇÃO DE ASSEMBLEIA"
 permalink: "/2025/07/convocatoria-assembleia-geral-docente.html"
 blogger_id: "2593987491636280750"
 ---

@@ -10,7 +10,7 @@ blogger_id: "7046084370476429870"
 
 ![](/imagens/assembleia-14-10-24-71be4ba6.png)
 
-A Diretoria do Sindicato Docente da Universidade Federal do Sul da Bahia SindiUFSB, com inscrição no CNPJ nº 26.682.334/0001-86, Seção Sindical do ANDES/SN, no uso de suas atribuições legais e estatutárias, convoca todos/as/es docentes da UFSB para a **Assembleia Geral** a ser realizada em **14/10/2024 (segunda-feira)** às **08h30** em primeira chamada e às **9h** em segunda e última chamada com qualquer quórum**,** com a seguinte **pauta**:
+A Diretoria do Sindicato Docente da Universidade Federal do Sul da Bahia SindiUFSB, com inscrição no CNPJ nº 26.682.334/0001-86, Seção Sindical do ANDES/SN, no uso de suas atribuições legais e estatutárias, convoca todos/as/es docentes da UFSB para a **Assembleia Geral** a ser realizada em **14/10/2024 (segunda-feira)** às **08h30** em primeira chamada e às **9h** em segunda e última chamada com qualquer quórum, com a seguinte **pauta**:
 
 **1) Informes;**
 

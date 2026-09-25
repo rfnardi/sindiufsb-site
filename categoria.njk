@@ -1,0 +1,23 @@
+---
+layout: base.njk
+pagination:
+  data: collections.categorias
+  size: 1
+  alias: categoria
+permalink: "/categoria/{{ categoria.slug }}/"
+eleventyComputed:
+  title: "{{ categoria.rotulo }}"
+---
+{% from "cards.njk" import linhaLista %}
+<div class="colunas">
+  <div class="principal">
+    <header class="titulo-secao">
+      <h1>{{ categoria.rotulo }}</h1>
+      <span class="contagem-texto">{{ categoria.posts.length }} publicações</span>
+    </header>
+    <ul class="lista-posts">
+      {% for post in categoria.posts %}{{ linhaLista(post) }}{% endfor %}
+    </ul>
+  </div>
+  {% include "lateral.njk" %}
+</div>

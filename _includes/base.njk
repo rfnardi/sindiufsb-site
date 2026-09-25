@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title and page.url != "/" %}{{ title }} · {% endif %}SindiUFSB — Seção Sindical do ANDES-SN</title>
+  <meta name="description" content="{{ descricao or site.descricao }}">
+  <link rel="icon" href="/assets/img/logo.jpg">
+  <link rel="alternate" type="application/atom+xml" href="/feed.xml" title="Notícias da SindiUFSB">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="topo-interno">
+    <a class="marca" href="/">
+      <img src="/assets/img/logo.jpg" alt="" width="52" height="52">
+      <span class="marca-texto">
+        <strong>SindiUFSB</strong>
+        <span>Sindicato Docente da UFSB · Seção Sindical do ANDES-SN</span>
+      </span>
+    </a>
+
+    <details class="menu-movel">
+      <summary aria-label="Abrir menu">Menu</summary>
+      {% include "menu.njk" %}
+    </details>
+    <nav class="menu-largo" aria-label="Principal">
+      {% include "menu.njk" %}
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+{{ content | safe }}
+</main>
+
+<footer class="rodape">
+  <div class="rodape-interno">
+    <div class="rodape-marca">
+      <img src="/assets/img/logo.jpg" alt="Logo da SindiUFSB" width="72" height="72">
+      <p><strong>SindiUFSB</strong><br>Sindicato Docente da Universidade Federal do Sul da Bahia, seção sindical do <a href="{{ site.andes }}">ANDES-SN</a>.</p>
+    </div>
+    <div class="rodape-contato">
+      <h2>Fale com a diretoria</h2>
+      <p><a href="mailto:{{ site.email }}">{{ site.email }}</a><br>
+         <a href="mailto:{{ site.emailInstitucional }}">{{ site.emailInstitucional }}</a></p>
+      <p class="redes">
+        <a href="{{ site.instagram }}">Instagram</a>
+        <a href="{{ site.facebook }}">Facebook</a>
+        <a href="/feed.xml">Feed de notícias</a>
+      </p>
+    </div>
+    <div class="rodape-links">
+      <h2>Filiados</h2>
+      <p><a href="/p/ficha-de-filiacao.html">Ficha de filiação</a><br>
+         <a href="/p/contribuicao-mensal-sindufsb.html">Contribuição mensal</a><br>
+         <a href="{{ site.minhaSindiufsb }}">Minha SindiUFSB</a></p>
+    </div>
+  </div>
+  <p class="lema">Trabalhadores do mundo, uni-vos!</p>
+</footer>
+</body>
+</html>
