@@ -1,5 +1,5 @@
 // Etiquetas dos posts → categorias do site. A tabela mora em
-// dados/categorias.json porque o CMS (repositório privado sindiufsb-blog) lê
+// dados/categorias.json porque o CMS (repositório privado sindiufsb-cms) lê
 // o mesmo arquivo pela API do GitHub para montar o seletor; fica fora de
 // _data para não virar um segundo dado global de mesmo nome. A ordem do JSON
 // é a da lateral. "CAPA" era o marcador do slider antigo e não vira
