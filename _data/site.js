@@ -8,9 +8,10 @@ export default {
   andes: 'https://www.andes.org.br/',
   // Foto do topo da capa (recebe o filtro vinho por cima). Trocar = mudar
   // este caminho; a imagem mora em assets/img/ ou imagens/.
-  fotoCapa: '/assets/img/assembleia.jpg',
-  // Posição vertical do recorte (0% = topo da foto, 100% = base).
-  fotoCapaPosicao: '40%',
+  fotoCapa: '/assets/img/capa-docentes-em-greve.jpg',
+  // Posição vertical do recorte (0% = topo da foto, 100% = base). No
+  // celular o recorte horizontal fica em 75% (site.css), onde está o ato.
+  fotoCapaPosicao: '55%',
   // Web app da tesouraria, de outra conta. Só o link mora aqui.
   minhaSindiufsb: 'https://script.google.com/macros/s/AKfycbxUkNmlAKeRCEaYdUj_Ganmg2-Z8e0P_nhq6RblixxCiz6cOe2lhsCezP16apIEv7L7/exec',
   menuSindicato: [
