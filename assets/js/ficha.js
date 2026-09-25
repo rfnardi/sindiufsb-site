@@ -1,7 +1,8 @@
 // Ficha de filiação: níveis/titulações por classe, cálculo da contribuição e
 // envio para o back-end em Apps Script (legado/boas-vindas no repositório do
-// CMS). Veio do tema do Blogger; a única mudança foi tirar as cores inline do
-// botão, que agora são do CSS (.botao:disabled).
+// CMS). Veio do tema do Blogger; mudanças: as cores inline do botão saíram
+// para o CSS (.botao:disabled) e o centro de formação virou lista por campus
+// (bloco no fim do arquivo).
 //
 // Os name= dos campos em paginas/ficha-de-filiacao.njk são o contrato com o
 // back-end: não renomeie sem mudar o doPost junto.
@@ -332,4 +333,41 @@
       }
     });
 
+})();
+
+// Centro de formação por campus. O valor gravado na planilha (coluna N) é a
+// sigla; o campus já vai em outra coluna, então "IHAC" basta.
+(function () {
+  var form = document.getElementById('sindiForm');
+  if (!form) { return; }
+
+  var CENTROS_POR_CAMPUS = {
+    'Campus Jorge Amado':     ['IHAC', 'CFCAF', 'CFTCI', 'CFPPTS'],
+    'Campus Sosígenes Costa': ['IHAC', 'CFAC', 'CFCAM', 'CFCHS'],
+    'Campus Paulo Freire':    ['IHAC', 'CFDT', 'CFCS'],
+    'Campus Maria Filipa':    ['IHAC']
+  };
+
+  var campus = document.getElementById('campus');
+  var centro = document.getElementById('centro_formacao');
+
+  function popularCentros() {
+    var anterior = centro.value;
+    var centros = CENTROS_POR_CAMPUS[campus.value] || [];
+    centro.innerHTML = '';
+    if (!centros.length) {
+      centro.appendChild(new Option('Selecione o campus primeiro', ''));
+      centro.disabled = true;
+      return;
+    }
+    centro.disabled = false;
+    if (centros.length > 1) centro.appendChild(new Option('Selecione', ''));
+    centros.forEach(function (c) { centro.appendChild(new Option(c, c)); });
+    if (centros.indexOf(anterior) > -1) centro.value = anterior;
+  }
+
+  campus.addEventListener('change', popularCentros);
+  // form.reset() depois do envio volta o campus ao vazio: repopula em seguida.
+  form.addEventListener('reset', function () { setTimeout(popularCentros, 0); });
+  popularCentros();
 })();

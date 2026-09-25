@@ -109,7 +109,10 @@ layout: base.njk
         </div>
         <div class="campo">
           <label for="centro_formacao">Centro de Formação / IHAC</label>
-          <input id="centro_formacao" name="centro_formacao" placeholder="Ex.: IHAC, CFCH, CFAV" required type="text">
+          <select id="centro_formacao" name="centro_formacao" required disabled>
+            <option value="">Selecione o campus primeiro</option>
+          </select>
+          <span class="dica" id="centro_hint">Os centros aparecem conforme o campus escolhido.</span>
         </div>
       </div>
     </fieldset>

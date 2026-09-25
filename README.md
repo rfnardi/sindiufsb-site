@@ -30,7 +30,8 @@ HTML pronto.
   `_data/categorias.js`. Post sem etiqueta conhecida cai em "Geral". Os links
   antigos `/search/label/NOME` redirecionam para `/categoria/slug/`.
 - `paginas/ficha-de-filiacao.njk` + `assets/js/ficha.js`: formulário de
-  filiação. Os `name=` dos campos são o contrato com o back-end em Apps
+  filiação (centros de formação por campus em `CENTROS_POR_CAMPUS`),
+  e os `name=` dos campos são o contrato com o back-end em Apps
   Script; não renomeie.
 - Publicação: `.github/workflows/publicar.yml` a cada push na `main`, e todo
   dia às 06h. Enquanto não houver domínio próprio, o prefixo do repositório
