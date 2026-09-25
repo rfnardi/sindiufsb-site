@@ -67,6 +67,17 @@ h1, h2, h3 { font-family: var(--titulo); line-height: 1.2; letter-spacing: -.01e
 .botao-claro { background: var(--branco); color: var(--vinho); }
 .botao-claro:hover { background: var(--vinho-claro); color: var(--vinho-escuro); }
 
+/* ---------- Faixa de links externos (acima do topo) ---------- */
+
+.faixa { background: var(--vinho-escuro); font-size: .85rem; }
+.faixa-interna {
+  max-width: var(--largura); margin: 0 auto; padding: .3rem 1rem;
+  display: flex; justify-content: flex-end; gap: 1.25rem; flex-wrap: wrap;
+}
+.faixa a { color: rgba(255,255,255,.88); text-decoration: none; }
+.faixa a:hover { color: var(--branco); text-decoration: underline; }
+.faixa-destaque { font-weight: 600; color: var(--branco) !important; }
+
 /* ---------- Topo ---------- */
 
 .topo {
@@ -147,7 +158,7 @@ h1, h2, h3 { font-family: var(--titulo); line-height: 1.2; letter-spacing: -.01e
   color: var(--branco);
   background:
     linear-gradient(90deg, rgba(90,13,29,.96) 0%, rgba(123,19,40,.88) 45%, rgba(123,19,40,.55) 100%),
-    url("../img/assembleia.jpg") center 40% / cover no-repeat,
+    var(--foto-capa) center var(--foto-capa-posicao, 40%) / cover no-repeat,
     var(--vinho);
 }
 .hero-interno { max-width: var(--largura); margin: 0 auto; padding: 3.5rem 1rem 3.75rem; }
@@ -239,6 +250,8 @@ h1, h2, h3 { font-family: var(--titulo); line-height: 1.2; letter-spacing: -.01e
 .bloco-filie h2 { padding: 0; margin: 0 0 .5rem; background: none; }
 .bloco-filie p { margin: 0 0 1rem; }
 .bloco-andes { padding: 1rem 1.1rem; font-size: .95rem; }
+.logo-andes { display: block; margin-bottom: .75rem; }
+.logo-andes img { display: block; width: 100%; max-width: 12rem; height: auto; border-radius: var(--raio); }
 .bloco-andes p { margin: 0; }
 
 /* ---------- Listas de posts ---------- */

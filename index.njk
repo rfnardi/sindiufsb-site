@@ -7,7 +7,7 @@ title: Início
 {%- set imgDestaque = destaque.content | primeiraImagem -%}
 {%- set catDestaque = (destaque.data.tags | categoriasDoPost)[0] -%}
 
-<section class="hero">
+<section class="hero" style="--foto-capa: url('{{ site.fotoCapa | url }}'); --foto-capa-posicao: {{ site.fotoCapaPosicao }};">
   <div class="hero-interno">
     <h1>Docentes da UFSB organizados por direitos, carreira e universidade pública</h1>
     <p>A SindiUFSB é a seção sindical do ANDES-SN na UFSB. Nossa força está na participação de cada colega, nas assembleias e nos campi.</p>
