@@ -10,9 +10,9 @@
 
 {% macro linhaLista(post) %}
 {%- set cat = (post.data.tags | categoriasDoPost)[0] -%}
-<li class="item-lista">
-  {%- set img = post.content | primeiraImagem -%}
-  {% if img %}<img src="{{ img }}" alt="" loading="lazy" width="160" height="160">{% else %}<span class="sem-imagem" aria-hidden="true"></span>{% endif %}
+{%- set img = post.content | primeiraImagem -%}
+<li class="item-lista{% if img %} com-imagem{% endif %}">
+  {% if img %}<img src="{{ img }}" alt="" loading="lazy" width="160" height="160">{% endif %}
   <div>
     <p class="card-categoria"><a href="/categoria/{{ cat.slug }}/">{{ cat.rotulo }}</a></p>
     <h2><a href="{{ post.url }}">{{ post.data.title }}</a></h2>

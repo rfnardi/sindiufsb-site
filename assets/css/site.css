@@ -287,17 +287,18 @@ h1, h2, h3 { font-family: var(--titulo); line-height: 1.2; letter-spacing: -.01e
 
 .lista-posts { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
 .item-lista {
-  display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 1.1rem;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.1rem;
   background: var(--branco); border: 1px solid var(--linha); border-radius: var(--raio); padding: 1rem;
 }
-.item-lista img, .sem-imagem { width: 8.5rem; height: 8.5rem; object-fit: cover; border-radius: var(--raio); background: var(--vinho-claro); display: block; }
+/* Só post com imagem reserva a coluna da miniatura; sem imagem, o texto ocupa tudo. */
+.item-lista.com-imagem { grid-template-columns: 8.5rem minmax(0, 1fr); }
+.item-lista img { width: 8.5rem; height: 8.5rem; object-fit: cover; border-radius: var(--raio); background: var(--vinho-claro); display: block; }
 .item-lista h2 { font-size: 1.15rem; margin: 0 0 .4rem; }
 .item-lista h2 a { color: var(--tinta); text-decoration: none; }
 .item-lista h2 a:hover { color: var(--vinho); text-decoration: underline; }
 @media (max-width: 560px) {
-  .item-lista { grid-template-columns: 1fr; }
+  .item-lista.com-imagem { grid-template-columns: 1fr; }
   .item-lista img { width: 100%; height: 11rem; }
-  .sem-imagem { display: none; }
 }
 
 .paginacao { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1.5rem; }
