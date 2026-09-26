@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { limparImagens, imagemQuebrada } from './_config/imagens.js';
 import { HtmlBasePlugin } from '@11ty/eleventy';
 import { feedPlugin } from '@11ty/eleventy-plugin-rss';
 import categorias from './_data/categorias.js';
@@ -62,9 +65,13 @@ export default function (config) {
     return texto.slice(0, texto.lastIndexOf(' ', max)).replace(/[,;:.\s]+$/, '') + '…';
   });
 
+  // Miniatura dos cards: a primeira imagem do post que não esteja quebrada.
+  const existeNoSite = (src) => fs.existsSync(path.join('.', decodeURIComponent(src)));
   config.addFilter('primeiraImagem', (html) => {
-    const m = String(html || '').match(/<img[^>]+src="([^"]+)"/i);
-    return m ? m[1] : null;
+    for (const m of String(html || '').matchAll(/<img[^>]+src="([^"]+)"/gi)) {
+      if (!imagemQuebrada(m[1], existeNoSite)) return m[1];
+    }
+    return null;
   });
 
   config.addFilter('encodeUrl', (s) => encodeURIComponent(s));
@@ -80,6 +87,19 @@ export default function (config) {
       base: 'https://www.sindiufsb.org.br/',
       author: { name: 'SindiUFSB' },
     },
+  });
+
+  // O site nunca mostra imagem quebrada conhecida (ver _config/imagens.js).
+  config.addTransform('imagens-quebradas', function (conteudo) {
+    if (!(this.page.outputPath || '').endsWith('.html')) return conteudo;
+    const prefixo = (config.pathPrefix || '/').replace(/\/$/, '');
+    const existe = (src) => {
+      const local = prefixo && src.startsWith(prefixo + '/') ? src.slice(prefixo.length) : src;
+      return fs.existsSync(path.join('.', decodeURIComponent(local)));
+    };
+    const { html, removidas } = limparImagens(conteudo, existe);
+    removidas.forEach((src) => console.warn(`[imagens] removida de ${this.page.inputPath}: ${src.slice(0, 80)}`));
+    return html;
   });
 
   return {

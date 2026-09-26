@@ -7,7 +7,14 @@ title: Início
 {%- set imgDestaque = destaque.content | primeiraImagem -%}
 {%- set catDestaque = (destaque.data.tags | categoriasDoPost)[0] -%}
 
-<section class="hero" style="--foto-capa: url('{{ site.fotoCapa | url }}'); --foto-capa-posicao: {{ site.fotoCapaPosicao }};">
+<section class="hero" aria-roledescription="carrossel" aria-label="Fotos da SindiUFSB">
+  <div class="hero-fotos">
+    {%- for f in capa %}
+    <figure class="hero-foto{% if loop.first %} ativa{% endif %}" style="--foto: url('{{ f.imagem | url }}'); --posicao: {{ f.posicao }};"{% if not loop.first %} aria-hidden="true"{% endif %}>
+      {%- if f.legenda %}<figcaption>{{ f.legenda }}</figcaption>{% endif -%}
+    </figure>
+    {%- endfor %}
+  </div>
   <div class="hero-interno">
     <h1>Docentes da UFSB organizados por direitos, carreira e universidade pública</h1>
     <p>A SindiUFSB é a seção sindical do ANDES-SN na UFSB. Nossa força está na participação de cada colega, nas assembleias e nos campi.</p>
@@ -15,6 +22,15 @@ title: Início
       <a class="botao botao-contorno" href="/p/composicao.html">Conheça a diretoria</a>
     </p>
   </div>
+  {%- if capa.length > 1 %}
+  <div class="hero-controles" hidden>
+    <button type="button" class="hero-pausa" aria-label="Pausar fotos"></button>
+    {%- for f in capa %}
+    <button type="button" class="hero-ponto" aria-label="Foto {{ loop.index }} de {{ capa.length }}{% if f.legenda %}: {{ f.legenda }}{% endif %}"{% if loop.first %} aria-current="true"{% endif %}></button>
+    {%- endfor %}
+  </div>
+  <script src="/assets/js/capa.js" defer></script>
+  {%- endif %}
 </section>
 
 <div class="colunas">

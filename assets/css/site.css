@@ -23,6 +23,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 html { -webkit-text-size-adjust: 100%; }
 
@@ -165,13 +166,30 @@ h1, h2, h3 { font-family: var(--titulo); line-height: 1.2; letter-spacing: -.01e
 
 /* ---------- Hero ---------- */
 
-.hero {
-  color: var(--branco);
+.hero { position: relative; overflow: hidden; color: var(--branco); background: var(--vinho); }
+.hero-fotos { position: absolute; inset: 0; }
+.hero-foto {
+  position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s ease;
   background:
     linear-gradient(90deg, rgba(90,13,29,.96) 0%, rgba(123,19,40,.88) 45%, rgba(123,19,40,.55) 100%),
-    var(--foto-capa) 75% var(--foto-capa-posicao, 40%) / cover no-repeat,
-    var(--vinho);
+    var(--foto) 75% var(--posicao, 40%) / cover no-repeat;
 }
+.hero-foto.ativa { opacity: 1; }
+.hero-foto figcaption {
+  position: absolute; right: 1rem; bottom: .75rem; max-width: 60%;
+  font-size: .8rem; color: rgba(255,255,255,.85); text-align: right;
+}
+.hero-interno { position: relative; z-index: 1; }
+.hero-controles { position: absolute; z-index: 2; left: 50%; bottom: .9rem; transform: translateX(-50%); display: flex; gap: .5rem; align-items: center; }
+.hero-ponto { width: .7rem; height: .7rem; border-radius: 50%; border: 2px solid var(--branco); background: transparent; padding: 0; cursor: pointer; }
+.hero-ponto[aria-current="true"] { background: var(--branco); }
+.hero-pausa { width: 1.9rem; height: 1.9rem; border-radius: 50%; border: 2px solid var(--branco); background: rgba(0,0,0,.2); cursor: pointer; position: relative; }
+.hero-pausa::before, .hero-pausa::after { content: ""; position: absolute; top: .45rem; width: .22rem; height: .75rem; background: var(--branco); }
+.hero-pausa::before { left: .55rem; } .hero-pausa::after { right: .55rem; }
+.hero-pausa.pausado::after { display: none; }
+.hero-pausa.pausado::before { left: .62rem; width: 0; height: 0; background: none; border-style: solid; border-width: .38rem 0 .38rem .6rem; border-color: transparent transparent transparent var(--branco); }
+@media (max-width: 640px) { .hero-foto figcaption { display: none; } }
+@media (prefers-reduced-motion: reduce) { .hero-foto { transition: none; } }
 .hero-interno { max-width: var(--largura); margin: 0 auto; padding: 3.5rem 1rem 3.75rem; }
 .hero h1 { font-size: clamp(1.8rem, 1.2rem + 2vw, 2.5rem); font-weight: 700; max-width: 26ch; margin: 0 0 1rem; }
 .hero p { max-width: 52ch; margin: 0 0 1.5rem; font-size: 1.125rem; }

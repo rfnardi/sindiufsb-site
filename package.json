@@ -5,7 +5,8 @@
   "scripts": {
     "build": "eleventy && pagefind --site _site",
     "start": "eleventy --serve",
-    "busca": "pagefind --site _site"
+    "busca": "pagefind --site _site",
+    "test": "node --test \"testes/**/*.test.mjs\""
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
