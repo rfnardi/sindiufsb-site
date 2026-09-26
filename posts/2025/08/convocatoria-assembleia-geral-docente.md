@@ -40,4 +40,3 @@ Atenciosamente,
 
 Diretoria da Sindiufsb
 
-![](blob:https://www.blogger.com/1c5213dc-0e45-443f-9ab7-528f812f1dda)

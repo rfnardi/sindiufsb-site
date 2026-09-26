@@ -9,7 +9,7 @@ permalink: "/2024/05/convocacao-assembleia-geral-docente-0905.html"
 blogger_id: "8108527093668980901"
 ---
 
-![](https://ci3.googleusercontent.com/mail-sig/AIorK4wwohuGokAmmmVlCW2GNI7KAWDL0w_yxnDpMd67qWQGlHo5p3eHWiq1NHjqMibGtDXxpwjPPHc=w400-h400)
+![](/imagens/logo-fundo-branco-26bd09fe.jpg)
 
 A Diretoria do Sindicato Docente da Universidade Federal do Sul da Bahia SindiUFSB, com inscrição no CNPJ nº 26.682.334/0001-86, Seção Sindical do ANDES/SN, no uso de suas atribuições legais e estatutárias, convoca todos/as/es docentes da UFSB para a **Assembleia Geral** a ser realizada em **09/05/2024** (quinta-feira) às **8h30min** em primeira chamada, havendo quórum, e às **9h** com qualquer quórum, conforme regra estatutária, com a seguinte **pauta**:
 

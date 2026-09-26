@@ -38,7 +38,7 @@ SindiUFSB
 
 \--
 
-![](https://ci3.googleusercontent.com/mail-sig/AIorK4wwohuGokAmmmVlCW2GNI7KAWDL0w_yxnDpMd67qWQGlHo5p3eHWiq1NHjqMibGtDXxpwjPPHc)
+![](/imagens/logo-fundo-branco-26bd09fe.jpg)
 
 "***Trabalhadores do mundo, uni-vos,***
 
