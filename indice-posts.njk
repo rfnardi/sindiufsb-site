@@ -5,5 +5,5 @@ permalink: /cms/indice-posts.json
 eleventyExcludeFromCollections: true
 ---
 [{% for post in collections.posts %}
-  {"arquivo": {{ post.inputPath | replace("./", "") | dump | safe }}, "titulo": {{ post.data.title | dump | safe }}, "data": {{ post.date | dataIso | dump | safe }}, "url": {{ post.url | dump | safe }}}{% if not loop.last %},{% endif %}{% endfor %}
+  {"arquivo": {{ post.inputPath | replace("./", "") | dump | safe }}, "titulo": {{ post.data.title | dump | safe }}, "data": {{ post.date | dataIso | dump | safe }}, "url": {{ post.url | dump | safe }}, "tags": {{ (post.data.tags or []) | dump | safe }}}{% if not loop.last %},{% endif %}{% endfor %}
 ]
