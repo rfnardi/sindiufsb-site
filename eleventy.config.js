@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import path from 'node:path';
 import { limparImagens, imagemQuebrada } from './_config/imagens.js';
 import { HtmlBasePlugin } from '@11ty/eleventy';
@@ -82,6 +83,14 @@ export default function (config) {
       if (!imagemQuebrada(m[1], existeNoSite)) return m[1];
     }
     return null;
+  });
+
+  // "/assets/css/site.css" → "/assets/css/site.css?v=<hash do conteúdo>": o
+  // GitHub Pages manda o navegador guardar o arquivo por 10 min; com o hash no
+  // endereço, estilo ou script alterado chega na hora.
+  config.addFilter('versao', (caminho) => {
+    const hash = crypto.createHash('sha1').update(fs.readFileSync(path.join('.', caminho))).digest('hex').slice(0, 8);
+    return `${caminho}?v=${hash}`;
   });
 
   config.addFilter('encodeUrl', (s) => encodeURIComponent(s));

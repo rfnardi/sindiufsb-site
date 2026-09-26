@@ -29,7 +29,7 @@ title: Início
     <button type="button" class="hero-ponto" aria-label="Foto {{ loop.index }} de {{ capa.length }}{% if f.legenda %}: {{ f.legenda }}{% endif %}"{% if loop.first %} aria-current="true"{% endif %}></button>
     {%- endfor %}
   </div>
-  <script src="/assets/js/capa.js" defer></script>
+  <script src="{{ '/assets/js/capa.js' | versao }}" defer></script>
   {%- endif %}
 </section>
 
@@ -55,7 +55,7 @@ title: Início
   </article>
   {%- endfor %}
 </section>
-<script src="/assets/js/eventos.js" defer></script>
+<script src="{{ '/assets/js/eventos.js' | versao }}" defer></script>
 {%- endif %}
 
 <div class="colunas">
