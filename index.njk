@@ -33,6 +33,31 @@ title: Início
   {%- endif %}
 </section>
 
+{%- if collections.proximosEventos.length %}
+<section class="eventos" aria-label="Próximos eventos">
+  {%- for e in collections.proximosEventos %}
+  <article class="evento evento-{{ e.tipo }}" data-fim="{{ e.fim | dataIso }}">
+    <p class="evento-rotulo">{{ e.rotulo }}</p>
+    <h2><a href="{{ e.url }}">{{ e.titulo }}</a></h2>
+    <p class="evento-quando"><time datetime="{{ e.inicio | dataIso }}">{{ e.inicio | diaDaSemana }}, {{ e.inicio | dataLonga }}</time>, {{ e.horaTexto }}</p>
+    {%- if e.locais.length %}
+    <ul class="evento-locais">
+      {%- for l in e.locais %}<li>{{ l }}</li>{% endfor %}
+    </ul>
+    {%- else %}
+    <p class="evento-onde">{{ e.onde }}</p>
+    {%- endif %}
+    <p class="evento-acoes">
+      <a class="botao botao-claro" href="{{ e.url }}">{{ "Ler a convocação" if e.tipo == "assembleia" else "Saiba mais" }}</a>
+      <a href="{{ e | googleAgenda }}" rel="noopener">Adicionar ao Google Agenda</a>
+      <a href="/agenda/{{ e.id }}.ics" download>Outra agenda (.ics)</a>
+    </p>
+  </article>
+  {%- endfor %}
+</section>
+<script src="/assets/js/eventos.js" defer></script>
+{%- endif %}
+
 <div class="colunas">
   <div class="principal">
     <header class="titulo-secao">

@@ -4,6 +4,8 @@ import { limparImagens, imagemQuebrada } from './_config/imagens.js';
 import { HtmlBasePlugin } from '@11ty/eleventy';
 import { feedPlugin } from '@11ty/eleventy-plugin-rss';
 import categorias from './_data/categorias.js';
+import site from './_data/site.js';
+import { proximosEventos, linkGoogleAgenda, ics } from './_config/eventos.js';
 
 const FUSO = 'America/Bahia';
 
@@ -43,6 +45,13 @@ export default function (config) {
   config.addCollection('etiquetasBlogger', (api) =>
     categorias.lista.filter((c) => c.etiqueta));
 
+  // Assembleias e debates que ainda não terminaram (destaque da página inicial).
+  // O build diário do Action tira os que já passaram; o navegador também os esconde.
+  config.addCollection('proximosEventos', (api) =>
+    proximosEventos(api.getFilteredByGlob('posts/**/*.md').filter((p) => !p.data.draft)));
+  config.addFilter('googleAgenda', (e) => linkGoogleAgenda(e, site.url + e.url));
+  config.addFilter('ics', (e) => ics(e, site.url + e.url, e.id));
+
   config.addFilter('categoriasDoPost', (tags) => categorias.doPost(tags));
 
   config.addFilter('dataLonga', (d) =>
@@ -51,6 +60,8 @@ export default function (config) {
   config.addFilter('dataCurta', (d) =>
     new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', timeZone: FUSO })
       .format(new Date(d)).replace(/\./g, '').replace(/ de /g, ' '));
+  config.addFilter('diaDaSemana', (d) =>
+    new Intl.DateTimeFormat('pt-BR', { weekday: 'long', timeZone: FUSO }).format(new Date(d)));
   config.addFilter('dataIso', (d) => new Date(d).toISOString());
 
   // Resumo para os cards: o começo do texto, sem HTML, cortado numa palavra.

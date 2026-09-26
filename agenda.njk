@@ -1,0 +1,9 @@
+---
+pagination:
+  data: collections.proximosEventos
+  size: 1
+  alias: evento
+permalink: "/agenda/{{ evento.id }}.ics"
+eleventyExcludeFromCollections: true
+---
+{{ evento | ics | safe }}

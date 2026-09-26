@@ -377,3 +377,26 @@ select.sindi-unico { background: var(--vinho-claro); }
 .lema { text-align: center; margin: 0; padding: 1rem; border-top: 1px solid rgba(255,255,255,.14); font: italic 400 .95rem var(--corpo); opacity: .85; }
 
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+
+/* ---------- Próximos eventos (página inicial) ---------- */
+
+.eventos {
+  max-width: var(--largura); margin: 1.5rem auto 0; padding: 0 1rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem;
+}
+.evento {
+  background: var(--branco); border: 1px solid var(--linha); border-left: 6px solid var(--vinho);
+  border-radius: var(--raio); padding: 1.1rem 1.25rem;
+}
+.evento-debate { border-left-color: var(--verde); }
+.evento-rotulo { margin: 0 0 .2rem; font: 700 .95rem/1.2 var(--titulo); color: var(--vinho); }
+.evento-debate .evento-rotulo { color: var(--verde-escuro); }
+.evento h2 { margin: 0 0 .4rem; font-size: 1.25rem; }
+.evento h2 a { color: var(--tinta); text-decoration: none; }
+.evento h2 a:hover { color: var(--vinho); text-decoration: underline; }
+.evento-quando { margin: 0 0 .4rem; font-weight: 600; }
+.evento-quando time::first-letter { text-transform: uppercase; }
+.evento-locais { margin: 0 0 .6rem; padding-left: 1.1rem; color: var(--cinza); }
+.evento-onde { margin: 0 0 .6rem; color: var(--cinza); }
+.evento-acoes { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; margin: .75rem 0 0; font-size: .95rem; }
+.evento .botao-claro { border: 1px solid var(--vinho); }
