@@ -16,7 +16,6 @@ export default function (config) {
   config.addPassthroughCopy('assets');
   config.ignores.add('README.md');
   config.ignores.add('MIGRACAO.md');
-  config.ignores.add('rascunhos/**');
 
   // Enquanto o site mora em usuario.github.io/repositorio/, o Action passa o
   // prefixo; com o domínio próprio, fica "/". O plugin reescreve os links
