@@ -5,6 +5,11 @@
     "slug": "convocacoes"
   },
   {
+    "etiqueta": "DEBATE",
+    "rotulo": "Debates",
+    "slug": "debates"
+  },
+  {
     "etiqueta": "NOTÍCIAS",
     "rotulo": "Notícias",
     "slug": "noticias"
