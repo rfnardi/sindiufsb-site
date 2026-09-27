@@ -90,7 +90,7 @@ h1, h2, h3 { font-family: var(--titulo); line-height: 1.2; letter-spacing: -.01e
   display: flex; align-items: center; gap: .6rem; color: var(--branco); text-decoration: none;
   font: 600 1.1rem/1.2 var(--titulo); text-align: right;
 }
-.marca-andes span { max-width: 7.5rem; opacity: .9; }
+.marca-andes span { max-width: 9rem; opacity: .9; }
 .marca-andes img { display: block; height: 110px; width: auto; border-radius: 3px; box-shadow: 0 0 0 2px var(--branco); }  /* o logo é vermelho como o topo */
 .marca-andes:hover span { text-decoration: underline; }
 
