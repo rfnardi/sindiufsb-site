@@ -7,8 +7,11 @@ document.addEventListener('error', function (e) {
   if (!img || img.tagName !== 'IMG') return;
   var card = img.closest('.item-lista');
   if (card) card.classList.remove('com-imagem');
-  if (img.closest('.destaque-imagem')) {
-    img.replaceWith(Object.assign(document.createElement('span'), { className: 'sem-imagem' }));
+  // No destaque, sai o quadro inteiro e fica só o texto, como num post sem imagem.
+  var quadro = img.closest('.destaque-imagem');
+  if (quadro) {
+    quadro.parentNode.classList.add('destaque-so-texto');
+    quadro.remove();
     return;
   }
   var alvo = img.parentNode && img.parentNode.tagName === 'A' && img.parentNode.children.length === 1 ? img.parentNode : img;

@@ -65,7 +65,7 @@ title: Início
       <a href="/noticias/">Ver todas as notícias</a>
     </header>
 
-    <article class="destaque">
+    <article class="destaque{% if not imgDestaque %} destaque-so-texto{% endif %}">
       <div class="destaque-texto">
         <p class="card-categoria"><a href="/categoria/{{ catDestaque.slug }}/">{{ catDestaque.rotulo }}</a></p>
         <h3><a href="{{ destaque.url }}">{{ destaque.data.title }}</a></h3>
@@ -73,10 +73,9 @@ title: Início
         <p class="card-resumo">{{ destaque.content | resumo(240) }}</p>
         <a class="botao botao-claro" href="{{ destaque.url }}">Ler notícia completa</a>
       </div>
-      <div class="destaque-imagem">
-        {% if imgDestaque %}<img src="{{ imgDestaque }}" alt="">{% else %}
-        <svg viewBox="0 0 64 64" width="96" height="96" aria-hidden="true"><rect x="14" y="8" width="36" height="48" rx="2" fill="none" stroke="currentColor" stroke-width="4"/><path d="M22 22h20M22 31h20M22 40h12" stroke="currentColor" stroke-width="4"/></svg>{% endif %}
-      </div>
+      {%- if imgDestaque %}
+      <div class="destaque-imagem"><img src="{{ imgDestaque }}" alt=""></div>
+      {%- endif %}
     </article>
 
     <div class="grade-cards">
