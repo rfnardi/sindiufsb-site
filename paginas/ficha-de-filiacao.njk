@@ -135,6 +135,13 @@ layout: base.njk
       </div>
     </fieldset>
 
+    {#- Armadilha para robôs: gente não vê nem alcança pelo teclado; o back-end
+        descarta a ficha que chega com este campo preenchido. Não remova. -#}
+    <div class="armadilha" aria-hidden="true">
+      <label for="site_contato">Não preencha este campo</label>
+      <input id="site_contato" name="site_contato" type="text" tabindex="-1" autocomplete="off">
+    </div>
+
     <button class="botao botao-verde" id="submitBtn" type="submit">Filiar-se agora</button>
     <div class="aviso-sucesso" id="successMessage" role="status">Ficha enviada. Você vai receber um e-mail de boas-vindas, e a diretoria entrará em contato.</div>
   </form>

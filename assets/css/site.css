@@ -440,3 +440,6 @@ select.sindi-unico { background: var(--vinho-claro); }
 .linha-do-tempo .quando { margin: 0 0 .15rem; font: 700 .9rem/1.3 var(--titulo); color: var(--vinho); }
 .texto .linha-do-tempo h2 { margin: 0 0 .35rem; font-size: 1.2rem; }
 .linha-do-tempo li p:last-child { margin: 0; }
+
+/* Campo-armadilha da ficha: fora da tela, sem sumir para os robôs. */
+.armadilha { position: absolute !important; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
