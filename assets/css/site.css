@@ -91,7 +91,7 @@ h1, h2, h3 { font-family: var(--titulo); line-height: 1.2; letter-spacing: -.01e
   font: 600 .8rem/1.15 var(--titulo); text-align: right;
 }
 .marca-andes span { max-width: 5.5rem; opacity: .9; }
-.marca-andes img { display: block; height: 55px; width: auto; border-radius: 3px; box-shadow: 0 0 0 2px var(--branco); }  /* o logo é vermelho como o topo */
+.marca-andes img { display: block; height: 110px; width: auto; border-radius: 3px; box-shadow: 0 0 0 2px var(--branco); }  /* o logo é vermelho como o topo */
 .marca-andes:hover span { text-decoration: underline; }
 
 /* Segunda linha do topo: o menu, largura inteira. */
@@ -157,11 +157,21 @@ h1, h2, h3 { font-family: var(--titulo); line-height: 1.2; letter-spacing: -.01e
 @media (max-width: 640px) {
   .topo-interno { flex-wrap: nowrap; }
   .marca { gap: .5rem; min-width: 0; }
-  .marca img { width: 44px; height: 44px; }
+  .marca img { width: 60px; height: 60px; }
   .marca-texto strong { font-size: 1.3rem; }
   .marca-andes { margin-left: auto; }
   .marca-andes span { display: none; }
-  .marca-andes img { height: 40px; }
+  .marca-andes img { height: 54px; }
+}
+@media (max-width: 380px) {
+  .marca img { width: 52px; height: 52px; }
+  .marca-texto strong { font-size: 1.1rem; }
+  .marca-andes img { height: 44px; }
+}
+@media (max-width: 340px) {
+  .marca img { width: 44px; height: 44px; }
+  .marca-texto strong { font-size: 1rem; }
+  .marca-andes img { height: 38px; }
 }
 
 /* ---------- Hero ---------- */
