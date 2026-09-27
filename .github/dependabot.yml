@@ -1,0 +1,8 @@
+# Propõe (em pull request) a atualização das ações fixadas por commit em
+# .github/workflows/publicar.yml. Nada é aplicado sem alguém aceitar.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

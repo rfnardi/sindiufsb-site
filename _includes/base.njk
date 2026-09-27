@@ -2,6 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
+  {#- Política mínima: o site é estático e os posts podem ter vídeos e imagens
+      de fora, então não se fecha scripts e quadros; fecha-se o que ninguém usa. -#}
+  <meta http-equiv="Content-Security-Policy" content="object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if title and page.url != "/" %}{{ title }} · {% endif %}SindiUFSB — Seção Sindical do ANDES-SN</title>
   <meta name="description" content="{{ descricao or site.descricao }}">

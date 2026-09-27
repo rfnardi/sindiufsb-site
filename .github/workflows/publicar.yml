@@ -1,5 +1,7 @@
 # Publica o site no GitHub Pages a cada push na main (inclusive os commits
 # que o CMS faz pela API) e uma vez por dia, para posts com data futura.
+# As ações vão fixadas pelo commit (o nome da versão pode ser movido por quem
+# controla o repositório da ação); o Dependabot propõe as atualizações.
 name: Publicar site
 
 on:
@@ -22,21 +24,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - id: pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       # Sem domínio próprio o site mora em /<repositório>/; com domínio,
       # base_path vem vazio e o prefixo vira "/".
       - run: npx eleventy --pathprefix="${{ steps.pages.outputs.base_path }}/"
         env:
           SITE_URL: ${{ steps.pages.outputs.base_url }}
       - run: npx pagefind --site _site
-      - uses: actions/upload-pages-artifact@v5
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: _site
 
@@ -48,4 +50,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
