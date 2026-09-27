@@ -1,5 +1,5 @@
 // Ficha de filiação: níveis/titulações por classe, cálculo da contribuição e
-// envio para o back-end em Apps Script (legado/boas-vindas no repositório do
+// envio para o back-end em Apps Script (ficha/ no repositório do
 // CMS). Veio do tema do Blogger; mudanças: as cores inline do botão saíram
 // para o CSS (.botao:disabled) e o centro de formação virou lista por campus
 // (bloco no fim do arquivo).
