@@ -63,5 +63,5 @@ HTML pronto.
 - `/cms/indice-posts.json` (`indice-posts.njk`): lista de posts com título e
   etiquetas, lida pelo CMS.
 - Publicação: `.github/workflows/publicar.yml` a cada push na `main`, e todo
-  dia às 06h. Enquanto não houver domínio próprio, o prefixo do repositório
-  entra nos links automaticamente.
+  dia às 06h. O domínio (`www.sindiufsb.org.br`) vem das configurações do
+  Pages; sem domínio, o prefixo do repositório entraria nos links sozinho.
