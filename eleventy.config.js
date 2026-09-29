@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import path from 'node:path';
 import { limparImagens, imagemQuebrada } from './_config/imagens.js';
+import { pdfEmNovaAba } from './_config/links.js';
 import { HtmlBasePlugin } from '@11ty/eleventy';
 import { feedPlugin } from '@11ty/eleventy-plugin-rss';
 import categorias from './_data/categorias.js';
@@ -120,6 +121,11 @@ export default function (config) {
     const { html, removidas } = limparImagens(conteudo, existe);
     removidas.forEach((src) => console.warn(`[imagens] removida de ${this.page.inputPath}: ${src.slice(0, 80)}`));
     return html;
+  });
+
+  // Link para PDF abre em nova aba (ver _config/links.js).
+  config.addTransform('pdf-em-nova-aba', function (conteudo) {
+    return (this.page.outputPath || '').endsWith('.html') ? pdfEmNovaAba(conteudo) : conteudo;
   });
 
   return {
