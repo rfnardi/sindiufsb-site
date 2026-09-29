@@ -20,6 +20,7 @@ salas:
   - "Campus Paulo Freire (CPF): Sala C 105 - Complexo II"
   - "Campus Sosígenes Costa (CSC): a confirmar"
   - "Campus Maria Filipa (CMF): a confirmar"
+updated: "2026-09-29T12:46:15.989Z"
 ---
 
 Colegas docentes,
