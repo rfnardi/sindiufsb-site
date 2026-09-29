@@ -8,6 +8,7 @@ Conteúdo do site da SindiUFSB — Seção Sindical do ANDES-SN
 - `paginas/` — páginas fixas (Nossa história, estatuto, contato, diretoria…).
   Não são editadas pelo CMS: mudam por commit aqui.
 - `imagens/` — imagens usadas nos posts.
+- `documentos/` — PDFs enviados pelo CMS, com link nos posts (públicos).
 - `dados/` — o que o CMS edita além dos posts: `categorias.json` e `capa.json`.
 
 Tudo aqui é **público para sempre** (o histórico do git também): nada de CPF,

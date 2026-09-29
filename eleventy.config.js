@@ -16,6 +16,7 @@ export default function (config) {
   config.setTemplateFormats(['md', 'njk', 'html']);
 
   config.addPassthroughCopy('imagens');
+  config.addPassthroughCopy('documentos');   // PDFs enviados pelo CMS (links nos posts)
   config.addPassthroughCopy('assets');
   config.ignores.add('README.md');
   config.ignores.add('MIGRACAO.md');
