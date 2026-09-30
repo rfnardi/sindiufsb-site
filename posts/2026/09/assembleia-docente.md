@@ -16,11 +16,11 @@ pauta:
   - "Ações de enfrentamento à Reitoria e demais gestoras/es diante do não cumprimento dos acordos firmados na reunião do CONSUNI diante do conflito envolvendo Reitoria, pesquisadoras/es da UFSB e comunidade do Quilombo de Volta Miúda."
   - "Ações de enfrentamento ao assedio e às violências na UFSB."
 salas:
-  - "Campus Jorge Amado (CJA): a confirmar"
+  - "Campus Jorge Amado (CJA): Sala de Reunião 01 do NVGA"
   - "Campus Paulo Freire (CPF): Sala C 105 - Complexo II"
   - "Campus Sosígenes Costa (CSC): Trancoso 1, no Pavilhão de Convenções"
   - "Campus Maria Filipa (CMF): a confirmar"
-updated: "2026-09-29T13:34:07.736Z"
+updated: "2026-09-30T19:57:21.119Z"
 ---
 
 Colegas docentes,
@@ -36,13 +36,13 @@ A Diretoria do Sindicato de Docentes da Universidade Federal do Sul da Bahia - S
 
 A Assembleia será realizada presencialmente nos campi da UFSB:
 
-- Campus Jorge Amado (CJA): a confirmar
+- Campus Jorge Amado (CJA): Sala de Reunião 01 do NVGA
 - Campus Paulo Freire (CPF): Sala C 105 - Complexo II
 - Campus Sosígenes Costa (CSC): Trancoso 1, no Pavilhão de Convenções
 - Campus Maria Filipa (CMF): a confirmar
 
 Aproveitamos para lembrar que as Assembleias Gerais Docentes estão abertas a todos os membros docentes da UFSB e não apenas a sindicalizadas/es/os.
 
-Itabuna/Teixeira de Freitas/Porto Seguro/Jequié, 29 de setembro de 2026.
+Itabuna/Teixeira de Freitas/Porto Seguro/Jequié, 30 de setembro de 2026.
 
 Diretoria - SindiUFSB
