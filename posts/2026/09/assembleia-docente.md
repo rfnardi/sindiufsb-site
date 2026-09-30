@@ -19,8 +19,8 @@ salas:
   - "Campus Jorge Amado (CJA): Sala de Reunião 01 do NVGA"
   - "Campus Paulo Freire (CPF): Sala C 105 - Complexo II"
   - "Campus Sosígenes Costa (CSC): Trancoso 1, no Pavilhão de Convenções"
-  - "Campus Maria Filipa (CMF): a confirmar"
-updated: "2026-09-30T19:57:21.119Z"
+  - "Campus Maria Filipa (CMF): Sala 2"
+updated: "2026-09-30T21:57:14.223Z"
 ---
 
 Colegas docentes,
@@ -39,7 +39,7 @@ A Assembleia será realizada presencialmente nos campi da UFSB:
 - Campus Jorge Amado (CJA): Sala de Reunião 01 do NVGA
 - Campus Paulo Freire (CPF): Sala C 105 - Complexo II
 - Campus Sosígenes Costa (CSC): Trancoso 1, no Pavilhão de Convenções
-- Campus Maria Filipa (CMF): a confirmar
+- Campus Maria Filipa (CMF): Sala 2
 
 Aproveitamos para lembrar que as Assembleias Gerais Docentes estão abertas a todos os membros docentes da UFSB e não apenas a sindicalizadas/es/os.
 
