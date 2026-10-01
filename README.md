@@ -36,6 +36,13 @@ HTML pronto.
 - Eleventy 3 (`eleventy.config.js`); layouts em `_includes/`, dados fixos
   (menu, contatos, link da Minha SindiUFSB) em `_data/site.js`. O menu está
   em `_includes/menu.njk`.
+- Minha SindiUFSB (`/minha-sindiufsb/`): `paginas/minha-sindiufsb.njk`,
+  `assets/css/minha.css`, `assets/js/minha.js` e `assets/js/minha-servidor.js`.
+  Página própria, sem o layout do site. Os dados vêm do projeto Apps Script da
+  tesouraria (`Api.gs` no repositório `sindiufsb-tesouraria`), chamado por
+  `fetch` sem cookie para não esbarrar no erro das várias contas Google
+  (`apiMinhaSindiufsb` em `_data/site.js`). Só funções da lista fechada de lá
+  respondem.
 - Visual: cores e medidas no topo de `assets/css/site.css` (vermelho da casa
   `#b5141b`, próximo ao do ANDES-SN; largura máxima 1280 px). CSS e JS são
   chamados com `?v=<hash do conteúdo>` (filtro `versao`), para mudança de
