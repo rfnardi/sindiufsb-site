@@ -8,8 +8,10 @@ export default {
   andes: 'https://www.andes.org.br/',
   // Endereço absoluto (links de agenda). O Action passa o do GitHub Pages.
   url: (process.env.SITE_URL || 'https://www.sindiufsb.org.br').replace(/\/$/, ''),
-  // Web app da tesouraria, de outra conta. Só o link mora aqui.
-  minhaSindiufsb: 'https://script.google.com/macros/s/AKfycbxUkNmlAKeRCEaYdUj_Ganmg2-Z8e0P_nhq6RblixxCiz6cOe2lhsCezP16apIEv7L7/exec',
+  // A área do filiado mora aqui desde 01/10/2026 (paginas/minha-sindiufsb.njk):
+  // o endereço do Apps Script não abre para quem tem mais de uma conta Google
+  // logada. Os dados continuam na tesouraria (apiMinhaSindiufsb, abaixo).
+  minhaSindiufsb: '/minha-sindiufsb/',
   // O doPost da tesouraria (Api.gs), que a /minha-sindiufsb/ chama por fetch.
   // É a mesma implantação pública de sempre.
   apiMinhaSindiufsb: 'https://script.google.com/macros/s/AKfycbxUkNmlAKeRCEaYdUj_Ganmg2-Z8e0P_nhq6RblixxCiz6cOe2lhsCezP16apIEv7L7/exec',
