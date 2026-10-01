@@ -1,0 +1,313 @@
+---
+permalink: /minha-sindiufsb/index.html
+layout: false
+eleventyExcludeFromCollections: true
+---
+{#- A Minha SindiUFSB, área do filiado. Era a PaginaFiliado.html servida
+    pelo Apps Script da tesouraria; veio para o site em 10/2026 porque o
+    script.google.com não abre para quem tem mais de uma conta Google logada.
+    Os dados continuam lá: assets/js/minha-servidor.js chama o doPost
+    (Api.gs no repositório sindiufsb-tesouraria). Documento próprio, sem o
+    layout do site, para manter o cabeçalho de abas que as pessoas conhecem.
+    O HTML segue o da PaginaFiliado: os id= são usados por assets/js/minha.js. -#}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Minha SindiUFSB</title>
+<link rel="icon" href="/assets/img/logo.jpg">
+<link rel="stylesheet" href="{{ '/assets/css/minha.css' | versao }}">
+</head>
+<body>
+<!--
+  O CABEÇALHO (26/09/2026). Faixa de ponta a ponta, grudada no topo, que
+  encolhe ao rolar: as abas e o Sair ficam sempre ao alcance, sem voltar ao
+  topo nas abas longas. No computador as abas são uma linha dentro da faixa;
+  no celular elas viram o menu do ☰. É o MESMO nav nos dois casos — só o CSS
+  muda —, para abrirPorta() e o Sair continuarem valendo sem duplicar botão.
+-->
+<header class="topo" id="topo">
+  <div class="topo-dentro">
+    <a class="marca" href="/" title="Voltar ao site da SindiUFSB">
+      <img src="/assets/img/logo.jpg" alt="SindiUFSB — página inicial">
+      <div class="marca-texto">
+        <h1 id="titulo">Minha SindiUFSB</h1>
+        <div class="aba-atual" id="abaAtual" hidden></div>
+      </div>
+    </a>
+    <div class="topo-acoes" id="topoAcoes" hidden>
+      <button type="button" id="btMenu" class="menu" aria-expanded="false"
+              aria-controls="navPortas" aria-label="Abrir o menu das abas">☰</button>
+    </div>
+  </div>
+
+  <nav class="portas" id="navPortas" hidden>
+    <div class="portas-dentro">
+      <button type="button" data-porta="consulta" aria-current="true">Minha situação</button>
+      <button type="button" data-porta="area">Meus dados</button>
+      <button type="button" data-porta="despesa">Pedir ressarcimento</button>
+      <button type="button" data-porta="pauta">Propor pauta</button>
+      <button type="button" data-porta="site">Texto para o site</button>
+      <button type="button" id="btSair" class="sair">Sair</button>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!--
+    A PORTA. Até 19/09/2026 a consulta e o ressarcimento tinham cada um a sua
+    entrada, e a consulta nem exigia código: ela mandava o PDF para o e-mail do
+    cadastro, sem mostrar nada. Com a área, tudo o que a pessoa faz passa a
+    exigir a mesma prova — o código no e-mail do cadastro —, e a página deixa
+    de ter dois jeitos de entrar.
+  -->
+  <!-- A saída dos lembretes: o link do rodapé do e-mail traz ?sair=TOKEN.
+       Pede um clique, e não sai sozinha, porque servidor de e-mail e
+       antivírus abrem os links para checá-los (ver Lembrete.gs). Responde a
+       mesma frase para token válido e inválido. -->
+  <section id="porta-sair" hidden>
+    <div class="passo">
+      <h2>Lembretes da SindiUFSB</h2>
+      <p>Você pode deixar de receber os lembretes de contribuição.</p>
+      <p class="porque">Isto não afeta a sua filiação nem a sua contribuição.</p>
+      <div class="botoes"><button id="btSairLembrete" type="button">Parar de receber</button></div>
+      <div id="sairAviso" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="porta-entrar">
+    <div class="promessa">
+      Informe o CPF. Um código de seis dígitos vai para o e-mail do seu
+      cadastro, e só para ele.
+    </div>
+
+    <div class="passo" id="areaPasso1">
+      <h2>1 · Receber o código</h2>
+      <p class="porque">O código vale por dez minutos.</p>
+      <div class="dupla">
+        <label>CPF<input type="text" id="arCpf" inputmode="numeric" maxlength="14"
+                         autocomplete="off" placeholder="000.000.000-00"></label>
+        <label style="flex:0 0 auto;align-self:flex-end">
+          <button id="btArCodigo" type="button">Receber o código</button>
+        </label>
+      </div>
+      <div id="arAviso1" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="passo" id="areaPasso2" hidden>
+      <h2>2 · Entrar</h2>
+      <p class="porque">Digite os seis dígitos que chegaram no seu e-mail.
+      Veja também a caixa de spam.</p>
+      <div class="dupla">
+        <label>Código<input type="text" id="arCodigo" inputmode="numeric"
+                            maxlength="6" autocomplete="off"></label>
+        <label style="flex:0 0 auto;align-self:flex-end">
+          <button id="btArEntrar" type="button">Entrar</button>
+        </label>
+      </div>
+      <div id="arAviso2" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="promessa" id="caminhoFicha">
+      <b>Não está no cadastro, ou não recebeu o código?</b><br>
+      A ficha de filiação serve para filiar-se e para corrigir um cadastro que
+      já existe.
+      <br><a href="/p/ficha-de-filiacao.html">Ficha de filiação</a>
+    </div>
+  </section>
+
+  <section id="porta-consulta" hidden>
+    <p class="promessa" id="arOla"></p>
+    <div class="passo">
+      <h2>Minha situação</h2>
+      <div id="arDemonstrativo">Carregando…</div>
+      <div class="dupla" style="margin-top:.9rem">
+        <label style="flex:0 0 auto">
+          <button id="btArPdf" type="button">Baixar o PDF</button>
+        </label>
+        <label style="flex:0 0 auto">
+          <button id="btArEmail" type="button" class="secundario">Receber por e-mail</button>
+        </label>
+      </div>
+      <div id="arAvisoDem" role="status" aria-live="polite"></div>
+      </div>
+
+    <!-- Só aqui: é a única aba que trata de dinheiro (pedido da tesouraria,
+         26/09/2026). -->
+    <footer>
+      Dúvidas ou divergência com seus comprovantes: ufsbsindicato@gmail.com<br>
+      Banco do Brasil · agência 2489-9 · conta corrente 66076-0<br>
+      PIX · chave do tipo e-mail: ufsbsindicato@gmail.com
+    </footer>
+  </section>
+
+  <section id="porta-despesa" hidden>
+    <div class="promessa">
+			Esta página deve ser usada exclusivamente para fazer ressarcimentos de compras para atividades da SindiUFSB e despesas
+			de participação em eventos do ANDES-SN alinhados previamente com a diretoria da SindiUFSB.
+    </div>
+
+    <div class="passo" id="passoTipo">
+      <h2>O que você quer pedir</h2>
+      <div class="dupla">
+        <label style="flex:0 0 auto">
+          <button id="btTipoCompra" type="button">Ressarcimento de compra</button>
+        </label>
+        <label style="flex:0 0 auto">
+          <button id="btTipoViagem" type="button" class="secundario">Diárias e passagens</button>
+        </label>
+      </div>
+    </div>
+
+    <div class="passo" id="passoCompra" hidden>
+      <h2>Ressarcimento de compra</h2>
+      <p class="porque">A nota fiscal precisa estar no CNPJ da SindiUFSB.
+      Descreva o objetivo da compra.</p>
+      <label>O que foi comprado, e para quê
+        <input type="text" id="cpDescricao" placeholder="Café e água para a assembleia de 12/09">
+      </label>
+      <div class="dupla" style="margin-top:.7rem">
+        <label>Data da compra<input type="date" id="cpData"></label>
+        <label>Valor<input type="text" id="cpValor" inputmode="decimal"
+                           placeholder="86,50"></label>
+        <label>Fornecedor<input type="text" id="cpFornecedor"></label>
+      </div>
+      <div id="bancoCompra"></div>
+      <div id="anexoCompra"></div>
+      <div class="dupla" style="margin-top:.9rem">
+        <label style="flex:0 0 auto">
+          <button id="btEnviarCompra" type="button">Enviar o pedido</button>
+        </label>
+      </div>
+      <div id="avisoCompra" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="passo" id="passoViagem" hidden>
+      <h2>Diárias e passagens</h2>
+      <p class="porque">Não informe o valor da diária: vale a tabela da
+      diretoria na data do evento. Os comprovantes precisam estar no CNPJ da
+      SindiUFSB.</p>
+      <label>Evento do ANDES-SN
+        <input type="text" id="vgEvento" placeholder="40º CONAD">
+      </label>
+      <div class="dupla" style="margin-top:.7rem">
+        <label>Cidade<input type="text" id="vgCidade"></label>
+        <label>Saída<input type="date" id="vgSaida"></label>
+        <label>Retorno<input type="date" id="vgRetorno"></label>
+      </div>
+      <div class="dupla" style="margin-top:.7rem">
+        <label>Quantidade de diárias<input type="number" id="vgDiarias" min="0" step="1"></label>
+        <label>Passagens (R$)<input type="text" id="vgPassagens" inputmode="decimal"></label>
+        <label>Hospedagem (R$)<input type="text" id="vgHospedagem" inputmode="decimal"></label>
+      </div>
+      <div class="confere" id="vgTotal" style="margin-top:.7rem"></div>
+      <div id="bancoViagem"></div>
+      <div id="anexoViagem"></div>
+      <div class="dupla" style="margin-top:.9rem">
+        <label style="flex:0 0 auto">
+          <button id="btEnviarViagem" type="button">Enviar o pedido</button>
+        </label>
+      </div>
+      <div id="avisoViagem" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!--
+    MINHA ÁREA — a única tela pública que mostra dado pessoal, e só depois do
+    código de seis dígitos. A porta continua sem dizer quem é filiado: pedir o
+    código responde a mesma frase para todo mundo.
+  -->
+  <section id="porta-area" hidden>
+
+    <div id="areaDentro">
+
+      <div class="passo">
+        <h2>Meus dados</h2>
+        <p class="porque">Atualize a ficha de sindicalização.</p>
+        <div id="arCampos"></div>
+        <div class="dupla" style="margin-top:.9rem">
+          <label style="flex:0 0 auto">
+            <button id="btArDados" type="button">Pedir a correção</button>
+          </label>
+        </div>
+        <div id="arAvisoDados" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="passo">
+        <h2>Minha carreira</h2>
+        <p class="porque">Regime, classe e titulação definem a contribuição
+        devida. A atualização vale a partir do mês seguinte.</p>
+        <div class="dupla">
+          <label>Regime<select id="arRegime"><option value="">Selecione</option></select></label>
+          <label>Classe e nível<select id="arClasse" disabled><option value="">Selecione o regime antes</option></select></label>
+          <label>Titulação<select id="arTitulacao" disabled><option value="">Selecione a classe antes</option></select></label>
+        </div>
+        <div class="dupla" style="margin-top:.9rem">
+          <label style="flex:0 0 auto">
+            <button id="btArCarreira" type="button">Atualizar carreira</button>
+          </label>
+        </div>
+        <div id="arAvisoCarreira" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="passo">
+        <h2>Meus lembretes</h2>
+        <div class="confere">
+          <input type="checkbox" id="arLemEmail">
+          <span>Lembrete mensal da contribuição, por e-mail.</span>
+        </div>
+        <div class="dupla" style="margin-top:.9rem">
+          <label style="flex:0 0 auto">
+            <button id="btArLembretes" type="button">Salvar preferências</button>
+          </label>
+        </div>
+        <div id="arAvisoLem" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pauta e textos para o site (EnviosArea.gs). O data-limite repete os
+       limites do servidor, e um teste compara os dois. NÃO é maxlength de
+       propósito: maxlength corta em silêncio o que é colado acima do limite,
+       e o texto chegaria à diretoria sem o fim. -->
+  <section id="porta-pauta" hidden>
+    <div class="passo">
+      <h2>Propor pauta</h2>
+      <p class="porque">Proponha uma pauta para o nosso sindicato.</p>
+      <label>Título<input type="text" id="pautaTitulo" data-limite="150"></label>
+      <label>Proposta<textarea id="pautaTexto" rows="8" data-limite="3000"></textarea>
+        <span class="ajuda" id="pautaConta"></span></label>
+      <div class="dupla" style="margin-top:.9rem">
+        <label style="flex:0 0 auto">
+          <button id="pautaEnviar" type="button">Enviar</button>
+        </label>
+      </div>
+      <div id="pautaAviso" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="porta-site" hidden>
+    <div class="passo">
+      <h2>Texto para o site</h2>
+      <p class="porque">Os textos passam pela diretoria antes de ir ao site.</p>
+      <label>Título<input type="text" id="siteTitulo" data-limite="150"></label>
+      <label>Texto<textarea id="siteTexto" rows="14" data-limite="30000"></textarea>
+        <span class="ajuda" id="siteConta"></span></label>
+      <div class="dupla" style="margin-top:.9rem">
+        <label style="flex:0 0 auto">
+          <button id="siteEnviar" type="button">Enviar</button>
+        </label>
+      </div>
+      <div id="siteAviso" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<script src="{{ '/assets/js/minha-servidor.js' | versao }}"></script>
+<script src="{{ '/assets/js/minha.js' | versao }}" data-api="{{ site.apiMinhaSindiufsb }}"></script>
+</body>
+</html>

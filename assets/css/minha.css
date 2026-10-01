@@ -1,0 +1,203 @@
+/* Minha SindiUFSB. Copiado da PaginaFiliado.html (repositório
+   sindiufsb-tesouraria) quando a página veio para o site, em 10/2026. */
+/* O atributo hidden é do navegador, mas QUALQUER regra de autor que defina
+   display vence a regra dele — e o elemento reaparece. Foi o que aconteceu
+   em 19/09/2026 com nav.portas (display:flex): a barra de abas ficou à
+   vista antes de a pessoa entrar. Esta linha devolve ao hidden o poder que
+   o nome promete, e vale para toda a página. */
+[hidden] { display: none !important; }
+
+
+:root {
+  --vinho: #B5141B;
+  --rosa:  #F7EDED;
+  --tinta: #211C1C;
+  --nota:  #6B6360;
+  --linha: #E0D8D8;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 0 0 4rem;
+  background: #fff;
+  color: var(--tinta);
+  font: 400 17px/1.55 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+/* 52em cabe as cinco abas numa linha no computador; a faixa do topo usa a
+   mesma largura por dentro, para a logo alinhar com o conteúdo. */
+main { max-width: 52em; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+
+/* --- o cabeçalho --- */
+.topo { position: sticky; top: 0; z-index: 900;
+        background: var(--vinho); color: #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,.14); }
+.topo-dentro { max-width: 52em; margin: 0 auto; padding: 1.1rem 1.25rem;
+               display: flex; align-items: center; gap: 1rem; }
+.marca { display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 0;
+         color: inherit; text-decoration: none; }
+.marca-texto { min-width: 0; }
+/* DISCO BRANCO ATRÁS DA LOGO — ver o comentário igual na PaginaTesouraria. */
+.marca img { height: 106px; width: 106px; flex: none;
+             background: #fff; border-radius: 50%; object-fit: contain; }
+h1 {
+  margin: .15em 0 0;
+  font-size: 2.1rem;
+  line-height: 1.08;
+  letter-spacing: -.02em;
+  color: #fff;
+  font-weight: 700;
+}
+/* O nome da aba aberta só serve no celular, onde as abas ficam no menu. */
+.aba-atual { display: none; color: #F0CDCF; font-size: .875rem; margin-top: .15rem; }
+.topo-acoes { flex: none; }
+/* margin: 0 nos botões da faixa: a regra global de button põe 1.8rem em
+   cima, que é para os botões de formulário, e aqui abriria buracos. */
+button.menu { display: none; background: none; color: #fff; margin: 0;
+              border: 1px solid rgba(255,255,255,.55); border-radius: 2px;
+              font-size: 1.5rem; line-height: 1; padding: .35rem .6rem; }
+button.menu[aria-expanded="true"] { background: rgba(255,255,255,.16); }
+
+/* Encolhido: a faixa fica fina e a logo pequena, mas o ☰ e as abas seguem
+   à mão. */
+.topo.encolhido .topo-dentro { padding-top: .45rem; padding-bottom: .45rem; }
+.topo.encolhido .marca img { height: 40px; width: 40px; }
+.topo.encolhido h1 { font-size: 1.2rem; margin: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .topo-dentro, .marca img, h1 { transition: padding .2s, height .2s, width .2s, font-size .2s; }
+}
+.promessa {
+  margin: 1.5rem 0 0;
+  padding: 1rem 1.15rem;
+  background: var(--rosa);
+  border-left: 4px solid var(--vinho);
+  font-size: 1.0625rem;
+}
+.promessa strong { font-weight: 600; }
+p.intro { margin: 1.5rem 0 0; }
+
+form { margin-top: 2rem; }
+fieldset { border: 0; margin: 0; padding: 0; }
+label { display: block; margin-top: 1.4rem; font-size: 1.0625rem; }
+.ajuda { display: block; color: var(--nota); font-size: .9375rem; margin-top: .15rem; }
+input[type=text], select, textarea {
+  width: 100%;
+  margin-top: .4rem;
+  padding: .6rem .7rem;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid var(--linha);
+  border-radius: 2px;
+}
+textarea { resize: vertical; line-height: 1.5; }
+input[type=text]:focus, select:focus, textarea:focus, button:focus-visible {
+  outline: 3px solid var(--vinho);
+  outline-offset: 1px;
+}
+select:disabled { background: #F6F4F4; color: var(--nota); }
+
+.confere { display: flex; gap: .6rem; margin-top: 1.8rem; align-items: flex-start; }
+.confere input { margin-top: .3rem; }
+.confere span { font-size: .9375rem; }
+
+button {
+  margin-top: 1.8rem;
+  padding: .7rem 1.4rem;
+  font-family: inherit; font-weight: 600; font-size: 1rem; line-height: 1.2;
+  color: #fff;
+  background: var(--vinho);
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+}
+button:disabled { background: var(--nota); cursor: default; }
+
+#aviso { margin-top: 1.6rem; padding: .9rem 1.05rem; font-size: .9375rem; display: none; }
+#aviso.ok  { display: block; background: var(--rosa); border-left: 4px solid var(--vinho); }
+#aviso.erro{ display: block; background: #FFF6E8; border-left: 4px solid #B06A00; }
+
+footer {
+  margin-top: 3rem; padding-top: 1.2rem;
+  border-top: 1px solid var(--linha);
+  color: var(--nota); font-size: .9375rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  button { transition: background .15s; }
+}
+/* --- as abas: uma linha dentro da faixa, no computador --- */
+.portas-dentro { max-width: 52em; margin: 0 auto; padding: 0 1.25rem;
+                 display: flex; gap: .25rem; align-items: flex-end; }
+nav.portas button {
+  background: none; color: #F0CDCF; border: 0; white-space: nowrap;
+  padding: .6rem .9rem; cursor: pointer;
+  font-family: inherit; font-weight: 600; font-size: 1.0625rem; line-height: 1.2;
+  border-radius: 3px 3px 0 0; margin: 0;
+}
+nav.portas button:hover { color: #fff; background: rgba(255,255,255,.1); }
+/* A aba aberta é branca e "encosta" na página, como uma ficha. */
+nav.portas button[aria-current="true"] { color: var(--vinho); background: #fff; }
+nav.portas button.sair { margin-left: auto; align-self: center; margin-bottom: .4rem;
+                         border: 1px solid rgba(255,255,255,.55); border-radius: 2px;
+                         padding: .35rem .8rem; color: #fff; }
+
+/* --- no celular: as abas viram o menu do ☰ --- */
+@media (max-width: 55.99em) {
+  .topo-dentro { padding: .8rem 1rem; gap: .8rem; }
+  .marca { gap: .8rem; }
+  .marca img { height: 64px; width: 64px; }
+  h1 { font-size: 1.45rem; }
+  .aba-atual { display: block; }
+  button.menu { display: inline-block; }
+  main { padding: 1.2rem 1rem 0; }
+
+  nav.portas { display: none; border-top: 1px solid rgba(255,255,255,.25); }
+  .topo.menu-aberto nav.portas { display: block; }
+  .portas-dentro { flex-direction: column; align-items: stretch; gap: 0;
+                   padding: .3rem 0 .6rem; }
+  nav.portas button { text-align: left; border-radius: 0; padding: .85rem 1.25rem;
+                      font-size: 1.125rem; color: #fff; }
+  nav.portas button[aria-current="true"] { color: #fff; background: rgba(255,255,255,.14);
+                                           box-shadow: inset 4px 0 0 #fff; }
+  nav.portas button.sair { margin: .4rem 1.25rem 0; align-self: flex-start; }
+}
+
+.passo { border: 1px solid var(--linha); border-top: 3px solid var(--vinho);
+         padding: 1rem 1.1rem; margin-bottom: 1.1rem; }
+.passo[hidden] { display: none; }
+.passo h2 { margin: 0 0 .5rem; font-size: 1.35rem; color: var(--vinho); }
+.passo p.porque { margin: 0 0 .9rem; font-size: 1.0625rem; color: var(--nota); }
+.dupla { display: flex; gap: .8rem; flex-wrap: wrap; }
+.dupla label { flex: 1 1 12em; }
+#codigo { font-size: 1.4rem; letter-spacing: .35em; text-align: center; }
+
+/* ---- espera pelo servidor ---- */
+/* A barra e o selo só aparecem depois de um quarto de segundo: resposta
+   rápida não pisca a tela. Somem na hora, sem esse atraso. */
+#esperaBarra { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 1000;
+               overflow: hidden; opacity: 0; pointer-events: none; transition: opacity .15s; }
+#esperaBarra::before { content: ""; position: absolute; top: 0; bottom: 0; width: 35%;
+               background: var(--vinho); animation: esperaCorre 1.1s ease-in-out infinite; }
+#esperaSelo { position: fixed; right: 1rem; bottom: 1rem; z-index: 1000;
+              display: flex; align-items: center; gap: .5rem; padding: .45rem .8rem;
+              background: #fff; color: var(--tinta); border: 1px solid var(--linha); border-radius: 2px;
+              box-shadow: 0 2px 8px rgba(0,0,0,.12); font-size: .8125rem;
+              opacity: 0; transform: translateY(.4rem); pointer-events: none;
+              transition: opacity .15s, transform .15s; }
+#esperaSelo .girando { color: var(--vinho); }
+body.esperando #esperaBarra,
+body.esperando #esperaSelo { opacity: 1; transform: none; transition-delay: .25s; }
+.girando, button.ocupado::after {
+  display: inline-block; width: .85em; height: .85em; flex: none; vertical-align: -.12em;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  animation: esperaGira .7s linear infinite; }
+button.ocupado::after { content: ""; margin-left: .5em; }
+.meta .girando, .intro .girando { margin-right: .45em; }
+@keyframes esperaGira { to { transform: rotate(360deg); } }
+@keyframes esperaCorre { from { left: -35%; } to { left: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .girando, button.ocupado::after, #esperaBarra::before { animation-duration: 2.5s; }
+}
+
+/* A saída dos lembretes (?sair= no link do e-mail), que antes era a
+   PaginaSaida.html da tesouraria. */
+#porta-sair .botoes { display: flex; flex-wrap: wrap; gap: .6rem; }
