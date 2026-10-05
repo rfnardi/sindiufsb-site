@@ -187,3 +187,119 @@ test('folhas: comprovantes em ordem de item (2.9 antes de 2.11) e numeração co
   ], 4);
   assert.deepEqual(simples(f).map((x) => x.id + ':' + x.de + '-' + x.ate), ['1.2:4-4', '1.10:5-5', '2.9:6-7', '2.11:8-10']);
 });
+
+// ---------------------------------------------------------------- PDF
+// O PDF é montado no navegador com pdf-lib. Aqui roda a mesma biblioteca,
+// do node_modules, sobre o mesmo arquivo da página.
+import * as PDFLib from 'pdf-lib';
+import zlib from 'node:zlib';
+
+// No mesmo contexto do teste (runInThisContext), e não num vm isolado: a
+// pdf-lib confere os argumentos com instanceof, e objetos de outro contexto
+// não passam. O arquivo só define window.montarPdfDeProgressao.
+function montador() {
+  globalThis.window = globalThis;
+  vm.runInThisContext(fs.readFileSync(new URL('../assets/js/progressao-pdf.js', import.meta.url), 'utf8'));
+  return globalThis.montarPdfDeProgressao;
+}
+
+async function pdfDe(paginas) {
+  const d = await PDFLib.PDFDocument.create();
+  for (let i = 0; i < paginas; i++) d.addPage([400, 600]).drawText('pagina ' + (i + 1), { x: 20, y: 300 });
+  return d.save();
+}
+async function pdfProtegido() {
+  const d = await PDFLib.PDFDocument.create();
+  d.addPage();
+  const s = Buffer.from(await d.save({ useObjectStreams: false })).toString('latin1');
+  return new Uint8Array(Buffer.from(s.replace(/trailer\s*<</, 'trailer\n<<\n/Encrypt 1 0 R'), 'latin1'));
+}
+// PNG 1×1 válido
+const PNG = new Uint8Array(Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFBQIAX8jx0gAAAABJRU5ErkJggg==', 'base64'));
+
+/** Todo o texto desenhado na página (os conteúdos vêm comprimidos e em hex). */
+async function textoDasPaginas(bytes) {
+  const d = await PDFLib.PDFDocument.load(bytes);
+  return d.getPages().map((p) => {
+    const c = p.node.Contents();
+    const streams = c instanceof PDFLib.PDFArray ? c.asArray().map((r) => d.context.lookup(r)) : [c];
+    let t = '';
+    for (const s of streams) {
+      let raw = Buffer.from(s.contents);
+      try { raw = zlib.inflateSync(raw); } catch { /* sem compressão */ }
+      const str = raw.toString('latin1');
+      for (const m of str.matchAll(/<([0-9A-Fa-f]+)>\s*Tj/g)) t += Buffer.from(m[1], 'hex').toString('latin1') + '\n';
+      for (const m of str.matchAll(/\(((?:\\.|[^\\)])*)\)\s*Tj/g)) t += m[1] + '\n';
+    }
+    return t;
+  });
+}
+
+const DADOS = {
+  nome: 'Docente de Teste', siape: '1234567', de: 'B1', para: 'B2', tipo: 'progressao',
+  inicio: '2023-03-01', fim: '2025-03-01', regime: 'DE', mesesDeLicenca: 0,
+  lancamentos: [
+    { chave: 'a', id: '2.11', quantidade: 2, detalhe: 'Artigo na Revista X' },
+    { chave: 'b', id: '1.1', quantidade: 120, detalhe: 'Componentes do quadrimestre' },
+    { chave: 'c', id: '2.9', quantidade: 1, detalhe: '' }
+  ]
+};
+
+test('PDF: capa, tabela, índice e comprovantes, com as folhas numeradas em sequência', async () => {
+  const montar = montador();
+  const anexos = [
+    { lancamento: 'a', nome: 'artigo.pdf', tipo: 'application/pdf', bytes: await pdfDe(3) },
+    { lancamento: 'b', nome: 'aulas.png', tipo: 'image/png', bytes: PNG },
+    { lancamento: 'c', nome: 'curso.pdf', tipo: 'application/pdf', bytes: await pdfDe(2) }
+  ];
+  const r = await montar(PDFLib, R, DADOS, anexos);
+  assert.equal(r.erros.length, 0);
+  const pre = r.paginasIniciais;
+  assert.ok(pre >= 3, 'capa + tabela + índice');
+  const doc = await PDFLib.PDFDocument.load(r.bytes);
+  assert.equal(doc.getPageCount(), pre + 3 + 1 + 2);
+
+  // ordem pelo número do item: 1.1 (png), 2.9 (2 págs), 2.11 (3 págs)
+  assert.deepEqual(simples(r.folhas).map((f) => f.item + ':' + f.de + '-' + f.ate),
+    ['1.1:' + (pre + 1) + '-' + (pre + 1), '2.9:' + (pre + 2) + '-' + (pre + 3), '2.11:' + (pre + 4) + '-' + (pre + 6)]);
+
+  const textos = await textoDasPaginas(r.bytes);
+  textos.forEach((t, i) => assert.match(t, new RegExp('Fl\\. ' + (i + 1) + '\\b'), 'página ' + (i + 1) + ' sem a folha'));
+  assert.match(textos[pre + 1], /Item 2\.9/);
+  assert.match(textos[pre + 3], /Item 2\.11/);
+  assert.match(textos[0], /Docente de Teste/);
+  assert.match(textos.slice(1, pre).join(''), /Fls?\. .*?\b/);
+  // o índice aponta a folha certa do artigo
+  assert.match(textos.slice(1, pre).join('\n'), new RegExp('2\\.11[\\s\\S]*' + (pre + 4) + '\\s*a\\s*' + (pre + 6)));
+});
+
+test('PDF: arquivo protegido ou corrompido vira aviso com o nome, e o resto sai', async () => {
+  const montar = montador();
+  const anexos = [
+    { lancamento: 'a', nome: 'protegido.pdf', tipo: 'application/pdf', bytes: await pdfProtegido() },
+    { lancamento: 'b', nome: 'lixo.pdf', tipo: 'application/pdf', bytes: new Uint8Array([1, 2, 3, 4]) },
+    { lancamento: 'c', nome: 'bom.pdf', tipo: 'application/pdf', bytes: await pdfDe(1) }
+  ];
+  const r = await montar(PDFLib, R, DADOS, anexos);
+  assert.deepEqual(simples(r.erros).map((e) => e.nome).sort(), ['lixo.pdf', 'protegido.pdf']);
+  assert.match(simples(r.erros).find((e) => e.nome === 'protegido.pdf').motivo, /senha|protegido/i);
+  const doc = await PDFLib.PDFDocument.load(r.bytes);
+  assert.equal(doc.getPageCount(), r.paginasIniciais + 1);
+});
+
+test('PDF: texto com caracteres fora da fonte padrão não derruba a montagem', async () => {
+  const montar = montador();
+  const d = { ...DADOS, nome: 'Zoë Ñúñez → Ştefan', lancamentos: [{ chave: 'a', id: '2.11', quantidade: 1, detalhe: 'Título “com” aspas — e ≥ símbolos 🎓' }] };
+  const r = await montar(PDFLib, R, d, [{ lancamento: 'a', nome: 'a.pdf', tipo: 'application/pdf', bytes: await pdfDe(1) }]);
+  assert.equal(r.erros.length, 0);
+  const textos = await textoDasPaginas(r.bytes);
+  assert.match(textos[0], /Zoë Ñúñez/);
+});
+
+test('pdf-lib servida pelo site é a mesma do package.json (sem CDN)', () => {
+  const pkg = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  const versao = pkg.devDependencies['pdf-lib'];
+  const servida = fs.readFileSync(new URL('../assets/js/vendor/pdf-lib-' + versao + '.min.js', import.meta.url));
+  const instalada = fs.readFileSync(new URL('../node_modules/pdf-lib/dist/pdf-lib.min.js', import.meta.url));
+  assert.ok(servida.equals(instalada), 'copie node_modules/pdf-lib/dist/pdf-lib.min.js para assets/js/vendor/');
+});
