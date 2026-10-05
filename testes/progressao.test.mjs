@@ -350,3 +350,59 @@ test('privacidade: nenhuma chamada ao servidor leva comprovante', () => {
   const rascunho = TELA.slice(TELA.indexOf('function guardarRascunho'), TELA.indexOf('function recuperarRascunho'));
   assert.doesNotMatch(rascunho, /arquivos\[|bytes|pgSiape/);
 });
+
+// ------------------------------------------- atividade fora do barema
+// Resolução 17/2022, art. 9º, § 4º: o docente pode sugerir à CPADD, antes da
+// submissão, atividade que não consta do Anexo I, com a pontuação que
+// considere adequada. Quem decide se vale é a CPADD — por isso a pontuação
+// proposta fica À PARTE e não conta para atingir o mínimo.
+
+test('fora do barema: a proposta fica à parte, fora do total e do mínimo', () => {
+  const p = R.placar([
+    { id: '2.11', quantidade: 3 },                                           // 75
+    { id: 'X', descricao: 'Curadoria do acervo indígena', proposta: 40 },
+    { id: 'X', descricao: 'Mutirão de matrícula', proposta: '10,5' }
+  ], { tipo: 'progressao', regime: 'DE' });
+  assert.equal(p.total, 75);
+  assert.equal(p.proposta, 50.5);
+  assert.equal(p.atinge, false, 'com a proposta passaria de 100, mas ela não é do docente decidir');
+  assert.equal(p.falta, 25);
+});
+
+test('fora do barema: vai depois de todos os itens na numeração de folhas', () => {
+  const f = R.folhear([{ id: 'X', paginas: 1 }, { id: '9.1', paginas: 1 }, { id: '1.1', paginas: 1 }], 1);
+  assert.deepEqual(simples(f).map((x) => x.id), ['1.1', '9.1', 'X']);
+});
+
+test('PDF: atividade proposta sai em bloco próprio, com aviso, e entra no índice', async () => {
+  const montar = montador();
+  const d = { ...DADOS, lancamentos: [
+    { chave: 'a', id: '2.11', quantidade: 1, detalhe: '' },
+    { chave: 'p', id: 'X', descricao: 'Curadoria do acervo indígena', proposta: 40, detalhe: '' }
+  ] };
+  const r = await montar(PDFLib, R, d, [
+    { lancamento: 'a', nome: 'a.pdf', tipo: 'application/pdf', bytes: await pdfDe(1) },
+    { lancamento: 'p', nome: 'curadoria.pdf', tipo: 'application/pdf', bytes: await pdfDe(2) }
+  ]);
+  assert.equal(r.erros.length, 0);
+  const textos = await textoDasPaginas(r.bytes);
+  const pre = textos.slice(1, r.paginasIniciais).join('\n');
+  assert.match(pre, /Atividades propostas \(art\. 9/);
+  assert.match(pre, /Curadoria do acervo ind/);
+  assert.match(pre, /depende(m)? da CPADD/);
+  assert.match(pre, /TOTAL\n25\b/, 'a proposta não entra no TOTAL');
+  assert.deepEqual(simples(r.folhas).map((f) => f.item), ['2.11', 'X']);
+  assert.match(textos[r.paginasIniciais + 1], /Atividade proposta/);
+});
+
+test('"o que o Lattes não traz": todo item citado existe no barema, sem repetição', () => {
+  const l = lerJson('lattes-barema.json');
+  const vistos = new Set();
+  for (const g of l.naoTraz) {
+    for (const id of g.itens) {
+      assert.ok(R.item(id), g.grupo + ': item ' + id + ' não existe no barema');
+      assert.ok(!vistos.has(id), 'repetido: ' + id);
+      vistos.add(id);
+    }
+  }
+});

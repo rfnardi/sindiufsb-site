@@ -378,10 +378,21 @@ eleventyExcludeFromCollections: true
       comprovante (PDF, JPG ou PNG). Cada atividade conta uma vez só no mesmo
       interstício (art. 18). Os comprovantes devem ser do período do
       interstício (art. 7º, § 3º).</p>
+      <details class="prog-quadro" id="pgQuadroNaoTraz">
+        <summary>O que o Lattes não traz: lançar com um clique</summary>
+        <p class="ajuda">Atividades que o currículo Lattes quase nunca tem, ou tem sem o
+        dado que pontua. Clique para acrescentar ao relatório e preencha a quantidade.</p>
+        <div id="pgNaoTraz"></div>
+      </details>
       <label>Procurar no barema (Anexo I)
         <input type="text" id="pgBusca" placeholder="artigo, orientação, banca, 2.11…" autocomplete="off"></label>
       <div id="pgAchados" class="prog-achados"></div>
       <div id="pgLancamentos"></div>
+      <div class="dupla">
+        <label style="flex:0 0 auto">
+          <button id="pgProposta" type="button" class="secundario">Outra atividade (fora do barema)</button>
+        </label>
+      </div>
       <div class="dupla">
         <label>Meses de licença no interstício
           <input type="text" id="pgLicenca" inputmode="numeric" value="0">
@@ -462,6 +473,7 @@ eleventyExcludeFromCollections: true
 <script src="{{ '/assets/js/progressao.js' | versao }}"
         data-carreira="{{ '/assets/progressao/carreira-ufsb.json' | versao }}"
         data-barema="{{ '/assets/progressao/barema-ufsb-17-2022.json' | versao }}"
+        data-lattes="{{ '/assets/progressao/lattes-barema.json' | versao }}"
         data-pdflib="{{ '/assets/js/vendor/pdf-lib-1.17.1.min.js' | versao }}"></script>
 </body>
 </html>

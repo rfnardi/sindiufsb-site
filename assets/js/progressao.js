@@ -20,6 +20,7 @@
   var LADO_MAX_IMAGEM = 2000;            // px — foto de celular vira página legível e leve
 
   var R = null;            // regras, depois de carregar os JSON
+  var LATTES = null;       // assets/progressao/lattes-barema.json
   var dadosPessoa = null;  // { nome } vindo de meusDados
   var escolhido = null;    // o interstício do relatório
   var lancamentos = [];    // { chave, id, quantidade, valor, variante, detalhe }
@@ -43,11 +44,14 @@
 
   // ------------------------------------------------------------ carregar
   Promise.all([fetch(script.dataset.carreira).then(function (r) { return r.json(); }),
-               fetch(script.dataset.barema).then(function (r) { return r.json(); })])
+               fetch(script.dataset.barema).then(function (r) { return r.json(); }),
+               fetch(script.dataset.lattes).then(function (r) { return r.json(); })])
     .then(function (j) {
       R = window.criarRegrasDeProgressao(j[0], j[1]);
+      LATTES = j[2];
       montarSelects();
       montarFontes();
+      montarNaoTraz();
       recuperarRascunho();
     }, function () {
       dizer('pgAvisoCarreira', 'erro', 'Não consegui carregar as regras. Recarregue a página.');
@@ -203,14 +207,46 @@
       + '. Refine a busca.</p>' : '') + (!achados.length ? '<p class="ajuda">Nada encontrado.</p>' : '');
     [].slice.call(el('pgAchados').querySelectorAll('button[data-item]')).forEach(function (b) {
       b.onclick = function () {
-        lancamentos.push({ chave: 'l' + (++seq) + '-' + Date.now(), id: b.dataset.item, quantidade: '', valor: '',
-                          variante: 0, detalhe: '' });
         el('pgBusca').value = '';
         el('pgAchados').innerHTML = '';
-        desenharLancamentos();
-        guardarRascunho();
+        novoLancamento(b.dataset.item);
       };
     });
+  };
+
+  /** Toda atividade entra por aqui: da busca, do quadro do Lattes ou fora do barema. */
+  function novoLancamento(id, extra) {
+    var l = { chave: 'l' + (++seq) + '-' + Date.now(), id: id, quantidade: '', valor: '',
+              variante: 0, detalhe: '', descricao: '', proposta: '' };
+    for (var k in (extra || {})) l[k] = extra[k];
+    lancamentos.push(l);
+    desenharLancamentos();
+    guardarRascunho();
+    return l;
+  }
+
+  // "O que o Lattes não traz": os grupos do barema que o currículo quase
+  // nunca tem, com um clique para cada item. O Lattes é coleta PARCIAL.
+  function montarNaoTraz() {
+    el('pgNaoTraz').innerHTML = LATTES.naoTraz.map(function (g) {
+      return '<div class="prog-nao-traz"><strong>' + escapar(g.grupo) + '</strong>'
+        + (g.porque ? ' <span class="ajuda">' + escapar(g.porque) + '</span>' : '') + '<div>'
+        + g.itens.map(function (id) {
+          var it = R.item(id);
+          return '<button type="button" class="secundario prog-mini" data-nao-traz="' + escapar(id) + '" title="'
+            + escapar(it.descricao) + '">' + escapar(id) + ' ' + escapar(curtoTela(it.descricao, 38)) + '</button>';
+        }).join('') + '</div></div>';
+    }).join('');
+    [].slice.call(el('pgNaoTraz').querySelectorAll('button[data-nao-traz]')).forEach(function (b) {
+      b.onclick = function () { if (escolhido) novoLancamento(b.dataset.naoTraz); };
+    });
+  }
+  function curtoTela(t, n) { return t.length <= n ? t : t.slice(0, t.lastIndexOf(' ', n)) + '…'; }
+
+  // Atividade que não consta do Anexo I (Resolução 17/2022, art. 9º, § 4º):
+  // a pontuação é proposta pelo docente e só vale se a CPADD aceitar.
+  el('pgProposta').onclick = function () {
+    if (escolhido) novoLancamento(R.ID_PROPOSTA);
   };
 
   function textoDaRegra(it) {
@@ -229,9 +265,9 @@
   function desenharLancamentos() {
     var min = R.minimo(escolhido.tipo, escolhido.regime);
     el('pgLancamentos').innerHTML = lancamentos.map(function (l, k) {
+      if (l.id === R.ID_PROPOSTA) return desenharProposta(l, k);
       var it = R.item(l.id);
       var campo = R.barema.campos[it.campo - 1];
-      var fs = arquivos[l.chave] || [];
       var h = '<div class="prog-lanc" data-k="' + k + '">'
         + '<div class="prog-lanc-topo"><strong>' + escapar(it.id) + '</strong> ' + escapar(it.descricao)
         + ' <span class="ajuda">' + escapar(it.textoPontos || textoDaRegra(it)) + '</span></div>';
@@ -246,9 +282,7 @@
       }).join('') + '</select></label>';
       h += '<label>Pontos<output>' + num(R.pontosDoItem(it, l, min)) + '</output></label></div>'
         + '<label>Descrição (opcional, sai no índice)<input type="text" data-f="detalhe" value="' + escapar(l.detalhe) + '"></label>'
-        + '<label>Comprovante(s)<input type="file" data-f="arquivos" multiple accept="application/pdf,image/jpeg,image/png">'
-        + '<span class="ajuda">' + (fs.length ? fs.map(function (f) { return escapar(f.name); }).join(', ')
-          : (l.tinhaArquivos ? 'Anexe de novo: os arquivos não ficam guardados.' : 'Nenhum arquivo.')) + '</span></label>'
+        + anexosDe(l)
         + '<button type="button" class="secundario prog-tirar" data-tirar="' + k + '">Tirar esta atividade</button></div>';
       return h;
     }).join('');
@@ -267,9 +301,9 @@
           return;
         }
         c.oninput = c.onchange = function () {
-          l[f] = f === 'quantidade' || f === 'valor' ? c.value.replace(',', '.') : c.value;
+          l[f] = f === 'quantidade' || f === 'valor' || f === 'proposta' ? c.value.replace(',', '.') : c.value;
           var out = bloco.querySelector('output');
-          out.textContent = num(R.pontosDoItem(R.item(l.id), l, R.minimo(escolhido.tipo, escolhido.regime)));
+          if (out) out.textContent = num(R.pontosDoItem(R.item(l.id), l, R.minimo(escolhido.tipo, escolhido.regime)));
           mostrarPlacar();
           guardarRascunho();
         };
@@ -286,6 +320,25 @@
     mostrarPlacar();
   }
 
+  function anexosDe(l) {
+    var fs = arquivos[l.chave] || [];
+    return '<label>Comprovante(s)<input type="file" data-f="arquivos" multiple accept="application/pdf,image/jpeg,image/png">'
+      + '<span class="ajuda">' + (fs.length ? fs.map(function (f) { return escapar(f.name); }).join(', ')
+        : (l.tinhaArquivos ? 'Anexe de novo: os arquivos não ficam guardados.' : 'Nenhum arquivo.')) + '</span></label>';
+  }
+
+  function desenharProposta(l, k) {
+    return '<div class="prog-lanc prog-proposta" data-k="' + k + '">'
+      + '<div class="prog-lanc-topo"><strong>Atividade fora do barema</strong> <span class="ajuda">Resolução 17/2022, '
+      + 'art. 9º, § 4º: proponha à CPADD <em>antes</em> de enviar o relatório. A pontuação proposta aparece à parte '
+      + 'e não conta para o mínimo até a CPADD aceitar.</span></div>'
+      + '<label>O que foi a atividade<input type="text" data-f="descricao" value="' + escapar(l.descricao) + '"></label>'
+      + '<div class="dupla"><label>Pontuação que você propõe<input type="text" inputmode="decimal" data-f="proposta" value="'
+      + escapar(l.proposta) + '"></label></div>'
+      + anexosDe(l)
+      + '<button type="button" class="secundario prog-tirar" data-tirar="' + k + '">Tirar esta atividade</button></div>';
+  }
+
   el('pgLicenca').oninput = function () { mostrarPlacar(); guardarRascunho(); };
   // o SIAPE entra no passo a passo do SIPAC, mas não no rascunho
   el('pgSiape').oninput = function () { if (escolhido) montarSipac(); };
@@ -300,7 +353,9 @@
     el('pgPlacar').className = 'prog-placar ' + (p.atinge ? 'ok' : 'erro');
     el('pgPlacar').innerHTML = '<strong>Total: ' + num(p.total) + ' de ' + num(p.minimo) + ' pontos</strong>'
       + (p.atinge ? ' · atinge o mínimo' : ' · faltam ' + num(p.falta))
-      + (partes.length ? '<br><span class="ajuda">' + escapar(partes.join(' · ')) + '</span>' : '');
+      + (partes.length ? '<br><span class="ajuda">' + escapar(partes.join(' · ')) + '</span>' : '')
+      + (p.proposta ? '<br><span class="ajuda">Fora do barema, proposta à CPADD (não somada): '
+        + num(p.proposta) + ' pontos</span>' : '');
   }
 
   // ---------------------------------------------------------------- PDF
@@ -360,10 +415,15 @@
   el('pgGerar').onclick = function () {
     if (!escolhido) return;
     var semArquivo = lancamentos.filter(function (l) { return !(arquivos[l.chave] || []).length; });
-    var semQtd = lancamentos.filter(function (l) { return !(Number(l.quantidade) > 0); });
+    var semQtd = lancamentos.filter(function (l) {
+      return l.id === R.ID_PROPOSTA ? !(String(l.descricao || '').trim() && Number(l.proposta) > 0)
+                                    : !(Number(l.quantidade) > 0);
+    });
     if (!lancamentos.length) { dizer('pgAvisoPdf', 'erro', 'Lance pelo menos uma atividade.'); return; }
     if (semQtd.length) {
-      dizer('pgAvisoPdf', 'erro', 'Falta a quantidade em: ' + semQtd.map(function (l) { return l.id; }).join(', ') + '.');
+      dizer('pgAvisoPdf', 'erro', 'Falta preencher: ' + semQtd.map(function (l) {
+        return l.id === R.ID_PROPOSTA ? 'atividade fora do barema (descrição e pontuação)' : l.id + ' (quantidade)';
+      }).join(', ') + '.');
       return;
     }
     var bt = el('pgGerar');
@@ -387,6 +447,7 @@
           mesesDeLicenca: el('pgLicenca').value.replace(',', '.'),
           lancamentos: lancamentos.map(function (l) {
             return { chave: l.chave, id: l.id, quantidade: Number(l.quantidade), valor: Number(l.valor) || 0,
+                     descricao: l.descricao || '', proposta: Number(l.proposta) || 0,
                      variante: Number(l.variante) || 0, detalhe: l.detalhe };
           })
         }, anexos);
@@ -488,6 +549,7 @@
         titulacao: el('pgTitulacao').value, licenca: el('pgLicenca').value, escolhido: escolhido,
         lancamentos: lancamentos.map(function (l) {
           return { chave: l.chave, id: l.id, quantidade: l.quantidade, valor: l.valor, variante: l.variante,
+                   descricao: l.descricao || '', proposta: l.proposta || '',
                    detalhe: l.detalhe, tinhaArquivos: !!l.tinhaArquivos };
         })
       }));
@@ -503,7 +565,7 @@
     if (r.regime) el('pgRegime').value = r.regime;
     if (r.titulacao) el('pgTitulacao').value = r.titulacao;
     if (r.licenca) el('pgLicenca').value = r.licenca;
-    lancamentos = (r.lancamentos || []).filter(function (l) { return R.item(l.id); });
+    lancamentos = (r.lancamentos || []).filter(function (l) { return R.item(l.id) || l.id === R.ID_PROPOSTA; });
     escolhido = r.escolhido && R.passo(r.escolhido.de) ? r.escolhido : null;
     mostrarRelatorio();
   }
