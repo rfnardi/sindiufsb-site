@@ -50,6 +50,17 @@ HTML pronto.
 - Categorias: as etiquetas (`tags`) de cada post, traduzidas em
   `dados/categorias.json` (lido também pelo CMS). Post sem etiqueta conhecida cai em "Geral". Os links
   antigos `/search/label/NOME` redirecionam para `/categoria/slug/`.
+- Minha progressão (porta da Minha SindiUFSB, 10/2026): ajuda o docente a
+  pedir progressão e promoção na UFSB. `assets/js/progressao-regras.js`
+  (contas), `assets/js/progressao-pdf.js` (o PDF único, montado no navegador
+  com a pdf-lib de `assets/js/vendor/`) e `assets/js/progressao.js` (tela).
+  As regras moram em `assets/progressao/`: `carreira-ufsb.json` (Lei 12.772
+  na redação da Lei 15.141/2025, Resolução UFSB 17/2022) e
+  `barema-ufsb-17-2022.json`, **gerado** da planilha oficial da PROGEPE por
+  `node _config/barema.js` (o teste refaz a conversão e compara). Os
+  comprovantes não saem do navegador. O aviso por e-mail é do Apps Script da
+  tesouraria (`Progressao.gs`). O botão no menu aparece com `?porta=progressao`
+  até a revisão de conteúdo.
 - `paginas/ficha-de-filiacao.njk` + `assets/js/ficha.js`: formulário de
   filiação (centros de formação por campus em `CENTROS_POR_CAMPUS`),
   e os `name=` dos campos são o contrato com o back-end em Apps
@@ -67,7 +78,7 @@ HTML pronto.
 - Imagens quebradas nunca aparecem: no build, `_config/imagens.js` tira as
   `<img>` com `blob:`/`data:` ou arquivo local inexistente (avisa no log);
   no navegador, `assets/js/imagens.js` esconde as que falharem ao carregar.
-- Testes: `npm test` (imagens e eventos).
+- Testes: `npm test` (imagens, eventos, Minha SindiUFSB e Minha progressão).
 - `/cms/indice-posts.json` (`indice-posts.njk`): lista de posts com título e
   etiquetas, lida pelo CMS.
 - Publicação: `.github/workflows/publicar.yml` a cada push na `main`, e todo

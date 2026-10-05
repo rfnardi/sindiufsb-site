@@ -339,7 +339,8 @@ test('privacidade: nenhuma chamada ao servidor leva comprovante', () => {
   // Toda chamada passa por servidor()…  .nomeDaFuncao({...}). A porta só pode
   // chamar as funções do alerta, e nenhuma delas recebe bytes ou arquivos.
   const chamadas = [...TELA.matchAll(/\}\)\.(\w+)\(\{([^}]*)\}\)/g)];
-  const permitidas = ['minhaProgressao', 'salvarMinhaProgressao'];
+  const permitidas = ['minhaProgressao', 'salvarMinhaProgressao', 'sairDoAlertaDeProgressao'];
+  assert.deepEqual(chamadas.map((c) => c[1]).sort(), [...permitidas].sort(), 'a varredura não achou as chamadas');
   for (const c of chamadas) {
     assert.ok(permitidas.includes(c[1]), 'chamada inesperada ao servidor: ' + c[1]);
     assert.doesNotMatch(c[2], /bytes|arquivo|anexo|File/i);

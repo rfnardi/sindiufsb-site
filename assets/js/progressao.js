@@ -523,6 +523,66 @@
     mostrarRelatorio();
   }
 
+  // --------------------------------------------------------------- aviso
+  // A caixa só aparece se o servidor conhece minhaProgressao (Progressao.gs
+  // da tesouraria): enquanto o Apps Script não estiver publicado com ela, a
+  // porta responde "não disponível" e a caixa fica escondida, sem prometer
+  // um aviso que não sairia.
+  var ultimaCarreira = null;
+  window.progressaoAlertaPronto = function (e) {
+    ultimaCarreira = e;
+    if (!window.tokenArea) return;
+    servidor().withSuccessHandler(function (r) {
+      if (!r || !r.ok) return;
+      el('pgAlerta').hidden = false;
+      el('pgAlertaLigado').checked = !!r.ativo;
+      if (r.ativo && r.nivel && (r.nivel !== e.nivel || r.desde !== e.desde)) {
+        dizer('pgAvisoAlerta', 'erro', 'O aviso guardado é para ' + r.nivel + ' desde ' + br(r.desde)
+          + '. Salve de novo para usar os dados acima.');
+      }
+    }).withFailureHandler(function () {}).minhaProgressao({ token: window.tokenArea });
+  };
+
+  el('pgAlertaSalvar').onclick = function () {
+    if (!ultimaCarreira) return;
+    var bt = el('pgAlertaSalvar');
+    bt.disabled = true;
+    dizer('pgAvisoAlerta', '', 'Salvando…');
+    servidor().withSuccessHandler(function (r) {
+      bt.disabled = false;
+      dizer('pgAvisoAlerta', r.ok ? 'ok' : 'erro', r.msg || r.erro);
+    }).withFailureHandler(function () {
+      bt.disabled = false;
+      dizer('pgAvisoAlerta', 'erro', 'Não consegui falar com o servidor.');
+    }).salvarMinhaProgressao({ token: window.tokenArea, ativar: el('pgAlertaLigado').checked,
+                               nivel: ultimaCarreira.nivel, desde: ultimaCarreira.desde,
+                               regime: ultimaCarreira.regime });
+  };
+
+  // ?sairProgressao=TOKEN, o link do rodapé do aviso. Pede um clique, como o
+  // ?sair= dos lembretes (minha.js): antivírus abrem links para checá-los.
+  (function () {
+    var token = new URLSearchParams(location.search).get('sairProgressao');
+    if (!token) return;
+    el('porta-entrar').hidden = true;
+    el('porta-sair').hidden = false;
+    el('porta-sair').querySelector('h2').textContent = 'Aviso de progressão';
+    el('porta-sair').querySelector('p').textContent = 'Você pode deixar de receber o aviso de progressão por e-mail.';
+    el('btSairLembrete').onclick = function () {
+      var bt = el('btSairLembrete');
+      bt.disabled = true;
+      bt.textContent = 'Registrando…';
+      servidor().withSuccessHandler(function (r) {
+        bt.hidden = true;
+        dizer('sairAviso', 'ok', r.msg);
+      }).withFailureHandler(function () {
+        bt.disabled = false;
+        bt.textContent = 'Parar de receber';
+        dizer('sairAviso', 'erro', 'A página não conseguiu falar com o servidor. Tente de novo em instantes.');
+      }).sairDoAlertaDeProgressao({ token: token });
+    };
+  })();
+
   el('pgApagar').onclick = function () {
     apagarTudo();
     dizer('pgAvisoCarreira', 'ok', 'Apagado deste computador.');
