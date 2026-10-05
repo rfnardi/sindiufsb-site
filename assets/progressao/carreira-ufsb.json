@@ -1,0 +1,58 @@
+{
+ "fonte": {
+  "lei": "Lei nº 12.772/2012, art. 12, na redação da Lei nº 15.141/2025 (estrutura vigente desde 01/01/2025)",
+  "resolucao": "Resolução UFSB nº 17/2022",
+  "conferido_em": "2026-10-05"
+ },
+ "niveis": [
+  { "id": "A",  "classe": "A", "nome": "Classe A (Assistente)", "romano": "Classe A",
+    "antes2025": "Auxiliar, Assistente-A ou Adjunto-A (antiga classe A) e Assistente (antiga classe B)" },
+  { "id": "B1", "classe": "B", "nome": "Adjunto 1", "romano": "Adjunto I", "antes2025": "Adjunto 1 (antiga classe C)" },
+  { "id": "B2", "classe": "B", "nome": "Adjunto 2", "romano": "Adjunto II", "antes2025": "Adjunto 2 (antiga classe C)" },
+  { "id": "B3", "classe": "B", "nome": "Adjunto 3", "romano": "Adjunto III", "antes2025": "Adjunto 3 (antiga classe C)" },
+  { "id": "B4", "classe": "B", "nome": "Adjunto 4", "romano": "Adjunto IV", "antes2025": "Adjunto 4 (antiga classe C)" },
+  { "id": "C1", "classe": "C", "nome": "Associado 1", "romano": "Associado I", "antes2025": "Associado 1 (antiga classe D)" },
+  { "id": "C2", "classe": "C", "nome": "Associado 2", "romano": "Associado II", "antes2025": "Associado 2 (antiga classe D)" },
+  { "id": "C3", "classe": "C", "nome": "Associado 3", "romano": "Associado III", "antes2025": "Associado 3 (antiga classe D)" },
+  { "id": "C4", "classe": "C", "nome": "Associado 4", "romano": "Associado IV", "antes2025": "Associado 4 (antiga classe D)" },
+  { "id": "D",  "classe": "D", "nome": "Titular", "romano": "Titular", "antes2025": "Titular (antiga classe E)" }
+ ],
+ "passos": [
+  { "de": "A",  "para": "B1", "tipo": "promocao", "meses": 36, "especial": "estagio_probatorio",
+    "norma": "Lei 12.772, art. 12, § 3º, I: interstício mínimo de trinta e seis meses no último nível da classe anterior e aprovação em avaliação de desempenho" },
+  { "de": "B1", "para": "B2", "tipo": "progressao", "meses": 24 },
+  { "de": "B2", "para": "B3", "tipo": "progressao", "meses": 24 },
+  { "de": "B3", "para": "B4", "tipo": "progressao", "meses": 24 },
+  { "de": "B4", "para": "C1", "tipo": "promocao", "meses": 24, "exigeDoutorado": true,
+    "norma": "Lei 12.772, art. 12, § 3º, II: vinte e quatro meses no último nível da classe anterior, avaliação de desempenho e título de doutor" },
+  { "de": "C1", "para": "C2", "tipo": "progressao", "meses": 24 },
+  { "de": "C2", "para": "C3", "tipo": "progressao", "meses": 24 },
+  { "de": "C3", "para": "C4", "tipo": "progressao", "meses": 24 },
+  { "de": "C4", "para": "D",  "tipo": "promocao", "meses": 24, "exigeDoutorado": true, "especial": "titular",
+    "norma": "Lei 12.772, art. 12, § 3º, III: título de doutor, avaliação de desempenho e aprovação de memorial ou tese inédita" }
+ ],
+ "minimos": {
+  "norma": "Resolução UFSB 17/2022, art. 9º, §§ 2º e 3º",
+  "progressao": { "20h": 40, "40h": 80, "DE": 100 },
+  "promocao":   { "20h": 50, "40h": 100, "DE": 120 }
+ },
+ "aberturaDiasAntes": 60,
+ "prescricaoAnos": 5,
+ "sipac": {
+  "endereco": "https://sig.ufsb.edu.br/sipac/",
+  "caminho": "Portal Admin. > Protocolo > Processos > Cadastrar Processo",
+  "tipoProgressao": "PROGRESSÃO HORIZONTAL",
+  "tipoPromocao": "PROGRESSÃO VERTICAL",
+  "unidade": "SETOR DE AVALIAÇÃO (11.01.03.01.04.01)",
+  "email": "avaliacao@ufsb.edu.br"
+ },
+ "links": {
+  "progepe": "https://ufsb.edu.br/progepe/orientacoes/206-progressao-e-promocao-funcional-docente",
+  "resolucao": "https://ufsb.edu.br/progepe/images/Resolucao17_2022_ProgressaoDocente.pdf",
+  "formulario": "https://ufsb.edu.br/progepe/images/Formulário_Promoção_e_Progressão.pdf",
+  "instrucoesSipac": "https://ufsb.edu.br/progepe/images/Instruções_para_cadastrar_processos_de_Progressão_Docentedocx.pdf",
+  "parecerAgu": "https://www.gov.br/agu/pt-br/comunicacao/noticias/parecer-da-agu-da-seguranca-juridica-para-progressao-na-carreira-de-professores-federais/parecerprogressodedocentes.pdf",
+  "titularUfba": "https://ufsb.edu.br/progepe/images/Formularios_PROGEPE/Resoluçãonº04.14.pdf",
+  "lei12772": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12772.htm"
+ }
+}

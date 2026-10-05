@@ -136,6 +136,9 @@ nav.portas button {
 nav.portas button:hover { color: #fff; background: rgba(255,255,255,.1); }
 /* A aba aberta é branca e "encosta" na página, como uma ficha. */
 nav.portas button[aria-current="true"] { color: var(--vinho); background: #fff; }
+/* Com a sexta aba (Minha progressão) a linha não cabe nos 52em: as abas
+   ficam um pouco mais justas, só quando ela está visível. */
+.portas-dentro:has(#btPortaProgressao:not([hidden])) button:not(.sair) { padding-left: .62rem; padding-right: .62rem; }
 nav.portas button.sair { margin-left: auto; align-self: center; margin-bottom: .4rem;
                          border: 1px solid rgba(255,255,255,.55); border-radius: 2px;
                          padding: .35rem .8rem; color: #fff; }
@@ -201,3 +204,35 @@ button.ocupado::after { content: ""; margin-left: .5em; }
 /* A saída dos lembretes (?sair= no link do e-mail), que antes era a
    PaginaSaida.html da tesouraria. */
 #porta-sair .botoes { display: flex; flex-wrap: wrap; gap: .6rem; }
+
+/* Minha progressão (assets/js/progressao.js) */
+.prog-inter { border: 1px solid var(--linha); border-left: 4px solid var(--nota);
+              padding: .7rem .9rem; margin-top: .8rem; font-size: .9375rem; }
+.prog-inter > div { margin-top: .3rem; }
+.prog-inter-topo { display: flex; justify-content: space-between; gap: .6rem; flex-wrap: wrap; margin-top: 0 !important; }
+.prog-selo { font-size: .8125rem; padding: .1rem .5rem; background: var(--rosa); color: var(--tinta); }
+.prog-vencido, .prog-pode_pedir { border-left-color: var(--vinho); }
+.prog-vencido .prog-selo, .prog-pode_pedir .prog-selo { background: var(--vinho); color: #fff; }
+.prog-bloqueado { border-left-color: #B06A00; }
+.prog-alerta { margin-top: 1.2rem; padding-top: .4rem; border-top: 1px dashed var(--linha); }
+.prog-achados { margin-top: .4rem; }
+button.prog-achado { display: block; width: 100%; text-align: left; margin: .25rem 0; background: #fff;
+                     color: var(--tinta); border: 1px solid var(--linha); padding: .5rem .7rem; font-weight: 400; }
+button.prog-achado:hover { border-color: var(--vinho); }
+.prog-lanc { border: 1px solid var(--linha); padding: .7rem .9rem; margin-top: .9rem; }
+.prog-lanc-topo { font-size: .9375rem; }
+.prog-lanc output { display: block; font-size: 1.2rem; font-weight: 600; padding-top: .45rem; }
+.prog-obs { margin: .3rem 0 0; }
+button.prog-tirar { margin-top: .7rem; }
+.prog-placar { margin-top: 1.2rem; padding: .8rem 1rem; background: var(--rosa); border-left: 4px solid var(--nota); }
+.prog-placar.ok { border-left-color: var(--vinho); }
+.prog-placar.erro { background: #FFF6E8; border-left-color: #B06A00; }
+a.prog-baixar { display: inline-block; margin-top: .8rem; padding: .6rem 1rem; background: var(--vinho);
+                color: #fff; text-decoration: none; font-weight: 600; }
+.prog-lista { padding-left: 1.3rem; }
+.prog-lista li { margin: .45rem 0; }
+.prog-copia { display: inline-flex; gap: .4rem; align-items: center; flex-wrap: wrap; }
+.prog-copia code { background: var(--rosa); padding: .1rem .4rem; white-space: normal; }
+.prog-copia button { padding: .15rem .55rem; font-size: .8125rem; margin: 0; }
+#porta-progressao button.secundario { background: #fff; color: var(--vinho); border: 1px solid var(--vinho); }
+#porta-progressao button.secundario:hover { background: var(--rosa); }
