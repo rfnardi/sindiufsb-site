@@ -51,6 +51,8 @@ eleventyExcludeFromCollections: true
       <button type="button" data-porta="despesa">Pedir ressarcimento</button>
       <button type="button" data-porta="pauta">Propor pauta</button>
       <button type="button" data-porta="site">Texto para o site</button>
+      <!-- Escondido até a revisão de conteúdo: aparece com ?porta=progressao -->
+      <button type="button" data-porta="progressao" id="btPortaProgressao" hidden>Minha progressão</button>
       <button type="button" id="btSair" class="sair">Sair</button>
     </div>
   </nav>
@@ -305,9 +307,161 @@ eleventyExcludeFromCollections: true
       <div id="siteAviso" role="status" aria-live="polite"></div>
     </div>
   </section>
+
+  <!--
+    MINHA PROGRESSÃO (10/2026). Ajuda o docente a pedir progressão e promoção
+    na UFSB: o que já pode pedir e desde quando, a pontuação pelo barema da
+    Resolução 17/2022, o PDF único que a PROGEPE exige e o passo a passo do
+    SIPAC. Os comprovantes NÃO saem do computador: o PDF é montado aqui, no
+    navegador (assets/js/progressao-pdf.js). Regras em assets/progressao/.
+  -->
+  <section id="porta-progressao" hidden>
+    <p class="promessa">Esta ferramenta ajuda a montar o pedido. Quem avalia
+    é a comissão de avaliação do seu campus (CPADD). <strong>Os documentos
+    que você anexar não saem do seu computador</strong>: o PDF é montado aqui
+    mesmo, no navegador.</p>
+
+    <div class="passo">
+      <h2>1 · Minha carreira</h2>
+      <p class="porque">Informe onde você está hoje. A data é a do início
+      no nível atual: a data em que valeu a sua última progressão (veja na
+      portaria), ou a do seu ingresso, se nunca progrediu.</p>
+      <div class="dupla">
+        <label>Classe e nível atual<select id="pgNivel"><option value="">Selecione</option></select></label>
+        <label>No nível desde<input type="date" id="pgDesde"></label>
+        <label>SIAPE<input type="text" id="pgSiape" inputmode="numeric" maxlength="8">
+          <span class="ajuda">Vai na capa do PDF e no formulário.</span></label>
+      </div>
+      <div class="dupla">
+        <label>Regime<select id="pgRegime">
+          <option value="">Selecione</option>
+          <option value="DE">Dedicação exclusiva</option>
+          <option value="40h">40 horas</option>
+          <option value="20h">20 horas</option></select></label>
+        <label>Titulação<select id="pgTitulacao">
+          <option value="">Selecione</option>
+          <option>Graduação</option><option>Aperfeiçoamento</option>
+          <option>Especialização</option><option>Mestrado</option>
+          <option>Doutorado</option></select></label>
+      </div>
+      <p class="ajuda">Classes desde 01/01/2025 (Lei 15.141/2025): quem era
+      Adjunto (classe C) passou a ser classe B, e quem era Associado (classe
+      D) passou a ser classe C. Na dúvida, veja seu contracheque.</p>
+      <div class="dupla" style="margin-top:.9rem">
+        <label style="flex:0 0 auto">
+          <button id="pgVer" type="button">Ver meus interstícios</button>
+        </label>
+      </div>
+      <div id="pgAvisoCarreira" role="status" aria-live="polite"></div>
+      <div id="pgLinha"></div>
+
+      <div id="pgAlerta" class="prog-alerta" hidden>
+        <div class="confere">
+          <input type="checkbox" id="pgAlertaLigado">
+          <span>Me avise por e-mail quando eu puder pedir a próxima
+          progressão. O aviso vai para o e-mail do seu cadastro, uma vez
+          por interstício, e você sai quando quiser.</span>
+        </div>
+        <div class="dupla" style="margin-top:.6rem">
+          <label style="flex:0 0 auto">
+            <button id="pgAlertaSalvar" type="button" class="secundario">Salvar o aviso</button>
+          </label>
+        </div>
+        <div id="pgAvisoAlerta" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="passo" id="pgRelatorio" hidden>
+      <h2>2 · Montar o relatório</h2>
+      <p class="porque" id="pgRelatorioQual"></p>
+      <p class="ajuda">Lance cada atividade do interstício e anexe o
+      comprovante (PDF, JPG ou PNG). Cada atividade conta uma vez só no mesmo
+      interstício (art. 18). Os comprovantes devem ser do período do
+      interstício (art. 7º, § 3º).</p>
+      <label>Procurar no barema (Anexo I)
+        <input type="text" id="pgBusca" placeholder="artigo, orientação, banca, 2.11…" autocomplete="off"></label>
+      <div id="pgAchados" class="prog-achados"></div>
+      <div id="pgLancamentos"></div>
+      <div class="dupla">
+        <label>Meses de licença no interstício
+          <input type="text" id="pgLicenca" inputmode="numeric" value="0">
+          <span class="ajuda">Licença médica, maternidade, paternidade,
+          adotante, por doença em pessoa da família, capacitação ou
+          pós-graduação: cada mês vale 1/24 dos pontos exigidos (arts. 16 e
+          17). Anexe a portaria da licença num item qualquer, ou peça
+          orientação à CPADD.</span></label>
+      </div>
+      <div id="pgPlacar" class="prog-placar" role="status" aria-live="polite"></div>
+      <div class="dupla" style="margin-top:.9rem">
+        <label style="flex:0 0 auto">
+          <button id="pgGerar" type="button">Gerar o PDF</button>
+        </label>
+        <label style="flex:0 0 auto">
+          <button id="pgApagar" type="button" class="secundario">Apagar tudo deste computador</button>
+        </label>
+      </div>
+      <div id="pgAvisoPdf" role="status" aria-live="polite"></div>
+      <div id="pgBaixar"></div>
+    </div>
+
+    <div class="passo" id="pgSipac" hidden>
+      <h2>3 · Enviar no SIPAC</h2>
+      <div id="pgSipacPassos"></div>
+    </div>
+
+    <div class="passo">
+      <h2>Depois do envio</h2>
+      <ul class="prog-lista">
+        <li>O Setor de Avaliação confere o interstício e envia à CPADD do
+        seu campus, que tem <strong>30 dias</strong> para dar o parecer.</li>
+        <li>Se o relatório for reprovado, você tem <strong>15 dias
+        úteis</strong>, contados da ciência, para pedir reconsideração à
+        CPADD, pelo e-mail <a href="mailto:avaliacao@ufsb.edu.br">avaliacao@ufsb.edu.br</a>.
+        A CPADD responde em 15 dias úteis.</li>
+        <li>Mantida a reprovação, cabe recurso ao CONSUNI, também em
+        <strong>15 dias úteis</strong> e pelo mesmo e-mail.</li>
+        <li>Você também pode abrir um novo processo a qualquer momento, com
+        novo relatório (art. 10).</li>
+        <li>Aprovado, o Gabinete emite a portaria. O efeito financeiro vale
+        desde a data em que o interstício se completou (Lei 12.772, art. 13-A).</li>
+      </ul>
+    </div>
+
+    <div class="passo">
+      <h2>Progressão já concedida com atraso?</h2>
+      <p class="porque">Se a CPADD aprovou o seu relatório <em>depois</em>
+      que o interstício já tinha terminado, você pode pedir a revisão do
+      efeito financeiro (retificação), dentro de cinco anos da aprovação.</p>
+      <div class="dupla">
+        <label>Fim do interstício<input type="date" id="pgRetFim"></label>
+        <label>Aprovação pela CPADD<input type="date" id="pgRetAprov"></label>
+      </div>
+      <div class="dupla">
+        <label>Progressão revista<select id="pgRetPasso"><option value="">Selecione</option></select></label>
+        <label>Nº do processo original<input type="text" id="pgRetProcesso" placeholder="23746.000000/2023-00"></label>
+      </div>
+      <div class="dupla" style="margin-top:.9rem">
+        <label style="flex:0 0 auto">
+          <button id="pgRetConferir" type="button" class="secundario">Conferir</button>
+        </label>
+      </div>
+      <div id="pgRetResultado" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="passo">
+      <h2>De onde vêm estas regras</h2>
+      <ul class="prog-lista" id="pgFontes"></ul>
+    </div>
+  </section>
 </main>
 
 <script src="{{ '/assets/js/minha-servidor.js' | versao }}"></script>
 <script src="{{ '/assets/js/minha.js' | versao }}" data-api="{{ site.apiMinhaSindiufsb }}"></script>
+<script src="{{ '/assets/js/progressao-regras.js' | versao }}"></script>
+<script src="{{ '/assets/js/progressao-pdf.js' | versao }}"></script>
+<script src="{{ '/assets/js/progressao.js' | versao }}"
+        data-carreira="{{ '/assets/progressao/carreira-ufsb.json' | versao }}"
+        data-barema="{{ '/assets/progressao/barema-ufsb-17-2022.json' | versao }}"
+        data-pdflib="{{ '/assets/js/vendor/pdf-lib-1.17.1.min.js' | versao }}"></script>
 </body>
 </html>

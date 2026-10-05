@@ -303,3 +303,49 @@ test('pdf-lib servida pelo site é a mesma do package.json (sem CDN)', () => {
   const instalada = fs.readFileSync(new URL('../node_modules/pdf-lib/dist/pdf-lib.min.js', import.meta.url));
   assert.ok(servida.equals(instalada), 'copie node_modules/pdf-lib/dist/pdf-lib.min.js para assets/js/vendor/');
 });
+
+// ---------------------------------------------------------------- tela
+const TEMPLATE = fs.readFileSync(new URL('../paginas/minha-sindiufsb.njk', import.meta.url), 'utf8');
+const TELA = fs.readFileSync(new URL('../assets/js/progressao.js', import.meta.url), 'utf8');
+
+test('tela: todo id que progressao.js usa existe na página', () => {
+  const usados = new Set([...TELA.matchAll(/el\('([A-Za-z0-9]+)'\)/g)].map((m) => m[1]));
+  for (const m of TELA.matchAll(/\[((?:\s*'[A-Za-z0-9]+',?\s*)+)\]\s*\.forEach/g)) {
+    for (const id of m[1].matchAll(/'([A-Za-z0-9]+)'/g)) usados.add(id[1]);
+  }
+  assert.ok(usados.size > 20);
+  for (const id of usados) assert.match(TEMPLATE, new RegExp('id="' + id + '"'), 'falta id="' + id + '" na página');
+});
+
+test('tela: a porta tem seção, botão no menu (escondido até a revisão) e os scripts na ordem', () => {
+  assert.match(TEMPLATE, /<section id="porta-progressao" hidden>/);
+  assert.match(TEMPLATE, /data-porta="progressao" id="btPortaProgressao" hidden/);
+  const ordem = ['minha-servidor.js', 'minha.js', 'progressao-regras.js', 'progressao-pdf.js', 'progressao.js']
+    .map((f) => TEMPLATE.indexOf("/assets/js/" + f + "'"));
+  assert.ok(ordem.every((p) => p > 0), 'script ausente');
+  assert.deepEqual([...ordem].sort((a, b) => a - b), ordem, 'scripts fora de ordem');
+  assert.match(TEMPLATE, /data-pdflib="\{\{ '\/assets\/js\/vendor\/pdf-lib-1\.17\.1\.min\.js' \| versao \}\}"/);
+});
+
+test('tela: Sair limpa a porta, e o nome vem do meusDados que a área já faz', () => {
+  const minha = fs.readFileSync(new URL('../assets/js/minha.js', import.meta.url), 'utf8');
+  assert.match(minha, /'porta-progressao'\]\.forEach/);
+  assert.match(minha, /window\.limparProgressao\(\)/);
+  assert.match(minha, /window\.progressaoComDados\(r\)/);
+  assert.match(TELA, /window\.limparProgressao = apagarTudo/);
+});
+
+test('privacidade: nenhuma chamada ao servidor leva comprovante', () => {
+  // Toda chamada passa por servidor()…  .nomeDaFuncao({...}). A porta só pode
+  // chamar as funções do alerta, e nenhuma delas recebe bytes ou arquivos.
+  const chamadas = [...TELA.matchAll(/\}\)\.(\w+)\(\{([^}]*)\}\)/g)];
+  const permitidas = ['minhaProgressao', 'salvarMinhaProgressao'];
+  for (const c of chamadas) {
+    assert.ok(permitidas.includes(c[1]), 'chamada inesperada ao servidor: ' + c[1]);
+    assert.doesNotMatch(c[2], /bytes|arquivo|anexo|File/i);
+  }
+  assert.doesNotMatch(TELA, /fetch\([^)]*method/i, 'fetch de envio na porta');
+  // o rascunho guarda a lista de atividades, nunca os arquivos nem o SIAPE
+  const rascunho = TELA.slice(TELA.indexOf('function guardarRascunho'), TELA.indexOf('function recuperarRascunho'));
+  assert.doesNotMatch(rascunho, /arquivos\[|bytes|pgSiape/);
+});

@@ -415,9 +415,11 @@ el('btSair').onclick = function () {
   el('topoAcoes').hidden = true;
   el('abaAtual').hidden = true;
   ['porta-consulta', 'porta-despesa', 'porta-area',
-   'porta-pauta', 'porta-site'].forEach(function (id) {
+   'porta-pauta', 'porta-site', 'porta-progressao'].forEach(function (id) {
     el(id).hidden = true;
   });
+  // Minha progressão: rascunho, anexos e PDF gerado saem junto com a pessoa
+  if (window.limparProgressao) window.limparProgressao();
   // Computador compartilhado: o rascunho de quem saiu não fica para o próximo.
   ['pautaTitulo', 'pautaTexto', 'siteTitulo', 'siteTexto'].forEach(function (id) {
     el(id).value = '';
@@ -474,6 +476,8 @@ function mostrarDados(r) {
     el('arRegime').value = r.carreira.regime;
     if (el('arRegime').value) el('arRegime').onchange();
   }
+  // a porta Minha progressão aproveita nome e carreira, sem nova chamada
+  if (window.progressaoComDados) window.progressaoComDados(r);
 }
 
 el('btArDados').onclick = function () {
