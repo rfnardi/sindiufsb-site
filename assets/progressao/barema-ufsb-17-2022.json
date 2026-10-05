@@ -1,0 +1,1324 @@
+{
+ "fonte": {
+  "norma": "Resolução UFSB nº 17/2022, Anexo I — Tabela de Atividades da Carreira de Magistério Superior",
+  "planilha": "https://ufsb.edu.br/progepe/images/CD_PROGEPE/Nova_Progressão_e_Promoção/TABELA_DE_ATIVIDADES_DA_CARREIRA_DE_MAGISTÉRIO_SUPERIOR.xlsx",
+  "resolucao": "https://ufsb.edu.br/progepe/images/Resolucao17_2022_ProgressaoDocente.pdf",
+  "periodo": "\"Período\" refere-se ao regime letivo vigente na Instituição (quadrimestre ou semestre)."
+ },
+ "campos": [
+  {
+   "numero": 1,
+   "romano": "I",
+   "titulo": "ATIVIDADES DE ENSINO, ORIENTAÇÃO E PARTICIPAÇÃO EM BANCAS EXAMINADORAS",
+   "obs": "Não será considerada a acumulação de pontuação de orientação e de membro de Banca Examinadora/Coordenação para fins de progressão/promoção",
+   "itens": [
+    {
+     "id": "1.1",
+     "descricao": "Ministrante de aulas em curso de graduação na Instituição",
+     "textoPontos": "1,25/15h de aula",
+     "tipo": "por_horas",
+     "pontos": 1.25,
+     "horas": 15,
+     "unidade": "hora"
+    },
+    {
+     "id": "1.2",
+     "descricao": "Ministrante de aulas em cursos de pós-graduação lato sensu na Instituição, atividade de preceptoria/ supervisão em curso de especialização (residência médica e multiprofissional)",
+     "textoPontos": "1,25/15h aula",
+     "tipo": "por_horas",
+     "pontos": 1.25,
+     "horas": 15,
+     "unidade": "hora"
+    },
+    {
+     "id": "1.3",
+     "descricao": "Ministrante de aulas em curso de pós-graduação (stricto sensu) na Instituição.",
+     "textoPontos": "1,25/15h de atividade",
+     "tipo": "por_horas",
+     "pontos": 1.25,
+     "horas": 15,
+     "unidade": "hora"
+    },
+    {
+     "id": "1.4",
+     "descricao": "Supervisão de Pós-Doutorado concluída (na Instituição e/ou em outras Instituições)",
+     "textoPontos": "05/estudante",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "estudante"
+    },
+    {
+     "id": "1.5",
+     "descricao": "Orientação de Tese de Doutorado defendida (na Instituição e/ou em outras Instituições)",
+     "textoPontos": "15/estudante",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "estudante"
+    },
+    {
+     "id": "1.6",
+     "descricao": "Orientação de Dissertação de Mestrado defendida (na Instituição e/ou em outras Instituições)",
+     "textoPontos": "10/estudante",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "estudante"
+    },
+    {
+     "id": "1.7",
+     "descricao": "Coorientação de Tese de Doutorado defendida (na Instituição e/ou em outras Instituições)",
+     "textoPontos": "05/estudante",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "estudante"
+    },
+    {
+     "id": "1.8",
+     "descricao": "Coorientação de Dissertação de Mestrado defendida (na Instituição e/ou em outras Instituições)",
+     "textoPontos": "03/estudante",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "estudante"
+    },
+    {
+     "id": "1.9",
+     "descricao": "Orientação de Trabalho de Conclusão de Curso de Especialização concluída (na Instituição e/ou em outras Instituições)",
+     "textoPontos": "03/estudante",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "estudante"
+    },
+    {
+     "id": "1.10",
+     "descricao": "Orientação de Trabalho de Conclusão de Curso de Graduação concluída(na Instituição e/ou em outras Instituições)",
+     "textoPontos": "02/estudante",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "estudante"
+    },
+    {
+     "id": "1.11",
+     "descricao": "Orientação de Trabalho de Conclusão de Curso de graduação e especialização em andamento (por estudante) (na Instituição e/ou em outras Instituições)",
+     "textoPontos": "01/período* orientado",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "período"
+    },
+    {
+     "id": "1.12",
+     "descricao": "Supervisão de Pós-Doutorado em andamento",
+     "textoPontos": "03/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "período"
+    },
+    {
+     "id": "1.13",
+     "descricao": "Orientação de Tese de Doutorado em andamento (por estudante)",
+     "textoPontos": "03/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "período"
+    },
+    {
+     "id": "1.14",
+     "descricao": "Orientação de Dissertação de Mestrado em andamento (por estudante)",
+     "textoPontos": "02/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "período"
+    },
+    {
+     "id": "1.15",
+     "descricao": "Coorientação de Mestrado em andamento (por estudante)",
+     "textoPontos": "01/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "período"
+    },
+    {
+     "id": "1.16",
+     "descricao": "Coorientação de Doutorado em andamento (por estudante)",
+     "textoPontos": "02/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "período"
+    },
+    {
+     "id": "1.17",
+     "descricao": "Coordenação de programas institucionais (PET, PIBID, PIBIT, Residência Pedagógica e similares), por programa, mediante relatório atualizado",
+     "textoPontos": "03/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "período"
+    },
+    {
+     "id": "1.18",
+     "descricao": "Orientação de estudantes em programas institucionais, aprovada pelo órgão competente (PIBIC, BAP, PIBITI, PIBIEX, ACCS, PET, Monitoria e similares), por estudante",
+     "textoPontos": "02/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "período"
+    },
+    {
+     "id": "1.19",
+     "descricao": "Supervisão de atividades práticas e estágios curriculares, obrigatórios e não obrigatórios (estudante da UFSB ou de outra instituição de ensino), por estudante",
+     "textoPontos": "01/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "período"
+    },
+    {
+     "id": "1.20",
+     "descricao": "Orientação acadêmica, oficializada de acordo com o Colegiado do Curso, por grupo de 10 estudantes",
+     "textoPontos": "01/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "período"
+    },
+    {
+     "id": "1.21",
+     "descricao": "Coordenação de estágio",
+     "textoPontos": "05/período orientado",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "período"
+    },
+    {
+     "id": "1.22",
+     "descricao": "Membro de Banca Examinadora de Livre Docência",
+     "textoPontos": "05/Banca",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.23",
+     "descricao": "Membro de Banca Examinadora de Tese de Doutorado",
+     "textoPontos": "05/Banca",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.24",
+     "descricao": "Presidente de Comissão de Execução de Concurso Público para professor efetivo",
+     "textoPontos": "20/Edital",
+     "tipo": "por_unidade",
+     "pontos": 20,
+     "unidade": "edital"
+    },
+    {
+     "id": "1.25",
+     "descricao": "Membro de Comissão de Execução de Concurso Público para professor efetivo",
+     "textoPontos": "10/Edital",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "edital"
+    },
+    {
+     "id": "1.26",
+     "descricao": "Presidente de Comissão de Execução de Concurso Público para professor substituto",
+     "textoPontos": "10/Edital",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "edital"
+    },
+    {
+     "id": "1.27",
+     "descricao": "Membro de Comissão de Execução de Concurso Público para professor substituto",
+     "textoPontos": "05/Edital",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "edital"
+    },
+    {
+     "id": "1.28",
+     "descricao": "Membro de Banca de Concurso Público para Professor da Carreira do Magistério Superior (professor efetivo)",
+     "textoPontos": "10/Banca",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.29",
+     "descricao": "Membro de Banca Examinadora de Dissertação de Mestrado",
+     "textoPontos": "03/Banca",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.30",
+     "descricao": "Membro de Banca Examinadora de Trabalhos de Conclusão de Curso de Especialização",
+     "textoPontos": "02/Banca",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.31",
+     "descricao": "Membro de Banca Examinadora de Trabalhos de Conclusão de Curso de Graduação",
+     "textoPontos": "01/Banca",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.32",
+     "descricao": "Membro de Banca de Seleção de Professor Substituto",
+     "textoPontos": "05/Banca",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.33",
+     "descricao": "Membro de Banca de Qualificação em cursos de pós-graduação (Mestrado e/ou Doutorado)",
+     "textoPontos": "03/Banca",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.34",
+     "descricao": "Presidente da Comissão de Seleção para pós-graduação stricto sensu",
+     "textoPontos": "20/Edital",
+     "tipo": "por_unidade",
+     "pontos": 20,
+     "unidade": "edital"
+    },
+    {
+     "id": "1.35",
+     "descricao": "Membro da Comissão de Seleção para pós-graduação stricto sensu",
+     "textoPontos": "05/ Edital",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "edital"
+    },
+    {
+     "id": "1.36",
+     "descricao": "Membro de Banca de Seleção para pós-graduação stricto sensu",
+     "textoPontos": "02/Banca",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.37",
+     "descricao": "Membro de Banca de Seleção para bolsas institucionais",
+     "textoPontos": "01/Banca",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "banca"
+    },
+    {
+     "id": "1.38",
+     "descricao": "Aulas ministradas em disciplinas/ componentes curriculares (graduação e/ou pós-graduação) em outra instituição com regime semestral",
+     "textoPontos": "1,25/15h de atividade",
+     "tipo": "por_horas",
+     "pontos": 1.25,
+     "horas": 15,
+     "unidade": "hora"
+    },
+    {
+     "id": "1.39",
+     "descricao": "Trabalho de campo e/ou visita técnica, programas comunitários de mobilização interna e externa, entre outros de interesse da Instituição e da comunidade, que visam à produção e socialização de conhecimento, realizados em segmentos da sociedade, compreendendo diagnóstico, planejamento, treinamento e desenvolvimento de ações de forma participativa",
+     "textoPontos": "02/15h de atividade",
+     "tipo": "por_horas",
+     "pontos": 2,
+     "horas": 15,
+     "unidade": "hora"
+    }
+   ]
+  },
+  {
+   "numero": 2,
+   "romano": "II",
+   "titulo": "ATIVIDADES DE PESQUISA, PRODUÇÃO ACADÊMICA, CRIAÇÃO E INOVAÇÃO",
+   "obs": "Não será considerada a acumulação de pontuação de coordenação e de membro de equipe executora para fins de progressão/promoção e nenhuma produção poderá ser bipontuada",
+   "itens": [
+    {
+     "id": "2.1",
+     "descricao": "Coordenação de projeto de pesquisa registrado na UFSB (por projeto, mediante relatório atualizado)",
+     "textoPontos": "05/período",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "período"
+    },
+    {
+     "id": "2.2",
+     "descricao": "Coordenação de projeto de pesquisa com financiamento externo à UFSB (CNPq, FAPESB, etc.)",
+     "textoPontos": "10/período",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "período"
+    },
+    {
+     "id": "2.3",
+     "descricao": "Membro de grupo/projeto de pesquisa registrado e atualizado no Diretório de Grupos do CNPq",
+     "textoPontos": "01/período",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "período"
+    },
+    {
+     "id": "2.4",
+     "descricao": "Membro de grupo/projeto de pesquisa registrado em outra Instituição de Ensino Superior (Federal ou Estadual) em grupo de pesquisa atualizado no Diretório de Grupos do CNPq",
+     "textoPontos": "01/período",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "período"
+    },
+    {
+     "id": "2.5",
+     "descricao": "Execução de projetos de pesquisa aprovados no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem",
+     "textoPontos": "02/atividade",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "atividade"
+    },
+    {
+     "id": "2.6",
+     "descricao": "Elaboração de Relatórios de Pesquisa aprovados no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem",
+     "textoPontos": "04/atividade",
+     "tipo": "por_unidade",
+     "pontos": 4,
+     "unidade": "atividade"
+    },
+    {
+     "id": "2.7",
+     "descricao": "Liderança de grupo de pesquisa da UFSB, em grupo de pesquisa registradoe atualizado na Plataforma de Grupos de Pesquisa do CNPq",
+     "textoPontos": "05/período / grupo",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "período"
+    },
+    {
+     "id": "2.8",
+     "descricao": "Participação como conferencista ou palestrante em congressos, seminários, colóquios e outros eventos característicos da área de atuação do/a docente",
+     "textoPontos": "02/atividade",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "atividade"
+    },
+    {
+     "id": "2.9",
+     "descricao": "Ministrante de cursos (CH <8 h) em eventos acadêmicos",
+     "textoPontos": "02/atividade",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "atividade"
+    },
+    {
+     "id": "2.10",
+     "descricao": "Participação em eventos (congressos, simpósios, seminários, encontros etc.) na(s) área(s) de atuação do/a docente",
+     "textoPontos": "02/atividade",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "atividade"
+    },
+    {
+     "id": "2.11",
+     "descricao": "Artigo de pesquisa publicado em revista indexada, nacional ou internacional, com Qualis, na(s) área(s) de atuação da/o docente (impresso ou meio digital)",
+     "textoPontos": "25/publicação",
+     "tipo": "por_unidade",
+     "pontos": 25,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.12",
+     "descricao": "Autoria de livro publicado (com ISBN), na(s) área(s) de atuação da/o docente, aprovado por Conselho Editorial, impresso ou meio digital",
+     "textoPontos": "25/publicação",
+     "tipo": "por_unidade",
+     "pontos": 25,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.13",
+     "descricao": "Autoria de álbuns artísticos (CD, DVD ou formas equivalentes) especializado na área de atuação da/o docente",
+     "textoPontos": "25/publicação",
+     "tipo": "por_unidade",
+     "pontos": 25,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.14",
+     "descricao": "Autoria de capítulo de livro publicado (com ISBN), na área de atuação da/o docente, aprovado por Conselho Editorial, impresso ou meio digital",
+     "textoPontos": "15/capítulo",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "capítulo"
+    },
+    {
+     "id": "2.15",
+     "descricao": "Participação em álbuns artísticos na área de atuação da/o docente",
+     "textoPontos": "10/participação",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "participação"
+    },
+    {
+     "id": "2.16",
+     "descricao": "Autoria de prefácio de livro, CD, DVD e mídias equivalentes",
+     "textoPontos": "02/publicação",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.17",
+     "descricao": "Tradução de livro publicado (impresso ou meio digital)",
+     "textoPontos": "10/publicação",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.18",
+     "descricao": "Tradução de capítulo de livro publicado (impresso ou meio digital)",
+     "textoPontos": "05/publicação",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.19",
+     "descricao": "Tradução publicada de artigo (impresso ou meio digital)",
+     "textoPontos": "05/publicação",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.20",
+     "descricao": "Publicação de trabalhos completos, de comunicação impressa ou meio digital, em anais de congressos, simpósios e similares, suplementos de periódicos ou cadernos especiais de jornais de âmbito internacional, na área deatuação da/o docente",
+     "textoPontos": "07/publicação",
+     "tipo": "por_unidade",
+     "pontos": 7,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.21",
+     "descricao": "Publicação de trabalhos completos, de comunicação impressa ou meio digital, em anais de congressos, simpósios e similares, suplementos de periódicos ou cadernos especiais de jornais de âmbito nacional, na área de atuação da/o docente",
+     "textoPontos": "05/publicação",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.22",
+     "descricao": "Publicação de resumo simples de comunicação impressa ou meio digital, em anais de congressos, simpósios e similares, suplementos de periódicos ou cadernos especiais de jornais de âmbito internacional, na área de atuação da/o docente",
+     "textoPontos": "03/publicação",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.23",
+     "descricao": "Publicação de resumo simples de comunicação impressa ou meio digital, em anais de congressos, simpósios e similares, suplementos de periódicos ou cadernos especiais de jornais de âmbito nacional, na área de atuação da/o docente",
+     "textoPontos": "02/publicação",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.24",
+     "descricao": "Resenha ou nota crítica publicada em revista indexada (impresso ou meio digital), com Qualis",
+     "textoPontos": "02/publicação",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.25",
+     "descricao": "Artigo publicado em jornal ou revista não indexada (impresso ou meio digital)",
+     "textoPontos": "05/publicação",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.26",
+     "descricao": "Produção e publicação de material didático e hipertextos",
+     "textoPontos": "02/publicação",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.27",
+     "descricao": "Produção de manual técnico",
+     "textoPontos": "05/publicação",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.28",
+     "descricao": "Nota científica prévia",
+     "textoPontos": "05/publicação",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.29",
+     "descricao": "Texto escrito para catálogo de exposições publicado por instituição pública ou privada (museus e galerias)",
+     "textoPontos": "02/publicação",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.30",
+     "descricao": "Autoria de peça teatral, musical ou coreografia, roteiro de cinema, vídeo, rádio ou televisão",
+     "textoPontos": "25/peça",
+     "tipo": "por_unidade",
+     "pontos": 25,
+     "unidade": "peça"
+    },
+    {
+     "id": "2.31",
+     "descricao": "Direção de peças teatrais apresentadas, cinema ou vídeo",
+     "textoPontos": "15/peça",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "peça"
+    },
+    {
+     "id": "2.32",
+     "descricao": "Partitura editada",
+     "textoPontos": "20/publicação",
+     "tipo": "por_unidade",
+     "pontos": 20,
+     "unidade": "publicação"
+    },
+    {
+     "id": "2.33",
+     "descricao": "Coordenadora/or de documentos cartográficos e mapas geológicos publicados",
+     "textoPontos": "25/documento",
+     "tipo": "por_unidade",
+     "pontos": 25,
+     "unidade": "documento"
+    },
+    {
+     "id": "2.34",
+     "descricao": "Coautora/or de documentos cartográficos e mapas geológicos publicados",
+     "textoPontos": "10/documento",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "documento"
+    },
+    {
+     "id": "2.35",
+     "descricao": "Edição e produção de conteúdos audiovisuais e sonoros vinculada à atividade desenvolvida na UFSB",
+     "textoPontos": "10/atividade",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "atividade"
+    },
+    {
+     "id": "2.36",
+     "descricao": "Fotografia publicada",
+     "textoPontos": "2/foto",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "foto"
+    },
+    {
+     "id": "2.37",
+     "descricao": "Patente examinada e concedida pelo INPI ou equivalente internacional",
+     "textoPontos": "25/patente",
+     "tipo": "por_unidade",
+     "pontos": 25,
+     "unidade": "patente"
+    },
+    {
+     "id": "2.38",
+     "descricao": "Desenho Industrial examinado e concedido pelo INPI ou equivalente internacional",
+     "textoPontos": "25/desenho industrial",
+     "tipo": "por_unidade",
+     "pontos": 25,
+     "unidade": "desenho industrial"
+    },
+    {
+     "id": "2.39",
+     "descricao": "Pedido de patente protocolado pela UFSB ou outra instituição no INPI ou equivalente internacional",
+     "textoPontos": "10/pedido",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "pedido"
+    },
+    {
+     "id": "2.40",
+     "descricao": "Pedido de Desenho Industrial protocolado pela UFSB ou outra instituição no INPI ou equivalente internacional",
+     "textoPontos": "10/pedido",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "pedido"
+    },
+    {
+     "id": "2.41",
+     "descricao": "Registro ou certificado de proteção de cultivar concedido pelo INPI ou equivalente internacional",
+     "textoPontos": "25/registro ou certificado",
+     "tipo": "por_unidade",
+     "pontos": 25,
+     "unidade": "registro ou certificado"
+    },
+    {
+     "id": "2.42",
+     "descricao": "Registro ou certificado de proteção de cultivar protocolado pela UFSB ou outra instituição no INPI ou equivalente internacional",
+     "textoPontos": "10/registro ou certificado",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "registro ou certificado"
+    },
+    {
+     "id": "2.43",
+     "descricao": "Registro de marcas protocolados pela UFSB ou outra instituição no INPI ou equivalente internacional",
+     "textoPontos": "10/registro",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "registro"
+    },
+    {
+     "id": "2.44",
+     "descricao": "Registro de softwares protocolados pela UFSB ou outra instituição no INPI ou equivalente internacional",
+     "textoPontos": "10/registro",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "registro"
+    },
+    {
+     "id": "2.45",
+     "descricao": "Registro de software livre",
+     "textoPontos": "10/registro",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "registro"
+    }
+   ]
+  },
+  {
+   "numero": 3,
+   "romano": "III",
+   "titulo": "ATIVIDADES DE EXTENSÃO (considerados instrumentos normativos vigentes)",
+   "obs": "Não será considerada a acumulação de pontuação de coordenação e de membro de equipe executora para fins de progressão/promoção e nenhuma produção poderá ser bipontuada",
+   "itens": [
+    {
+     "id": "3.1",
+     "descricao": "Elaboração e Coordenação de programas de extensão registrados, com aprovação no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem (por projeto, mediante relatório atualizado)",
+     "textoPontos": "07/período",
+     "tipo": "por_unidade",
+     "pontos": 7,
+     "unidade": "período"
+    },
+    {
+     "id": "3.2",
+     "descricao": "Elaboração e Coordenação de projetos de extensão registrados, com aprovação no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem (por projeto, mediante relatório atualizado)",
+     "textoPontos": "05/período",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "período"
+    },
+    {
+     "id": "3.3",
+     "descricao": "Participação em programas de extensão registrados, com aprovação no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem (por projeto, mediante relatório atualizado)",
+     "textoPontos": "03/período",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "período"
+    },
+    {
+     "id": "3.4",
+     "descricao": "Participação em projetos de extensão registrados, com aprovação no órgãode lotação do/a docente ou nas Unidades Universitárias em que se realizem (por projeto, mediante relatório atualizado)",
+     "textoPontos": "02/período",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "período"
+    },
+    {
+     "id": "3.5",
+     "descricao": "Coordenação geral de congresso de extensão",
+     "textoPontos": "10/atividade",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "atividade"
+    },
+    {
+     "id": "3.6",
+     "descricao": "Coordenação de eventos registrados no módulo de Extensão no SIG (cursosde extensão CH menor ou igual a 8 h, jornadas, seminários, exposições, recitaise similares), registrados e aprovados no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem",
+     "textoPontos": "03/atividade",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "atividade"
+    },
+    {
+     "id": "3.7",
+     "descricao": "Membro de Comissão organizadora de congressos e outros eventos de extensão (cursos, jornadas, seminários, exposições, recitais e similares), registrados e aprovados no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem",
+     "textoPontos": "05/atividade",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "atividade"
+    },
+    {
+     "id": "3.8",
+     "descricao": "Coordenação de cursos (oficina, workshop, laboratório e treinamento, de caráter teórico e/ou prático, planejados e organizados de modo sistemático, com carga horária definida e processo de avaliação formal, além da frequência), com CH mínima 8 h e máxima até 180 h, registrados e aprovados no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem",
+     "textoPontos": "01/08 horas de atividade",
+     "tipo": "por_horas",
+     "pontos": 1,
+     "horas": 8,
+     "unidade": "hora"
+    },
+    {
+     "id": "3.9",
+     "descricao": "Coordenação de cursos de atualização registrados e aprovados no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem",
+     "textoPontos": "10/atividade",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "atividade"
+    },
+    {
+     "id": "3.10",
+     "descricao": "Coordenação de cursos de aperfeiçoamento e especialização registrados e aprovados no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem",
+     "textoPontos": "15/atividade",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "atividade"
+    },
+    {
+     "id": "3.11",
+     "descricao": "Ministrante de cursos (oficina, workshop, laboratório e treinamento, de caráter teórico e/ou prático, planejados e organizados de modo sistemático, com carga horária definida e processo de avaliação formal, além da frequência), com CH mínima 8 h e máxima até 180 h, registrados e aprovados no órgão de lotação do/a docente ou nas Unidades Universitárias em que se realizem",
+     "textoPontos": "01/8h de atividade",
+     "tipo": "por_horas",
+     "pontos": 1,
+     "horas": 8,
+     "unidade": "hora"
+    },
+    {
+     "id": "3.12",
+     "descricao": "Prestação de serviços (consultorias, assessorias, cooperação técnica e institucional, assistência jurídica, assistência hospitalar e ambulatorial, perícias, laudos técnicos etc.), desde que aprovados pela instância de lotação do/a docente",
+     "textoPontos": "04/atividade",
+     "tipo": "por_unidade",
+     "pontos": 4,
+     "unidade": "atividade"
+    },
+    {
+     "id": "3.13",
+     "descricao": "Coordenação de ambientes de inovação (aceleradoras, pré- incubadoras, incubadora de empresas, parques tecnológicos), com relatório semestral aprovado",
+     "textoPontos": "01/mês",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "mês"
+    },
+    {
+     "id": "3.14",
+     "descricao": "Ministrante (ou Responsável) por Componente Curricular de Extensão (CCEx)",
+     "textoPontos": "01/15h de atividade",
+     "tipo": "por_horas",
+     "pontos": 1,
+     "horas": 15,
+     "unidade": "hora"
+    }
+   ]
+  },
+  {
+   "numero": 4,
+   "romano": "IV",
+   "titulo": "RECEBIMENTO DE COMENDAS E PREMIAÇÕES ADVINDASDO EXERCÍCIO DE ATIVIDADES ACADÊMICAS",
+   "obs": "",
+   "itens": [
+    {
+     "id": "4.1",
+     "descricao": "Obras, publicações e outros produtos acadêmicos premiados, na área de atuação do/a docente",
+     "textoPontos": "05/registro",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "registro"
+    },
+    {
+     "id": "4.2",
+     "descricao": "Obras, publicações e outros produtos acadêmicos premiados, fora da áreade atuação do/a docente",
+     "textoPontos": "03/registro",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "registro"
+    },
+    {
+     "id": "4.3",
+     "descricao": "Comendas e premiações públicas de outra natureza",
+     "textoPontos": "02/registro",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "registro"
+    }
+   ]
+  },
+  {
+   "numero": 5,
+   "romano": "V",
+   "titulo": "PARTICIPAÇÃO EM ATIVIDADES EDITORIAIS E/OU DEARBITRAGEM DE PRODUÇÃO INTELECTUAL E/OU ARTÍSTICA",
+   "obs": "",
+   "itens": [
+    {
+     "id": "5.1",
+     "descricao": "Editora/or ou organizadora/or de livro publicado (com ISBN), impresso ou meio digital, com circulação internacional",
+     "textoPontos": "20/trabalho",
+     "tipo": "por_unidade",
+     "pontos": 20,
+     "unidade": "trabalho"
+    },
+    {
+     "id": "5.2",
+     "descricao": "Editora/or ou organizadora/or de livro publicado (com ISBN) (impresso ou meio digital, com circulação nacional)",
+     "textoPontos": "15/trabalho",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "trabalho"
+    },
+    {
+     "id": "5.3",
+     "descricao": "Editora/or Chefe de Revista",
+     "textoPontos": "15/Edição",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "edição"
+    },
+    {
+     "id": "5.4",
+     "descricao": "Editora/or Associado/a de Revista",
+     "textoPontos": "10/trabalho",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "trabalho"
+    },
+    {
+     "id": "5.5",
+     "descricao": "Membro de corpo editorial",
+     "textoPontos": "04/período",
+     "tipo": "por_unidade",
+     "pontos": 4,
+     "unidade": "período"
+    },
+    {
+     "id": "5.6",
+     "descricao": "Revisora/or ou parecerista de revista científica, de material didático, capítulode livro; Parecerista de evento acadêmico/científico que requeira seleção prévia",
+     "textoPontos": "04/trabalho",
+     "tipo": "por_unidade",
+     "pontos": 4,
+     "unidade": "trabalho"
+    },
+    {
+     "id": "5.7",
+     "descricao": "Revisora/or de livro",
+     "textoPontos": "04/trabalho",
+     "tipo": "por_unidade",
+     "pontos": 4,
+     "unidade": "trabalho"
+    }
+   ]
+  },
+  {
+   "numero": 6,
+   "romano": "VI",
+   "titulo": "ATIVIDADES DE ADMINISTRAÇÃO/ REPRESENTAÇÃO/ACADÊMICAS",
+   "obs": "Não será considerada a acumulação de pontuação no caso de membro e presidente da mesma Comissão.",
+   "itens": [
+    {
+     "id": "6.1",
+     "descricao": "O exercício dos cargos de Reitora/or, Vice-Reitora/or, Pró-Reitora/or, Chefe de Gabinete da/o Reitora/or e Decana/o de Unidade Universitária corresponderá a uma pontuação no interstício, total ou proporcional ao tempo de efetivo exercício, considerando-se 02 anos como o total de pontos necessários à progressão ou 1/24 (um vinte e quatro avos) deste total por mês no exercício do cargo.",
+     "textoPontos": "",
+     "tipo": "fracao_do_minimo",
+     "fracao": 0.041666666666666664,
+     "unidade": "mês"
+    },
+    {
+     "id": "6.2",
+     "descricao": "O exercício do cargo de Vice-Decana/o de Unidade Universitária, dos cargos de Assessora/or Especial da/o Reitora/or, Coordenadora/or de Órgão Complementar, Diretora/or de Órgão associado a Sistema Estruturante, Presidente da CPPD, Presidente da CPA, Membro de Conselho Superior, Coordenadora/or de Colegiado de Curso, Coordenadora/or do Núcleo Docente Estruturante (NDE), Coordenadora/or Pedagógico, Coordenadoras/es de Núcleos e Programas, Coordenadora/or de Comissão/Comitê de Ética, Coordenações associadas às Pró-Reitorias e Superintendências corresponderá a uma pontuação de 2,1 pontos por mês no exercício do cargo. Dentre esses cargos, aqueles que não forem remunerados, 03 pontos por mês no exercício do cargo.",
+     "textoPontos": "",
+     "tipo": "por_unidade",
+     "unidade": "mês",
+     "variantes": [
+      {
+       "rotulo": "cargo remunerado",
+       "pontos": 2.1
+      },
+      {
+       "rotulo": "cargo não remunerado",
+       "pontos": 3
+      }
+     ]
+    },
+    {
+     "id": "6.3",
+     "descricao": "O exercício do cargo Vice-Coordenadora/or de Colegiado ou de Núcleo ou Programa, Vice- Coordenadora/or de Comissão/Comitê de Ética quando houver delegação de competência através de Portaria do dirigente do Órgão, corresponderá a uma pontuação de 1 ponto por mês no exercício do cargo.",
+     "textoPontos": "",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "mês"
+    },
+    {
+     "id": "6.4",
+     "descricao": "O exercício de cargo público com afastamento formal e integral da UFSB para exercer cargos nas áreas de Educação, Ciência e Tecnologia, com designação devidamente publicada no Diário Oficial da União, corresponderá a uma pontuação no interstício, total ou proporcional ao tempo de efetivo exercício, considerando-se 02 anos como o total de pontos necessários à progressão ou 1/24 (um vinte e quatro avos) deste total no exercício do cargo.",
+     "textoPontos": "",
+     "tipo": "fracao_do_minimo",
+     "fracao": 0.041666666666666664,
+     "unidade": "mês"
+    },
+    {
+     "id": "6.5",
+     "descricao": "A participação como membro de comissões permanentes ou transitórias que tenham por finalidade assessorar o Reitor, corresponderá a uma pontuação no interstício de 02 pontos por mês, desde que não haja remuneração.",
+     "textoPontos": "",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "mês"
+    },
+    {
+     "id": "6.6",
+     "descricao": "Participação como membro em órgãos colegiados e não mencionados no item 6.2, incluindo NDE e Câmaras Assessoras (de Pesquisa; de Extensão e de Graduação).",
+     "textoPontos": "01/mês",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "mês"
+    },
+    {
+     "id": "6.7",
+     "descricao": "Participação, em tempo parcial, em diretorias, conselhos e comissões permanentes de sociedades acadêmicas, órgãos de fomento, órgãos governamentais relacionados com a comunidade acadêmica, órgãos de classee representações sindicais",
+     "textoPontos": "01/mês",
+     "tipo": "por_unidade",
+     "pontos": 1,
+     "unidade": "mês"
+    },
+    {
+     "id": "6.8",
+     "descricao": "Participação como membro da comissão de Processo Administrativo Disciplinar",
+     "textoPontos": "10/Comissão",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "comissão"
+    },
+    {
+     "id": "6.9",
+     "descricao": "Participação como membro de comissões de sindicância/ inquérito",
+     "textoPontos": "05/Comissão",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "comissão"
+    },
+    {
+     "id": "6.10",
+     "descricao": "Participação como membro de comissões ou grupos de trabalho transitórios, de caráter pedagógico, definidas através de portaria do Decanato de Unidade Universitária ou de dirigente de Órgão colegiado definido no Regimento da UFSB",
+     "textoPontos": "02mês/Comissão",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "mês"
+    },
+    {
+     "id": "6.11",
+     "descricao": "Participação em comissões de avaliação de processos de progressão/promoção, estágio probatório, licitações/compras etc.",
+     "textoPontos": "02mês/Comissão",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "mês"
+    },
+    {
+     "id": "6.12",
+     "descricao": "Participação em Comissão Julgadora (prêmios em arte e/ou ciência e tecnologia) de órgãos oficiais",
+     "textoPontos": "02/Comissão",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "comissão"
+    },
+    {
+     "id": "6.13",
+     "descricao": "Participação em comitês científicos: comitê técnico-científico, avaliadores de artigos de periódicos, avaliadores de projetos de pesquisa etc.",
+     "textoPontos": "02/atividade",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "atividade"
+    },
+    {
+     "id": "6.14",
+     "descricao": "Coordenadora/or ou responsável por Laboratório de Ensino de Graduação, Laboratórios de Pesquisa, ou outro, designada/o por portaria do Decanato da Unidade Universitária ou da Reitoria",
+     "textoPontos": "05/período",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "período"
+    },
+    {
+     "id": "6.15",
+     "descricao": "Outras atividades administrativas definidas através de Portaria do Decanatoda Unidade Universitária ou Reitoria",
+     "textoPontos": "03/período",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "período"
+    }
+   ]
+  },
+  {
+   "numero": 7,
+   "romano": "VII",
+   "titulo": "ATIVIDADES PROFISSIONAIS",
+   "obs": "",
+   "itens": [
+    {
+     "id": "7.1",
+     "descricao": "Exercício profissional na área específica de atuação da/o docente (por ano)",
+     "textoPontos": "10/atividade",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.2",
+     "descricao": "Relatório técnico, demandado à UFSB ou outra Instituição de ensino na forma de consultoria",
+     "textoPontos": "05/atividade",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.3",
+     "descricao": "Aprovação em concurso para cargo do Magistério Superior, com defesa de Memorial",
+     "textoPontos": "15/concurso",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "concurso"
+    },
+    {
+     "id": "7.4",
+     "descricao": "Ilustração de livros publicados (com Conselho Editorial)",
+     "textoPontos": "04/atividade",
+     "tipo": "por_unidade",
+     "pontos": 4,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.5",
+     "descricao": "Criação de capa de livro publicado (com Conselho Editorial)",
+     "textoPontos": "05/atividade",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.6",
+     "descricao": "Projeto gráfico de livros (design)",
+     "textoPontos": "10/atividade",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.7",
+     "descricao": "Direção de peças teatrais apresentadas, cinema ou vídeo em circuitos avaliados por pares",
+     "textoPontos": "15/atividade",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.8",
+     "descricao": "Coreografia apresentada em circuitos avaliados por pares",
+     "textoPontos": "15/atividade",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.9",
+     "descricao": "Exposições individuais, referendadas pelo conselho de instituições reconhecidas",
+     "textoPontos": "10/atividade",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.10",
+     "descricao": "Curadoria de exposições científicas ou artísticas em circuitos avaliados porpares",
+     "textoPontos": "15/atividade",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.11",
+     "descricao": "Participação em salões de arte ou exposições coletivas de artes plásticas e fotografia, referendadas pelo conselho de instituições reconhecidas",
+     "textoPontos": "05/atividade",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.12",
+     "descricao": "Autoria de monumentos (esculturas, murais, painéis) expostos em circuitos avaliados por pares",
+     "textoPontos": "20/obra",
+     "tipo": "por_unidade",
+     "pontos": 20,
+     "unidade": "obra"
+    },
+    {
+     "id": "7.13",
+     "descricao": "Produção de espetáculos, cinema, rádio, televisão, vídeo, audiovisual ou mídias digitais lançados em festivais ou apresentados em circuitos avaliados por pares",
+     "textoPontos": "15/atividade",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.14",
+     "descricao": "Composição musical apresentada ou criada para cinema, vídeo, rádio ou televisão, teatro ou dança lançadas em festivais ou apresentados em circuitos avaliados por pares",
+     "textoPontos": "15/atividade",
+     "tipo": "por_unidade",
+     "pontos": 15,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.15",
+     "descricao": "Arranjo de peças musicais instrumental ou vocal apresentados em circuitos avaliados por pares",
+     "textoPontos": "05/atividade",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.16",
+     "descricao": "Apresentação de concertos ou recitais no âmbito da UFSB",
+     "textoPontos": "03/atividade",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.17",
+     "descricao": "Apresentação de concertos ou recitais no País, a convite, fora do âmbito daUFSB",
+     "textoPontos": "05/atividade",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.18",
+     "descricao": "Apresentação de concertos ou recitais no exterior, a convite",
+     "textoPontos": "10/atividade",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.19",
+     "descricao": "Apresentação, no País, de obras artísticas de sua autoria em circuitos avaliados por pares",
+     "textoPontos": "05/atividade",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.20",
+     "descricao": "Apresentação, no exterior, de obras artísticas de sua autoria em circuitos avaliados por pares",
+     "textoPontos": "10/atividade",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.21",
+     "descricao": "Apresentação de espetáculos de dança ou de teatro no âmbito da UFSB",
+     "textoPontos": "03/atividade",
+     "tipo": "por_unidade",
+     "pontos": 3,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.22",
+     "descricao": "Apresentação de espetáculos de dança ou de teatro no País, a convite de instituições de arte e cultura, fora do âmbito da UFSB",
+     "textoPontos": "05/atividade",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "atividade"
+    },
+    {
+     "id": "7.23",
+     "descricao": "Apresentação de espetáculos de dança ou de teatro no exterior, a convitede instituições de arte e cultura",
+     "textoPontos": "10/atividade",
+     "tipo": "por_unidade",
+     "pontos": 10,
+     "unidade": "atividade"
+    }
+   ]
+  },
+  {
+   "numero": 8,
+   "romano": "VIII",
+   "titulo": "ATIVIDADES DE APRENDIZADO E APERFEIÇOAMENTO",
+   "obs": "",
+   "itens": [
+    {
+     "id": "8.1",
+     "descricao": "Docente regularmente matriculado em curso de Pós-Graduação strictosensu com relatórios de pós-graduação aprovados - com ou sem afastamento",
+     "textoPontos": "05/mês",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "mês"
+    },
+    {
+     "id": "8.2",
+     "descricao": "Docente regularmente matriculado em curso de Pós-Graduação lato sensu",
+     "textoPontos": "05/mês",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "mês"
+    },
+    {
+     "id": "8.3",
+     "descricao": "Estágio Pós-Doutoral ou Estágio Sênior",
+     "textoPontos": "05/mês",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "mês"
+    },
+    {
+     "id": "8.4",
+     "descricao": "Docente em licença para capacitação (Art 87, Lei N.8112), com relatório final aprovado em reunião do Conselho Diretor da Unidade Acadêmica ou do Colegiado da Unidade Acadêmica Especial",
+     "textoPontos": "05/mês",
+     "tipo": "por_unidade",
+     "pontos": 5,
+     "unidade": "mês"
+    },
+    {
+     "id": "8.5",
+     "descricao": "Curso de aperfeiçoamento realizado com carga horária inferior a 40 horas",
+     "textoPontos": "02/curso",
+     "tipo": "por_unidade",
+     "pontos": 2,
+     "unidade": "curso"
+    },
+    {
+     "id": "8.6",
+     "descricao": "Curso de aperfeiçoamento realizado com carga horária igual ou superior a40 horas",
+     "textoPontos": "02 a cada 40 horas",
+     "tipo": "por_horas",
+     "pontos": 2,
+     "horas": 40,
+     "unidade": "hora"
+    }
+   ]
+  },
+  {
+   "numero": 9,
+   "romano": "IX",
+   "titulo": "AVALIAÇÃO DOCENTE PELAS/OS DISCENTES",
+   "obs": "",
+   "itens": [
+    {
+     "id": "9.1",
+     "descricao": "A avaliação do/a docente pelos/as discentes deverá ser feita mediante preenchimento de formulário específico previamente estabelecido em Sistema de Avaliação elaborado para este fim.",
+     "textoPontos": "Até 05/ período",
+     "tipo": "teto_por_periodo",
+     "teto": 5,
+     "unidade": "período"
+    }
+   ]
+  }
+ ]
+}
