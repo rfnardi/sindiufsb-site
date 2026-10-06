@@ -166,6 +166,7 @@
     if (escolhido && (escolhido.de !== i.de || escolhido.inicio !== i.inicio) && lancamentos.length
         && !confirmar('Trocar de interstício apaga as atividades já lançadas. Continuar?')) return;
     if (escolhido && (escolhido.de !== i.de || escolhido.inicio !== i.inicio)) { lancamentos = []; arquivos = {}; }
+    if (escolhido && (escolhido.de !== i.de || escolhido.inicio !== i.inicio)) limparLattes();
     escolhido = { de: i.de, para: i.para, tipo: i.tipo, inicio: i.inicio, fim: i.fim, regime: e.regime };
     mostrarRelatorio();
     el('pgRelatorio').scrollIntoView({ behavior: 'smooth' });
@@ -217,7 +218,7 @@
   /** Toda atividade entra por aqui: da busca, do quadro do Lattes ou fora do barema. */
   function novoLancamento(id, extra) {
     var l = { chave: 'l' + (++seq) + '-' + Date.now(), id: id, quantidade: '', valor: '',
-              variante: 0, detalhe: '', descricao: '', proposta: '' };
+              variante: 0, detalhe: '', descricao: '', proposta: '', origem: '' };
     for (var k in (extra || {})) l[k] = extra[k];
     lancamentos.push(l);
     desenharLancamentos();
@@ -242,6 +243,95 @@
     });
   }
   function curtoTela(t, n) { return t.length <= n ? t : t.slice(0, t.lastIndexOf(' ', n)) + '…'; }
+
+  // ------------------------------------------------------------- Lattes
+  // Rota opcional: o XML do Lattes é lido aqui (progressao-lattes.js) e vira
+  // SUGESTÃO. Nada entra no relatório sem o clique; o XML não fica guardado.
+  var sugestoesLattes = null;
+
+  function limparLattes() {
+    sugestoesLattes = null;
+    el('pgLattesArquivo').value = '';
+    el('pgLattesLista').innerHTML = '';
+    el('pgLattesNao').innerHTML = '';
+    el('pgLattesAdicionar').hidden = true;
+    dizer('pgLattesAviso', '', '');
+  }
+
+  el('pgLattesArquivo').onchange = function () {
+    var f = el('pgLattesArquivo').files[0];
+    if (!f || !escolhido) return;
+    dizer('pgLattesAviso', '', 'Lendo o currículo no seu computador…');
+    lerBytes(f).then(window.ProgressaoLattes.lerArquivoLattes).then(function (xml) {
+      sugestoesLattes = window.ProgressaoLattes.sugestoesDoLattes(xml, LATTES, escolhido);
+      desenharLattes();
+    }).catch(function (e) {
+      sugestoesLattes = null;
+      el('pgLattesLista').innerHTML = '';
+      el('pgLattesNao').innerHTML = '';
+      el('pgLattesAdicionar').hidden = true;
+      dizer('pgLattesAviso', 'erro', (e && e.message) || 'Não consegui ler o arquivo.');
+    });
+  };
+
+  function jaNoRelatorio(chave) {
+    return lancamentos.some(function (l) { return l.origem === chave; });
+  }
+
+  function desenharLattes() {
+    var r = sugestoesLattes;
+    if (!r) return;
+    var marcadas = r.sugeridas.filter(function (s) { return s.marcado && !jaNoRelatorio(s.chave); }).length;
+    dizer('pgLattesAviso', 'ok', r.sugeridas.length + ' sugestão(ões) no interstício, ' + marcadas + ' já marcada(s). '
+      + r.foraDoPeriodo + ' registro(s) do currículo ficaram fora do período. Confira cada linha: o Lattes não '
+      + 'traz o Qualis e, em geral, só traz o ano.');
+    el('pgLattesLista').innerHTML = r.sugeridas.map(function (s, i) {
+      var ja = jaNoRelatorio(s.chave);
+      var opcoes = [s.item].concat(s.alternativas).map(function (id) {
+        var it = R.item(id);
+        return '<option value="' + escapar(id) + '"' + (id === (s.escolha || s.item) ? ' selected' : '') + '>'
+          + escapar(id + ' ' + curtoTela(it.descricao, 50)) + '</option>';
+      }).join('');
+      return '<div class="prog-sug' + (ja ? ' prog-sug-ja' : '') + '">'
+        + '<label class="confere"><input type="checkbox" data-sug="' + i + '"' + (ja ? ' disabled' : (s.marcado ? ' checked' : ''))
+        + '><span><strong>' + escapar(String(s.ano)) + '</strong> · ' + escapar(s.titulo)
+        + (ja ? ' <em>(já no relatório)</em>' : '') + '</span></label>'
+        + '<select data-sug-item="' + i + '"' + (ja ? ' disabled' : '') + '>' + opcoes + '</select>'
+        + s.avisos.map(function (a) { return '<p class="ajuda">' + escapar(a) + '</p>'; }).join('') + '</div>';
+    }).join('');
+    [].slice.call(el('pgLattesLista').querySelectorAll('input[data-sug]')).forEach(function (c) {
+      c.onchange = function () { r.sugeridas[Number(c.dataset.sug)].marcado = c.checked; };
+    });
+    [].slice.call(el('pgLattesLista').querySelectorAll('select[data-sug-item]')).forEach(function (c) {
+      c.onchange = function () { r.sugeridas[Number(c.dataset.sugItem)].escolha = c.value; };
+    });
+    el('pgLattesAdicionar').hidden = !r.sugeridas.length;
+    el('pgLattesNao').innerHTML = r.naoSugeridas.length
+      ? '<p><strong>Não sugerido</strong> <span class="ajuda">— está no Lattes, mas sem item claro no barema. '
+        + 'Se valer, lance pela busca.</span></p><ul class="prog-lista">' + r.naoSugeridas.map(function (s) {
+          return '<li>' + escapar(s.ano) + ' · ' + escapar(s.rotulo) + ': ' + escapar(s.titulo)
+            + (s.dica ? '<br><span class="ajuda">' + escapar(s.dica) + '</span>' : '') + '</li>';
+        }).join('') + '</ul>'
+      : '';
+  }
+
+  el('pgLattesAdicionar').onclick = function () {
+    var r = sugestoesLattes;
+    if (!r || !escolhido) return;
+    var n = 0;
+    r.sugeridas.forEach(function (s) {
+      if (!s.marcado || jaNoRelatorio(s.chave)) return;
+      lancamentos.push({ chave: 'l' + (++seq) + '-' + Date.now(), id: s.escolha || s.item, quantidade: '1',
+                         valor: '', variante: 0, detalhe: s.titulo + ' (' + s.ano + ')', descricao: '',
+                         proposta: '', origem: s.chave });
+      n++;
+    });
+    desenharLancamentos();
+    guardarRascunho();
+    desenharLattes();
+    dizer('pgLattesAviso', 'ok', n ? n + ' atividade(s) acrescentada(s) ao relatório. Anexe o comprovante de cada uma.'
+                                    : 'Nada novo para acrescentar.');
+  };
 
   // Atividade que não consta do Anexo I (Resolução 17/2022, art. 9º, § 4º):
   // a pontuação é proposta pelo docente e só vale se a CPADD aceitar.
@@ -315,6 +405,7 @@
         delete arquivos[l.chave];
         desenharLancamentos();
         guardarRascunho();
+        if (l.origem) desenharLattes();
       };
     });
     mostrarPlacar();
@@ -549,7 +640,7 @@
         titulacao: el('pgTitulacao').value, licenca: el('pgLicenca').value, escolhido: escolhido,
         lancamentos: lancamentos.map(function (l) {
           return { chave: l.chave, id: l.id, quantidade: l.quantidade, valor: l.valor, variante: l.variante,
-                   descricao: l.descricao || '', proposta: l.proposta || '',
+                   descricao: l.descricao || '', proposta: l.proposta || '', origem: l.origem || '',
                    detalhe: l.detalhe, tinhaArquivos: !!l.tinhaArquivos };
         })
       }));
@@ -582,6 +673,7 @@
     });
     ['pgAvisoCarreira', 'pgAvisoPdf', 'pgRetResultado', 'pgAvisoAlerta'].forEach(function (id) { dizer(id, '', ''); });
     el('pgAlerta').hidden = true;
+    limparLattes();
     mostrarRelatorio();
   }
 
