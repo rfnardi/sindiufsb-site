@@ -320,7 +320,8 @@ test('tela: todo id que progressao.js usa existe na página', () => {
 test('tela: a porta tem seção, botão no menu (escondido até a revisão) e os scripts na ordem', () => {
   assert.match(TEMPLATE, /<section id="porta-progressao" hidden>/);
   assert.match(TEMPLATE, /data-porta="progressao" id="btPortaProgressao" hidden/);
-  const ordem = ['minha-servidor.js', 'minha.js', 'progressao-regras.js', 'progressao-pdf.js', 'progressao.js']
+  const ordem = ['minha-servidor.js', 'minha.js', 'progressao-regras.js', 'progressao-pdf.js',
+                 'progressao-lattes.js', 'progressao.js']
     .map((f) => TEMPLATE.indexOf("/assets/js/" + f + "'"));
   assert.ok(ordem.every((p) => p > 0), 'script ausente');
   assert.deepEqual([...ordem].sort((a, b) => a - b), ordem, 'scripts fora de ordem');
@@ -348,5 +349,146 @@ test('privacidade: nenhuma chamada ao servidor leva comprovante', () => {
   assert.doesNotMatch(TELA, /fetch\([^)]*method/i, 'fetch de envio na porta');
   // o rascunho guarda a lista de atividades, nunca os arquivos nem o SIAPE
   const rascunho = TELA.slice(TELA.indexOf('function guardarRascunho'), TELA.indexOf('function recuperarRascunho'));
-  assert.doesNotMatch(rascunho, /arquivos\[|bytes|pgSiape/);
+  assert.doesNotMatch(rascunho, /arquivos\[|bytes|pgSiape|sugestoesLattes|xml/i);
+});
+
+// ------------------------------------------- atividade fora do barema
+// Resolução 17/2022, art. 9º, § 4º: o docente pode sugerir à CPADD, antes da
+// submissão, atividade que não consta do Anexo I, com a pontuação que
+// considere adequada. Quem decide se vale é a CPADD — por isso a pontuação
+// proposta fica À PARTE e não conta para atingir o mínimo.
+
+test('fora do barema: a proposta fica à parte, fora do total e do mínimo', () => {
+  const p = R.placar([
+    { id: '2.11', quantidade: 3 },                                           // 75
+    { id: 'X', descricao: 'Curadoria do acervo indígena', proposta: 40 },
+    { id: 'X', descricao: 'Mutirão de matrícula', proposta: '10,5' }
+  ], { tipo: 'progressao', regime: 'DE' });
+  assert.equal(p.total, 75);
+  assert.equal(p.proposta, 50.5);
+  assert.equal(p.atinge, false, 'com a proposta passaria de 100, mas ela não é do docente decidir');
+  assert.equal(p.falta, 25);
+});
+
+test('fora do barema: vai depois de todos os itens na numeração de folhas', () => {
+  const f = R.folhear([{ id: 'X', paginas: 1 }, { id: '9.1', paginas: 1 }, { id: '1.1', paginas: 1 }], 1);
+  assert.deepEqual(simples(f).map((x) => x.id), ['1.1', '9.1', 'X']);
+});
+
+test('PDF: atividade proposta sai em bloco próprio, com aviso, e entra no índice', async () => {
+  const montar = montador();
+  const d = { ...DADOS, lancamentos: [
+    { chave: 'a', id: '2.11', quantidade: 1, detalhe: '' },
+    { chave: 'p', id: 'X', descricao: 'Curadoria do acervo indígena', proposta: 40, detalhe: '' }
+  ] };
+  const r = await montar(PDFLib, R, d, [
+    { lancamento: 'a', nome: 'a.pdf', tipo: 'application/pdf', bytes: await pdfDe(1) },
+    { lancamento: 'p', nome: 'curadoria.pdf', tipo: 'application/pdf', bytes: await pdfDe(2) }
+  ]);
+  assert.equal(r.erros.length, 0);
+  const textos = await textoDasPaginas(r.bytes);
+  const pre = textos.slice(1, r.paginasIniciais).join('\n');
+  assert.match(pre, /Atividades propostas \(art\. 9/);
+  assert.match(pre, /Curadoria do acervo ind/);
+  assert.match(pre, /depende(m)? da CPADD/);
+  assert.match(pre, /TOTAL\n25\b/, 'a proposta não entra no TOTAL');
+  assert.deepEqual(simples(r.folhas).map((f) => f.item), ['2.11', 'X']);
+  assert.match(textos[r.paginasIniciais + 1], /Atividade proposta/);
+});
+
+test('"o que o Lattes não traz": todo item citado existe no barema, sem repetição', () => {
+  const l = lerJson('lattes-barema.json');
+  const vistos = new Set();
+  for (const g of l.naoTraz) {
+    for (const id of g.itens) {
+      assert.ok(R.item(id), g.grupo + ': item ' + id + ' não existe no barema');
+      assert.ok(!vistos.has(id), 'repetido: ' + id);
+      vistos.add(id);
+    }
+  }
+});
+
+// ------------------------------------------------------------- Lattes
+// O docente exporta o XML do próprio Lattes e carrega na porta; nada sai do
+// navegador. A fixture é INVENTADA, com a estrutura conferida num currículo
+// real (06/10/2026), que não entra no repositório público.
+function lattes() {
+  globalThis.window = globalThis;
+  vm.runInThisContext(fs.readFileSync(new URL('../assets/js/progressao-lattes.js', import.meta.url), 'utf8'));
+  return globalThis.ProgressaoLattes;
+}
+const FIXTURE = fs.readFileSync(new URL('./fixtures/lattes-ficticio.xml', import.meta.url));
+const MAPA = () => lerJson('lattes-barema.json');
+const INTER = { inicio: '2023-03-01', fim: '2025-03-01' };
+
+/** Um .zip com um arquivo só, deflate — como o Lattes entrega. */
+function zipDe(nome, dados) {
+  const comp = zlib.deflateRawSync(dados);
+  const n = Buffer.from(nome);
+  const crc = zlib.crc32 ? zlib.crc32(dados) : 0;
+  const local = Buffer.alloc(30); local.writeUInt32LE(0x04034b50, 0); local.writeUInt16LE(20, 4);
+  local.writeUInt16LE(8, 8); local.writeUInt32LE(crc, 14); local.writeUInt32LE(comp.length, 18);
+  local.writeUInt32LE(dados.length, 22); local.writeUInt16LE(n.length, 26);
+  const central = Buffer.alloc(46); central.writeUInt32LE(0x02014b50, 0); central.writeUInt16LE(20, 4);
+  central.writeUInt16LE(20, 6); central.writeUInt16LE(8, 10); central.writeUInt32LE(crc, 16);
+  central.writeUInt32LE(comp.length, 20); central.writeUInt32LE(dados.length, 24); central.writeUInt16LE(n.length, 28);
+  central.writeUInt32LE(0, 42);
+  const corpo = Buffer.concat([local, n, comp]);
+  const fim = Buffer.alloc(22); fim.writeUInt32LE(0x06054b50, 0); fim.writeUInt16LE(1, 8); fim.writeUInt16LE(1, 10);
+  fim.writeUInt32LE(central.length + n.length, 12); fim.writeUInt32LE(corpo.length, 16);
+  return new Uint8Array(Buffer.concat([corpo, central, n, fim]));
+}
+
+test('Lattes: lê o .xml em ISO-8859-1 e o .zip do Lattes, com acentos e entidades', async () => {
+  const L = lattes();
+  const doXml = await L.lerArquivoLattes(new Uint8Array(FIXTURE));
+  const doZip = await L.lerArquivoLattes(zipDe('0000000000000000.xml', FIXTURE));
+  assert.equal(doZip, doXml);
+  const r = L.sugestoesDoLattes(doXml, MAPA(), INTER);
+  assert.equal(r.nome, 'Docente Fictícia da Silva');
+  assert.ok(r.sugeridas.some((s) => s.titulo === 'Rios & mares na escola'));
+});
+
+test('Lattes: arquivo que não é currículo Lattes vira erro claro', async () => {
+  const L = lattes();
+  await assert.rejects(L.lerArquivoLattes(new Uint8Array(Buffer.from('não é xml'))), /não parece um currículo Lattes/);
+  const xml = await L.lerArquivoLattes(new Uint8Array(Buffer.from('<?xml version="1.0"?><html><body/></html>')));
+  assert.throws(() => L.sugestoesDoLattes(xml, MAPA(), INTER), /não parece um currículo Lattes/);
+});
+
+test('Lattes: sugestões pelo barema, com o período do interstício', async () => {
+  const L = lattes();
+  const r = L.sugestoesDoLattes(await L.lerArquivoLattes(new Uint8Array(FIXTURE)), MAPA(), INTER);
+  const por = (t) => r.sugeridas.find((s) => s.titulo === t);
+  // dentro do período: marcado; ano de borda: desmarcado e avisado; fora: só contado
+  assert.deepEqual([por('Artigo do meio do interstício').item, por('Artigo do meio do interstício').marcado], ['2.11', true]);
+  assert.deepEqual([por('Artigo do ano de início').item, por('Artigo do ano de início').marcado], ['2.11', false]);
+  assert.ok(por('Artigo do ano de início').avisos.some((a) => /confira a data/i.test(a)));
+  assert.ok(por('Artigo do meio do interstício').avisos.some((a) => /Qualis/.test(a)));
+  assert.equal(por('Artigo antigo'), undefined);
+  assert.ok(r.foraDoPeriodo >= 1);
+  assert.equal(por('Rios & mares na escola').item, '2.20');      // completo, internacional
+  assert.equal(por('Educação no campo').item, '2.23');           // resumo, nacional
+  assert.equal(por('Coletânea fictícia').item, '5.2');
+  assert.equal(por('Capítulo fictício').item, '2.14');
+  assert.equal(por('Dissertação fictícia').item, '1.8');         // coorientação de mestrado
+  assert.equal(por('TCC fictício').item, '1.10');
+  assert.equal(por('Qualificação fictícia').item, '1.33');
+  assert.deepEqual([por('Banca de TCC fictícia').item, por('Banca de TCC fictícia').marcado], ['1.31', false]);
+  assert.equal(por('Congresso fictício').item, '2.10');          // ouvinte
+  assert.equal(por('Seminário fictício').item, '2.8');           // conferencista
+  assert.equal(por('Palestra fictícia').item, '2.8');
+  assert.equal(por('Palestra fictícia').marcado, false, 'apresentação pode repetir uma participação já listada');
+  assert.deepEqual([por('Menção honrosa em ensino').item, por('Menção honrosa em ensino').marcado], ['4.1', false]);
+  assert.deepEqual(simples(por('Menção honrosa em ensino').alternativas), ['4.2', '4.3']);
+  // todo item sugerido existe no barema
+  for (const s of r.sugeridas) assert.ok(R.item(s.item), s.titulo + ' → ' + s.item);
+  // sem item claro: não sugerido, mas nada some
+  const nao = r.naoSugeridas.map((s) => s.titulo);
+  for (const t of ['Iniciação fictícia', 'Maquete fictícia', 'Saberes do litoral sul']) assert.ok(nao.includes(t), t);
+  assert.ok(r.naoSugeridas.some((s) => s.tag === 'ENSINO'));
+  // cada sugestão tem chave estável, para não duplicar no relatório
+  const chaves = r.sugeridas.map((s) => s.chave);
+  assert.equal(new Set(chaves).size, chaves.length);
+  assert.match(por('Capítulo fictício').chave, /^lattes:/);
 });

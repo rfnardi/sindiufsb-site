@@ -1,0 +1,567 @@
+{
+ "nota": "Lattes como coleta PARCIAL (05/10/2026). 'regras': como cada registro do XML exportado pelo Lattes vira SUGESTÃO de item do barema; o docente confirma cada uma. Estrutura conferida num currículo real em 06/10/2026 (artigos, bancas, eventos, apresentações, prêmios, ensino, projetos); trabalhos em eventos, livros, capítulos e orientações seguem o formato conhecido do Lattes — registro de tag não coberta cai em 'não sugerido', nunca some. 'quando': todas as condições valem; a primeira regra da tag que casar é a usada. 'naoTraz': o que o Lattes quase nunca tem, oferecido com um clique.",
+ "naoTraz": [
+  {
+   "grupo": "Aulas ministradas (em horas)",
+   "itens": [
+    "1.1",
+    "1.2",
+    "1.3",
+    "1.38"
+   ]
+  },
+  {
+   "grupo": "Estágio e orientação acadêmica",
+   "itens": [
+    "1.19",
+    "1.20",
+    "1.21"
+   ]
+  },
+  {
+   "grupo": "Orientações em andamento (por período letivo)",
+   "itens": [
+    "1.11",
+    "1.12",
+    "1.13",
+    "1.14",
+    "1.15",
+    "1.16"
+   ],
+   "porque": "O Lattes tem a orientação, mas não conta os períodos."
+  },
+  {
+   "grupo": "Comissões de concurso e de seleção",
+   "itens": [
+    "1.24",
+    "1.25",
+    "1.26",
+    "1.27",
+    "1.34",
+    "1.35"
+   ]
+  },
+  {
+   "grupo": "Cargos, representação e comissões (em meses)",
+   "itens": [
+    "6.1",
+    "6.2",
+    "6.3",
+    "6.4",
+    "6.5",
+    "6.6",
+    "6.7",
+    "6.10",
+    "6.11",
+    "6.14",
+    "6.15"
+   ]
+  },
+  {
+   "grupo": "Pareceres e revisões",
+   "itens": [
+    "5.6",
+    "5.7"
+   ]
+  },
+  {
+   "grupo": "Avaliação pelos discentes",
+   "itens": [
+    "9.1"
+   ]
+  }
+ ],
+ "regras": [
+  {
+   "tag": "ARTIGO-PUBLICADO",
+   "item": "2.11",
+   "alternativas": [
+    "2.25"
+   ],
+   "aviso": "Qualis não vem no Lattes: confirme que a revista é indexada com Qualis; se não for, use 2.25."
+  },
+  {
+   "tag": "LIVRO-PUBLICADO-OU-ORGANIZADO",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO",
+     "valores": [
+      "LIVRO_ORGANIZADO_OU_EDICAO"
+     ]
+    }
+   ],
+   "item": "5.2",
+   "alternativas": [
+    "5.1"
+   ],
+   "aviso": "Se a circulação for internacional, use 5.1."
+  },
+  {
+   "tag": "LIVRO-PUBLICADO-OU-ORGANIZADO",
+   "item": "2.12"
+  },
+  {
+   "tag": "CAPITULO-DE-LIVRO-PUBLICADO",
+   "item": "2.14"
+  },
+  {
+   "tag": "TRABALHO-EM-EVENTOS",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "NATUREZA",
+     "valores": [
+      "COMPLETO"
+     ]
+    },
+    {
+     "em": "detalhe",
+     "atributo": "CLASSIFICACAO-DO-EVENTO",
+     "valores": [
+      "INTERNACIONAL"
+     ]
+    }
+   ],
+   "item": "2.20",
+   "alternativas": [
+    "2.21"
+   ]
+  },
+  {
+   "tag": "TRABALHO-EM-EVENTOS",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "NATUREZA",
+     "valores": [
+      "COMPLETO"
+     ]
+    }
+   ],
+   "item": "2.21",
+   "alternativas": [
+    "2.20"
+   ]
+  },
+  {
+   "tag": "TRABALHO-EM-EVENTOS",
+   "quando": [
+    {
+     "em": "detalhe",
+     "atributo": "CLASSIFICACAO-DO-EVENTO",
+     "valores": [
+      "INTERNACIONAL"
+     ]
+    }
+   ],
+   "item": "2.22",
+   "alternativas": [
+    "2.23"
+   ]
+  },
+  {
+   "tag": "TRABALHO-EM-EVENTOS",
+   "item": "2.23",
+   "alternativas": [
+    "2.22"
+   ]
+  },
+  {
+   "tag": "TEXTO-EM-JORNAL-OU-REVISTA",
+   "item": "2.25"
+  },
+  {
+   "tag": "TRADUCAO",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "NATUREZA",
+     "valores": [
+      "LIVRO"
+     ]
+    }
+   ],
+   "item": "2.17",
+   "alternativas": [
+    "2.18",
+    "2.19"
+   ]
+  },
+  {
+   "tag": "TRADUCAO",
+   "item": "2.19",
+   "alternativas": [
+    "2.17",
+    "2.18"
+   ]
+  },
+  {
+   "tag": "PREFACIO-POSFACIO",
+   "item": "2.16"
+  },
+  {
+   "tag": "ORIENTACOES-CONCLUIDAS-PARA-DOUTORADO",
+   "quando": [
+    {
+     "em": "detalhe",
+     "atributo": "TIPO-DE-ORIENTACAO",
+     "valores": [
+      "CO_ORIENTADOR"
+     ]
+    }
+   ],
+   "item": "1.7",
+   "alternativas": [
+    "1.5"
+   ]
+  },
+  {
+   "tag": "ORIENTACOES-CONCLUIDAS-PARA-DOUTORADO",
+   "item": "1.5",
+   "alternativas": [
+    "1.7"
+   ]
+  },
+  {
+   "tag": "ORIENTACOES-CONCLUIDAS-PARA-MESTRADO",
+   "quando": [
+    {
+     "em": "detalhe",
+     "atributo": "TIPO-DE-ORIENTACAO",
+     "valores": [
+      "CO_ORIENTADOR"
+     ]
+    }
+   ],
+   "item": "1.8",
+   "alternativas": [
+    "1.6"
+   ]
+  },
+  {
+   "tag": "ORIENTACOES-CONCLUIDAS-PARA-MESTRADO",
+   "item": "1.6",
+   "alternativas": [
+    "1.8"
+   ]
+  },
+  {
+   "tag": "ORIENTACOES-CONCLUIDAS-PARA-POS-DOUTORADO",
+   "item": "1.4"
+  },
+  {
+   "tag": "OUTRAS-ORIENTACOES-CONCLUIDAS",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "NATUREZA",
+     "valores": [
+      "TRABALHO_DE_CONCLUSAO_DE_CURSO_GRADUACAO"
+     ]
+    }
+   ],
+   "item": "1.10"
+  },
+  {
+   "tag": "OUTRAS-ORIENTACOES-CONCLUIDAS",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "NATUREZA",
+     "valores": [
+      "MONOGRAFIA_DE_CONCLUSAO_DE_CURSO_APERFEICOAMENTO_E_ESPECIALIZACAO"
+     ]
+    }
+   ],
+   "item": "1.9"
+  },
+  {
+   "tag": "PARTICIPACAO-EM-BANCA-DE-DOUTORADO",
+   "item": "1.23"
+  },
+  {
+   "tag": "PARTICIPACAO-EM-BANCA-DE-MESTRADO",
+   "item": "1.29"
+  },
+  {
+   "tag": "PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO",
+   "item": "1.33"
+  },
+  {
+   "tag": "PARTICIPACAO-EM-BANCA-DE-GRADUACAO",
+   "item": "1.31"
+  },
+  {
+   "tag": "PARTICIPACAO-EM-BANCA-DE-APERFEICOAMENTO-ESPECIALIZACAO",
+   "item": "1.30"
+  },
+  {
+   "tag": "BANCA-JULGADORA-PARA-CONCURSO-PUBLICO",
+   "item": "1.28"
+  },
+  {
+   "tag": "PARTICIPACAO-EM-CONGRESSO",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO-PARTICIPACAO",
+     "valores": [
+      "Conferencista"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-CONGRESSO",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-SEMINARIO",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO-PARTICIPACAO",
+     "valores": [
+      "Conferencista"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-SEMINARIO",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-SIMPOSIO",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO-PARTICIPACAO",
+     "valores": [
+      "Conferencista"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-SIMPOSIO",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-OFICINA",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO-PARTICIPACAO",
+     "valores": [
+      "Conferencista"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-OFICINA",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-ENCONTRO",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO-PARTICIPACAO",
+     "valores": [
+      "Conferencista"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-ENCONTRO",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-FEIRA",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO-PARTICIPACAO",
+     "valores": [
+      "Conferencista"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-FEIRA",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-EXPOSICAO",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO-PARTICIPACAO",
+     "valores": [
+      "Conferencista"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-EXPOSICAO",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-OLIMPIADA",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO-PARTICIPACAO",
+     "valores": [
+      "Conferencista"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ]
+  },
+  {
+   "tag": "PARTICIPACAO-EM-OLIMPIADA",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ]
+  },
+  {
+   "tag": "OUTRAS-PARTICIPACOES-EM-EVENTOS-CONGRESSOS",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "TIPO-PARTICIPACAO",
+     "valores": [
+      "Conferencista"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ]
+  },
+  {
+   "tag": "OUTRAS-PARTICIPACOES-EM-EVENTOS-CONGRESSOS",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ]
+  },
+  {
+   "tag": "APRESENTACAO-DE-TRABALHO",
+   "quando": [
+    {
+     "em": "basicos",
+     "atributo": "NATUREZA",
+     "valores": [
+      "CONFERENCIA"
+     ]
+    }
+   ],
+   "item": "2.8",
+   "alternativas": [
+    "2.10"
+   ],
+   "desmarcado": true,
+   "aviso": "Pode ser a mesma participação já listada em eventos: cada atividade conta uma vez (art. 18)."
+  },
+  {
+   "tag": "APRESENTACAO-DE-TRABALHO",
+   "item": "2.10",
+   "alternativas": [
+    "2.8"
+   ],
+   "desmarcado": true,
+   "aviso": "Pode ser a mesma participação já listada em eventos: cada atividade conta uma vez (art. 18)."
+  },
+  {
+   "tag": "SOFTWARE",
+   "item": "2.44",
+   "alternativas": [
+    "2.45"
+   ]
+  },
+  {
+   "tag": "PATENTE",
+   "item": "2.39",
+   "alternativas": [
+    "2.37"
+   ],
+   "aviso": "Concedida pelo INPI? Então é 2.37."
+  },
+  {
+   "tag": "PREMIO-TITULO",
+   "item": "4.1",
+   "alternativas": [
+    "4.2",
+    "4.3"
+   ],
+   "desmarcado": true,
+   "aviso": "Escolha: obra premiada na sua área (4.1), fora dela (4.2) ou comenda de outra natureza (4.3)."
+  }
+ ],
+ "naoSugeridosComDica": {
+  "ENSINO": "Aulas contam em horas (1.1 a 1.3): o Lattes não tem a carga horária. Use o quadro 'O que o Lattes não traz'.",
+  "PROJETO-DE-PESQUISA": "Projetos contam por período e dependem do seu papel: coordenação (2.1, 2.2, 3.1, 3.2) ou participação (2.5, 3.3, 3.4)."
+ }
+}

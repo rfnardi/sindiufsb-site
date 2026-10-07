@@ -61,6 +61,12 @@ HTML pronto.
   comprovantes não saem do navegador. O aviso por e-mail é do Apps Script da
   tesouraria (`Progressao.gs`). O botão no menu aparece com `?porta=progressao`
   até a revisão de conteúdo.
+  Rota opcional do Lattes (`assets/js/progressao-lattes.js`): o docente
+  carrega o XML exportado do próprio Lattes, lido no navegador, e recebe
+  SUGESTÕES pelo barema (regras em `assets/progressao/lattes-barema.json`),
+  que confirma uma a uma; o que o Lattes não traz entra à mão. A fixture de
+  teste é inventada (`testes/fixtures/lattes-ficticio.xml`): nenhum currículo
+  real entra neste repositório.
 - `paginas/ficha-de-filiacao.njk` + `assets/js/ficha.js`: formulário de
   filiação (centros de formação por campus em `CENTROS_POR_CAMPUS`),
   e os `name=` dos campos são o contrato com o back-end em Apps

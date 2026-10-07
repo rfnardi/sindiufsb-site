@@ -133,10 +133,17 @@ window.criarRegrasDeProgressao = function (carreira, barema) {
       if (!it) return;
       porCampo[it.campo - 1] = arred(porCampo[it.campo - 1] + pontosDoItem(it, l, min));
     });
+    // Atividade fora do barema (art. 9º, § 4º): pontuação PROPOSTA pelo
+    // docente, que só a CPADD aceita ou não. Fica à parte: não entra no
+    // total nem decide se o mínimo foi atingido.
+    var proposta = 0;
+    lancamentos.forEach(function (l) {
+      if (l.id === ID_PROPOSTA) proposta += Math.max(Number(String(l.proposta || 0).replace(',', '.')) || 0, 0);
+    });
     var meses = Math.max(Number(o.mesesDeLicenca) || 0, 0);
     var licenca = arred(meses * min / 24);
     var total = arred(porCampo.reduce(function (s, v) { return s + v; }, 0) + licenca);
-    return { minimo: min, porCampo: porCampo, licenca: licenca, total: total,
+    return { minimo: min, porCampo: porCampo, licenca: licenca, total: total, proposta: arred(proposta),
              falta: arred(Math.max(min - total, 0)), atinge: total >= min };
   }
 
@@ -171,8 +178,11 @@ window.criarRegrasDeProgressao = function (carreira, barema) {
   }
 
   // ------------------------------------------------------------- folhas
+  // Atividade proposta fora do barema: id 'X', sempre depois dos nove campos
+  var ID_PROPOSTA = 'X';
   function compararIds(a, b) {
-    var x = a.split('.'), y = b.split('.');
+    var x = a === ID_PROPOSTA ? ['99', '0'] : a.split('.');
+    var y = b === ID_PROPOSTA ? ['99', '0'] : b.split('.');
     return (+x[0] - +y[0]) || (+x[1] - +y[1]);
   }
   /**
@@ -198,6 +208,7 @@ window.criarRegrasDeProgressao = function (carreira, barema) {
     item: item, pontosDoItem: pontosDoItem, placar: placar,
     cabeRetificacao: cabeRetificacao, tipoSipac: tipoSipac,
     assuntoDetalhado: assuntoDetalhado, compararIds: compararIds, folhear: folhear,
+    ID_PROPOSTA: ID_PROPOSTA,
     carreira: carreira, barema: barema
   };
 };

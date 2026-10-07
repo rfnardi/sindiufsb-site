@@ -47,6 +47,11 @@ window.montarPdfDeProgressao = function (PDFLib, R, dados, anexos) {
     if (t.length <= max) return t;
     return t.slice(0, t.lastIndexOf(' ', max)) + '...';
   }
+  // Item do barema, ou atividade proposta fora dele (art. 9º, § 4º, id 'X')
+  function ehProposta(l) { return l.id === R.ID_PROPOSTA; }
+  function descricaoDe(l) {
+    return ehProposta(l) ? (l.descricao || 'Atividade fora do barema') : R.item(l.id).descricao;
+  }
   function br(d) { return d ? d.split('-').reverse().join('/') : ''; }
   function num(v) { return String(Math.round(v * 100) / 100).replace('.', ','); }
 
@@ -76,7 +81,7 @@ window.montarPdfDeProgressao = function (PDFLib, R, dados, anexos) {
     // --- 1. abre cada anexo, sem deixar um ruim derrubar os outros
     var abrir = anexos.map(function (a) {
       var l = porChave[a.lancamento];
-      if (!l || !R.item(l.id)) return Promise.resolve(null);
+      if (!l || !(R.item(l.id) || ehProposta(l))) return Promise.resolve(null);
       var ehImagem = /^image\/(png|jpe?g)$/i.test(a.tipo) || /\.(png|jpe?g)$/i.test(a.nome);
       if (ehImagem) {
         var png = /png/i.test(a.tipo) || /\.png$/i.test(a.nome);
@@ -125,6 +130,16 @@ window.montarPdfDeProgressao = function (PDFLib, R, dados, anexos) {
         });
         linhasTab.push({ soma: 'Subtotal do campo ' + c.romano, valor: num(placar.porCampo[ci]) });
       });
+      var propostas = dados.lancamentos.filter(ehProposta);
+      if (propostas.length) {
+        linhasTab.push({ titulo: 'Atividades propostas (art. 9º, § 4º) - não constam do Anexo I; a pontuação '
+                                 + 'é proposta pelo docente e depende da CPADD' });
+        propostas.forEach(function (l) {
+          linhasTab.push({ cel: ['-', descricaoDe(l) + (l.detalhe ? ' (' + l.detalhe + ')' : ''), '-',
+                                 num(Number(String(l.proposta || 0).replace(',', '.')) || 0)] });
+        });
+        linhasTab.push({ soma: 'Pontuação proposta (não somada ao total)', valor: num(placar.proposta) });
+      }
       if (placar.licenca) linhasTab.push({ soma: 'Licença no interstício (' + num(dados.mesesDeLicenca) + ' meses, arts. 16 e 17)', valor: num(placar.licenca) });
       linhasTab.push({ soma: 'TOTAL', valor: num(placar.total) });
       linhasTab.push({ soma: 'Mínimo exigido (Resolução 17/2022, art. 9º)', valor: num(placar.minimo) });
@@ -136,8 +151,7 @@ window.montarPdfDeProgressao = function (PDFLib, R, dados, anexos) {
 
       function linhasDoIndice(base) {
         return ordem.map(function (o) {
-          var it = R.item(o.id);
-          return { cel: [o.id, curto(it.descricao, 90) + (o.x.l.detalhe ? ' - ' + o.x.l.detalhe : '') + ' [' + o.x.a.nome + ']',
+          return { cel: [ehProposta(o.x.l) ? '-' : o.id, curto(descricaoDe(o.x.l), 90) + (o.x.l.detalhe ? ' - ' + o.x.l.detalhe : '') + ' [' + o.x.a.nome + ']',
                          (o.de + base) === (o.ate + base) ? String(o.de + base) : (o.de + base) + ' a ' + (o.ate + base)] };
         });
       }
@@ -253,8 +267,8 @@ window.montarPdfDeProgressao = function (PDFLib, R, dados, anexos) {
       return Promise.all(copias).then(function (copiadas) {
         var folhas = [];
         ordem.forEach(function (o, k) {
-          var it = R.item(o.id);
-          var rotulo = 'Item ' + it.id + ' - ' + it.descricao;
+          var rotulo = ehProposta(o.x.l) ? 'Atividade proposta (art. 9º, § 4º) - ' + descricaoDe(o.x.l)
+                                          : 'Item ' + o.id + ' - ' + descricaoDe(o.x.l);
           var de = n + 1;
           if (copiadas[k]) {
             copiadas[k].forEach(function (pg) { doc.addPage(pg); folha(pg, ++n, rotulo); });
