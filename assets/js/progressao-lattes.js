@@ -49,34 +49,12 @@ window.ProgressaoLattes = (function () {
     try { return new TextDecoder(cod).decode(b); } catch (e) { return new TextDecoder('utf-8').decode(b); }
   }
 
-  function u16(b, p) { return b[p] | (b[p + 1] << 8); }
-  function u32(b, p) { return (b[p] | (b[p + 1] << 8) | (b[p + 2] << 16)) + b[p + 3] * 16777216; }
-
   /** O primeiro .xml do zip. O Lattes chama o arquivo pelo número do currículo. */
   function xmlDoZip(b) {
-    var fim = b.length - 22;
-    while (fim >= 0 && u32(b, fim) !== 0x06054b50) fim--;
-    if (fim < 0) return Promise.reject(new Error(NAO_E_LATTES));
-    var total = u16(b, fim + 10), p = u32(b, fim + 16);
-    for (var i = 0; i < total; i++) {
-      if (u32(b, p) !== 0x02014b50) break;
-      var metodo = u16(b, p + 10), tam = u32(b, p + 20);
-      var nLen = u16(b, p + 28), xLen = u16(b, p + 30), cLen = u16(b, p + 32), local = u32(b, p + 42);
-      var nome = '';
-      for (var k = 0; k < nLen; k++) nome += String.fromCharCode(b[p + 46 + k]);
-      if (/\.xml$/i.test(nome)) {
-        var ini = local + 30 + u16(b, local + 26) + u16(b, local + 28);
-        var dado = b.subarray(ini, ini + tam);
-        if (metodo === 0) return Promise.resolve(dado);
-        if (metodo !== 8 || typeof DecompressionStream === 'undefined') {
-          return Promise.reject(new Error('Não consegui abrir o .zip neste navegador. Descompacte e carregue o .xml.'));
-        }
-        var fluxo = new Blob([dado]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
-        return new Response(fluxo).arrayBuffer().then(function (ab) { return new Uint8Array(ab); });
-      }
-      p += 46 + nLen + xLen + cLen;
-    }
-    return Promise.reject(new Error(NAO_E_LATTES));
+    return window.ProgressaoZip.lerZip(b).then(function (itens) {
+      for (var i = 0; i < itens.length; i++) if (/\.xml$/i.test(itens[i].nome)) return itens[i].bytes;
+      throw new Error(NAO_E_LATTES);
+    }, function () { throw new Error(NAO_E_LATTES); });
   }
 
   // --------------------------------------------------------------- XML
@@ -140,7 +118,8 @@ window.ProgressaoLattes = (function () {
           // evento no DETALHAMENTO (visto no currículo real)
           titulo: attrQueComeca(b.attrs, ['TITULO', 'NOME-DO-PREMIO', 'NOME-DO-PROJETO', 'NOME-CURSO'])
                   || attrQueComeca(detalhe.attrs, ['NOME-DO-EVENTO', 'TITULO'])
-                  || '(sem título no Lattes)'
+                  || '(sem título no Lattes)',
+          doi: String(b.attrs.DOI || '').trim()
         });
         if (basicos) return;     // os filhos de uma produção não são outras produções
       }
@@ -203,7 +182,8 @@ window.ProgressaoLattes = (function () {
       if (regra.aviso) avisos.push(regra.aviso);
       if (borda) avisos.push('Ano de ' + (r.ano === a0 ? 'início' : 'fim') + ' do interstício: confira a data no comprovante.');
       sugeridas.push({ chave: chave, tag: r.tag, item: regra.item, alternativas: (regra.alternativas || []).slice(),
-                       ano: r.ano, titulo: r.titulo, marcado: !borda && !regra.desmarcado, avisos: avisos });
+                       ano: r.ano, titulo: r.titulo, doi: r.doi, marcado: !borda && !regra.desmarcado,
+                       avisos: avisos });
     });
 
     sugeridas.sort(function (x, y) {

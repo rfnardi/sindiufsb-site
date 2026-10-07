@@ -414,6 +414,7 @@ test('"o que o Lattes não traz": todo item citado existe no barema, sem repeti�
 // real (06/10/2026), que não entra no repositório público.
 function lattes() {
   globalThis.window = globalThis;
+  vm.runInThisContext(fs.readFileSync(new URL('../assets/js/progressao-zip.js', import.meta.url), 'utf8'));
   vm.runInThisContext(fs.readFileSync(new URL('../assets/js/progressao-lattes.js', import.meta.url), 'utf8'));
   return globalThis.ProgressaoLattes;
 }
@@ -466,6 +467,8 @@ test('Lattes: sugestões pelo barema, com o período do interstício', async () 
   assert.ok(por('Artigo do ano de início').avisos.some((a) => /confira a data/i.test(a)));
   assert.ok(por('Artigo do meio do interstício').avisos.some((a) => /Qualis/.test(a)));
   assert.equal(por('Artigo antigo'), undefined);
+  assert.equal(por('Artigo do meio do interstício').doi, '10.9999/ficticio.2024.001');
+  assert.equal(por('Artigo do ano de início').doi, '');
   assert.ok(r.foraDoPeriodo >= 1);
   assert.equal(por('Rios & mares na escola').item, '2.20');      // completo, internacional
   assert.equal(por('Educação no campo').item, '2.23');           // resumo, nacional
@@ -491,4 +494,139 @@ test('Lattes: sugestões pelo barema, com o período do interstício', async () 
   const chaves = r.sugeridas.map((s) => s.chave);
   assert.equal(new Set(chaves).size, chaves.length);
   assert.match(por('Capítulo fictício').chave, /^lattes:/);
+});
+
+// ------------------------------------------------------------------ zip
+// O arquivo do pedido ("Baixar o pedido para continuar depois") e o .zip do
+// Lattes passam pelo mesmo leitor, sem dependência.
+import { execFileSync } from 'node:child_process';
+import os from 'node:os';
+import path from 'node:path';
+
+function noContexto(arquivo) {
+  globalThis.window = globalThis;
+  vm.runInThisContext(fs.readFileSync(new URL('../assets/js/' + arquivo, import.meta.url), 'utf8'));
+}
+function zipLib() { noContexto('progressao-zip.js'); return globalThis.ProgressaoZip; }
+
+test('zip: montar e ler de volta, com acento no nome e arquivo binário', async () => {
+  const Z = zipLib();
+  const bin = new Uint8Array(256); for (let i = 0; i < 256; i++) bin[i] = i;
+  const z = Z.montarZip([{ nome: 'pedido.json', bytes: new TextEncoder().encode('{"a":"ação"}') },
+                         { nome: 'anexos/1-diploma-ção.pdf', bytes: bin }]);
+  const lidos = await Z.lerZip(z);
+  assert.deepEqual(simples(lidos.map((x) => x.nome)), ['pedido.json', 'anexos/1-diploma-ção.pdf']);
+  assert.equal(new TextDecoder().decode(lidos[0].bytes), '{"a":"ação"}');
+  assert.deepEqual(Array.from(lidos[1].bytes), Array.from(bin));
+});
+
+test('zip: o arquivo montado abre no unzip do sistema, com CRC correto', () => {
+  const Z = zipLib();
+  const z = Z.montarZip([{ nome: 'pedido.json', bytes: new TextEncoder().encode('{"ok":true}') }]);
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'zip-'));
+  fs.writeFileSync(path.join(dir, 'p.zip'), z);
+  const saida = execFileSync('unzip', ['-t', path.join(dir, 'p.zip')]).toString();
+  assert.match(saida, /No errors detected/);
+});
+
+test('zip: o .zip do Lattes (deflate) continua lido', async () => {
+  const Z = zipLib();
+  const lidos = await Z.lerZip(zipDe('0000000000000000.xml', FIXTURE));
+  assert.equal(lidos[0].nome, '0000000000000000.xml');
+  assert.equal(Buffer.from(lidos[0].bytes).equals(FIXTURE), true);
+});
+
+// ------------------------------------------------- primeira página do artigo
+// Pelo DOI: o OpenAlex diz onde há PDF de acesso aberto, o navegador baixa e
+// a pdf-lib recorta a primeira página. Sai da máquina só o DOI (público).
+function artigoLib() { noContexto('progressao-artigo.js'); return globalThis.ProgressaoArtigo; }
+
+function fetchFalso(rotas) {
+  const chamadas = [];
+  const f = async (url) => {
+    chamadas.push(url);
+    const r = rotas[url];
+    if (r === undefined) throw new TypeError('Failed to fetch');        // como o CORS bloqueado
+    if (r instanceof Error) throw r;
+    const corpo = r.json ? new TextEncoder().encode(JSON.stringify(r.json)) : r.bytes || new Uint8Array();
+    return { ok: (r.status || 200) < 400, status: r.status || 200,
+             json: async () => r.json, arrayBuffer: async () => corpo.buffer.slice(corpo.byteOffset, corpo.byteOffset + corpo.byteLength) };
+  };
+  f.chamadas = chamadas;
+  return f;
+}
+const OA = (doi) => 'https://api.openalex.org/works/doi:' + encodeURIComponent(doi);
+
+test('artigo: acha o PDF aberto pelo DOI e recorta a 1ª página (ou as 2 primeiras)', async () => {
+  const A = artigoLib();
+  const pdf = await pdfDe(3);
+  const f = fetchFalso({
+    [OA('10.1590/abc')]: { json: { best_oa_location: { pdf_url: 'https://revista.exemplo/a.pdf' }, locations: [] } },
+    'https://revista.exemplo/a.pdf': { bytes: pdf } });
+  const r = await A.buscarPrimeiraPagina('https://doi.org/10.1590/abc', { fetch: f, PDFLib });
+  assert.equal(r.erro, undefined, r.motivo);
+  assert.equal((await PDFLib.PDFDocument.load(r.bytes)).getPageCount(), 1);
+  assert.equal(r.fonte, 'revista.exemplo');
+  assert.equal(r.url, 'https://revista.exemplo/a.pdf');
+  assert.equal(f.chamadas[0], OA('10.1590/abc'), 'o prefixo https://doi.org/ é tirado');
+  const r2 = await A.buscarPrimeiraPagina('10.1590/abc', { fetch: f, PDFLib, paginas: 2 });
+  assert.equal((await PDFLib.PDFDocument.load(r2.bytes)).getPageCount(), 2);
+});
+
+test('artigo: sem pdf no melhor local, tenta os outros; bloqueio e HTML viram motivo legível', async () => {
+  const A = artigoLib();
+  const pdf = await pdfDe(2);
+  const f = fetchFalso({
+    [OA('10.1/x')]: { json: { best_oa_location: { pdf_url: null },
+                              locations: [{ pdf_url: 'https://editora.exemplo/bloq.pdf' },
+                                          { pdf_url: 'https://repo.exemplo/html' },
+                                          { pdf_url: 'https://repo.exemplo/ok.pdf' }] } },
+    'https://editora.exemplo/bloq.pdf': { status: 403 },
+    'https://repo.exemplo/html': { bytes: new TextEncoder().encode('<html>login</html>') },
+    'https://repo.exemplo/ok.pdf': { bytes: pdf } });
+  const r = await A.buscarPrimeiraPagina('10.1/x', { fetch: f, PDFLib });
+  assert.equal(r.fonte, 'repo.exemplo');
+  const g = fetchFalso({
+    [OA('10.1/y')]: { json: { best_oa_location: { pdf_url: 'https://editora.exemplo/bloq.pdf' }, locations: [] } },
+    'https://editora.exemplo/bloq.pdf': { status: 403 } });
+  const r2 = await A.buscarPrimeiraPagina('10.1/y', { fetch: g, PDFLib });
+  assert.equal(r2.bytes, undefined);
+  assert.match(r2.motivo, /editora bloqueou/);
+  const h = fetchFalso({
+    [OA('10.1/z')]: { json: { best_oa_location: { pdf_url: 'https://repo.exemplo/html' }, locations: [] } },
+    'https://repo.exemplo/html': { bytes: new TextEncoder().encode('<html>login</html>') } });
+  assert.match((await A.buscarPrimeiraPagina('10.1/z', { fetch: h, PDFLib })).motivo, /não é um PDF|não devolveu um PDF/);
+  const cors = fetchFalso({
+    [OA('10.1/w')]: { json: { best_oa_location: { pdf_url: 'https://fechado.exemplo/a.pdf' }, locations: [] } } });
+  assert.match((await A.buscarPrimeiraPagina('10.1/w', { fetch: cors, PDFLib })).motivo, /não deixa|não permite/);
+});
+
+test('artigo: sem acesso aberto, DOI desconhecido ou vazio', async () => {
+  const A = artigoLib();
+  const f = fetchFalso({ [OA('10.1/fechado')]: { json: { best_oa_location: null, locations: [] } },
+                         [OA('10.1/nada')]: { status: 404 } });
+  assert.match((await A.buscarPrimeiraPagina('10.1/fechado', { fetch: f, PDFLib })).motivo, /acesso aberto/);
+  assert.match((await A.buscarPrimeiraPagina('10.1/nada', { fetch: f, PDFLib })).motivo, /não encontrou este DOI/);
+  const n = f.chamadas.length;
+  assert.match((await A.buscarPrimeiraPagina('  ', { fetch: f, PDFLib })).motivo, /Sem DOI/);
+  assert.equal(f.chamadas.length, n, 'sem DOI não chama a rede');
+});
+
+test('artigo: prefere a versão publicada; pré-print vem marcado como tal', async () => {
+  const A = artigoLib();
+  const pdf = await pdfDe(1);
+  const f = fetchFalso({
+    [OA('10.1/v')]: { json: { best_oa_location: { pdf_url: 'https://arxiv.exemplo/a.pdf', version: 'submittedVersion' },
+                              locations: [{ pdf_url: 'https://arxiv.exemplo/a.pdf', version: 'submittedVersion' },
+                                          { pdf_url: 'https://revista.exemplo/a.pdf', version: 'publishedVersion' }] } },
+    'https://arxiv.exemplo/a.pdf': { bytes: pdf }, 'https://revista.exemplo/a.pdf': { bytes: pdf } });
+  const r = await A.buscarPrimeiraPagina('10.1/v', { fetch: f, PDFLib });
+  assert.equal(r.fonte, 'revista.exemplo');
+  assert.equal(r.publicada, true);
+  const g = fetchFalso({
+    [OA('10.1/p')]: { json: { best_oa_location: { pdf_url: 'https://arxiv.exemplo/a.pdf', version: 'submittedVersion' }, locations: [] } },
+    'https://arxiv.exemplo/a.pdf': { bytes: pdf } });
+  const r2 = await A.buscarPrimeiraPagina('10.1/p', { fetch: g, PDFLib });
+  assert.equal(r2.publicada, false);
+  assert.match(r2.aviso, /pré-publicação|não é a versão publicada/);
 });
