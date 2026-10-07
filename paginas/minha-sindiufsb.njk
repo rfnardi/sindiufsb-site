@@ -321,6 +321,14 @@ eleventyExcludeFromCollections: true
     que você anexar não saem do seu computador</strong>: o PDF é montado aqui
     mesmo, no navegador.</p>
 
+    <div class="prog-andamento" id="pgEmAndamento" hidden>
+      <p id="pgEmAndamentoTexto"></p>
+      <div class="dupla">
+        <label style="flex:0 0 auto"><button id="pgContinuar" type="button">Continuar o pedido</button></label>
+        <label style="flex:0 0 auto"><button id="pgOutro" type="button" class="secundario">Começar outro</button></label>
+      </div>
+    </div>
+
     <div class="passo">
       <h2>1 · Minha carreira</h2>
       <p class="porque">Informe onde você está hoje. A data é a do início
@@ -433,6 +441,28 @@ eleventyExcludeFromCollections: true
       <div id="pgBaixar"></div>
     </div>
 
+    <div class="passo" id="pgGuardar">
+      <h2>Guardar e continuar depois</h2>
+      <p class="porque">O pedido fica salvo neste navegador, com os anexos, e continua de
+      onde parou na próxima vez, mesmo depois de Sair. Para continuar em outro computador,
+      baixe o pedido num arquivo e abra-o lá.</p>
+      <div id="pgSalvo" role="status" aria-live="polite"></div>
+      <div class="confere">
+        <input type="checkbox" id="pgCompartilhado">
+        <span>Este é um computador compartilhado: não guardar o pedido aqui. (O que estiver
+        guardado neste navegador é apagado.)</span>
+      </div>
+      <div class="dupla" style="margin-top:.9rem">
+        <label style="flex:0 0 auto">
+          <button id="pgBaixarPedido" type="button" class="secundario">Baixar o pedido para continuar depois</button>
+        </label>
+        <label>Abrir um pedido salvo (.zip)
+          <input type="file" id="pgAbrirPedido" accept=".zip,application/zip"></label>
+      </div>
+      <p class="ajuda">O arquivo do pedido contém os seus documentos: guarde-o em lugar seguro.</p>
+      <div id="pgAvisoPedido" role="status" aria-live="polite"></div>
+    </div>
+
     <div class="passo" id="pgSipac" hidden>
       <h2>3 · Enviar no SIPAC</h2>
       <div id="pgSipacPassos"></div>
@@ -488,7 +518,10 @@ eleventyExcludeFromCollections: true
 <script src="{{ '/assets/js/minha.js' | versao }}" data-api="{{ site.apiMinhaSindiufsb }}"></script>
 <script src="{{ '/assets/js/progressao-regras.js' | versao }}"></script>
 <script src="{{ '/assets/js/progressao-pdf.js' | versao }}"></script>
+<script src="{{ '/assets/js/progressao-zip.js' | versao }}"></script>
 <script src="{{ '/assets/js/progressao-lattes.js' | versao }}"></script>
+<script src="{{ '/assets/js/progressao-pedido.js' | versao }}"></script>
+<script src="{{ '/assets/js/progressao-artigo.js' | versao }}"></script>
 <script src="{{ '/assets/js/progressao.js' | versao }}"
         data-carreira="{{ '/assets/progressao/carreira-ufsb.json' | versao }}"
         data-barema="{{ '/assets/progressao/barema-ufsb-17-2022.json' | versao }}"

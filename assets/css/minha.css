@@ -246,3 +246,8 @@ a.prog-baixar { display: inline-block; margin-top: .8rem; padding: .6rem 1rem; b
 .prog-sug select { margin-top: .35rem; font-size: .875rem; }
 .prog-sug .ajuda { margin: .25rem 0 0; }
 .prog-sug-ja { opacity: .6; }
+.prog-andamento { border: 1px solid var(--vinho); background: var(--rosa); padding: .8rem 1rem; margin-bottom: 1.1rem; }
+.prog-andamento p { margin: 0; }
+.prog-artigo { margin-top: .4rem; padding: .5rem .7rem; background: #FAF7F7; border-left: 3px solid var(--linha); font-size: .9375rem; }
+.prog-artigo.ok { border-left-color: var(--vinho); }
+.prog-artigo.erro { border-left-color: #B06A00; }
