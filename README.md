@@ -67,6 +67,13 @@ HTML pronto.
   que confirma uma a uma; o que o Lattes não traz entra à mão. A fixture de
   teste é inventada (`testes/fixtures/lattes-ficticio.xml`): nenhum currículo
   real entra neste repositório.
+  Salvar o pedido (07/10/2026): sozinho neste navegador, com os anexos
+  (IndexedDB, `assets/js/progressao-pedido.js`), e num .zip que abre em
+  qualquer computador ("Baixar o pedido" / "Abrir um pedido salvo"). O Sair
+  NÃO apaga mais o pedido salvo; a caixa "computador compartilhado" e o
+  botão "Apagar tudo deste computador" apagam. Primeira página de artigo pelo
+  DOI (`assets/js/progressao-artigo.js`): OpenAlex + download no navegador,
+  preferindo a versão publicada; nada passa pelo servidor.
 - `paginas/ficha-de-filiacao.njk` + `assets/js/ficha.js`: formulário de
   filiação (centros de formação por campus em `CENTROS_POR_CAMPUS`),
   e os `name=` dos campos são o contrato com o back-end em Apps

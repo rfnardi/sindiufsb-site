@@ -24,7 +24,19 @@
   var dadosPessoa = null;  // { nome } vindo de meusDados
   var escolhido = null;    // o interstício do relatório
   var lancamentos = [];    // { chave, id, quantidade, valor, variante, detalhe }
-  var arquivos = {};       // chave -> [File]
+  var arquivos = {};       // chave -> [File], anexados pelo docente
+  var paginaTrazida = {};  // chave -> File, a 1ª página que o sistema trouxe pelo DOI
+
+  // Salvar o pedido (decisão da tesouraria, 07/10/2026): sozinho neste
+  // navegador, com os anexos (IndexedDB), e num arquivo para outro computador.
+  // Nada vai ao servidor. Ver progressao-pedido.js.
+  var P = window.ProgressaoPedido;
+  var armazenamento = P ? P.armazenamentoIndexedDB() : null;
+  var cofre = armazenamento ? P.criarCofre(armazenamento) : null;
+  var CHAVE_COMPARTILHADO = 'sindiufsb.progressao.compartilhado';
+  function compartilhado() {
+    try { return localStorage.getItem(CHAVE_COMPARTILHADO) === 'sim'; } catch (e) { return false; }
+  }
   var urlPdf = '';
   var seq = 0;
 
@@ -52,7 +64,9 @@
       montarSelects();
       montarFontes();
       montarNaoTraz();
-      recuperarRascunho();
+      el('pgCompartilhado').checked = compartilhado();
+      if (cofre) verificarEmAndamento();
+      else recuperarRascunho();
     }, function () {
       dizer('pgAvisoCarreira', 'erro', 'Não consegui carregar as regras. Recarregue a página.');
     });
@@ -165,7 +179,9 @@
   function escolher(i, e) {
     if (escolhido && (escolhido.de !== i.de || escolhido.inicio !== i.inicio) && lancamentos.length
         && !confirmar('Trocar de interstício apaga as atividades já lançadas. Continuar?')) return;
-    if (escolhido && (escolhido.de !== i.de || escolhido.inicio !== i.inicio)) { lancamentos = []; arquivos = {}; }
+    if (escolhido && (escolhido.de !== i.de || escolhido.inicio !== i.inicio)) {
+      lancamentos = []; arquivos = {}; paginaTrazida = {};
+    }
     if (escolhido && (escolhido.de !== i.de || escolhido.inicio !== i.inicio)) limparLattes();
     escolhido = { de: i.de, para: i.para, tipo: i.tipo, inicio: i.inicio, fim: i.fim, regime: e.regime };
     mostrarRelatorio();
@@ -218,7 +234,7 @@
   /** Toda atividade entra por aqui: da busca, do quadro do Lattes ou fora do barema. */
   function novoLancamento(id, extra) {
     var l = { chave: 'l' + (++seq) + '-' + Date.now(), id: id, quantidade: '', valor: '',
-              variante: 0, detalhe: '', descricao: '', proposta: '', origem: '' };
+              variante: 0, detalhe: '', descricao: '', proposta: '', origem: '', doi: '', paginas: '1' };
     for (var k in (extra || {})) l[k] = extra[k];
     lancamentos.push(l);
     desenharLancamentos();
@@ -318,14 +334,18 @@
   el('pgLattesAdicionar').onclick = function () {
     var r = sugestoesLattes;
     if (!r || !escolhido) return;
-    var n = 0;
+    var n = 0, comDoi = [];
     r.sugeridas.forEach(function (s) {
       if (!s.marcado || jaNoRelatorio(s.chave)) return;
-      lancamentos.push({ chave: 'l' + (++seq) + '-' + Date.now(), id: s.escolha || s.item, quantidade: '1',
-                         valor: '', variante: 0, detalhe: s.titulo + ' (' + s.ano + ')', descricao: '',
-                         proposta: '', origem: s.chave });
+      var l = { chave: 'l' + (++seq) + '-' + Date.now(), id: s.escolha || s.item, quantidade: '1',
+                valor: '', variante: 0, detalhe: s.titulo + ' (' + s.ano + ')', descricao: '',
+                proposta: '', origem: s.chave, doi: s.doi || '', paginas: '1' };
+      lancamentos.push(l);
+      if (l.doi && ITENS_COM_DOI.indexOf(l.id) > -1) comDoi.push(l);
       n++;
     });
+    // as primeiras páginas, uma de cada vez, para não disparar tudo junto
+    comDoi.reduce(function (p, l) { return p.then(function () { return buscarArtigo(l); }); }, Promise.resolve());
     desenharLancamentos();
     guardarRascunho();
     desenharLattes();
@@ -372,6 +392,7 @@
       }).join('') + '</select></label>';
       h += '<label>Pontos<output>' + num(R.pontosDoItem(it, l, min)) + '</output></label></div>'
         + '<label>Descrição (opcional, sai no índice)<input type="text" data-f="detalhe" value="' + escapar(l.detalhe) + '"></label>'
+        + (ITENS_COM_DOI.indexOf(l.id) > -1 ? blocoDoArtigo(l, k) : '')
         + anexosDe(l)
         + '<button type="button" class="secundario prog-tirar" data-tirar="' + k + '">Tirar esta atividade</button></div>';
       return h;
@@ -399,16 +420,95 @@
         };
       });
     });
+    [].slice.call(el('pgLancamentos').querySelectorAll('button[data-buscar]')).forEach(function (b) {
+      b.onclick = function () { buscarArtigo(lancamentos[Number(b.dataset.buscar)]); };
+    });
+    [].slice.call(el('pgLancamentos').querySelectorAll('button[data-tirar-pagina]')).forEach(function (b) {
+      b.onclick = function () {
+        var l = lancamentos[Number(b.dataset.tirarPagina)];
+        delete paginaTrazida[l.chave];
+        l.artigo = null;
+        desenharLancamentos();
+        guardarRascunho();
+      };
+    });
     [].slice.call(el('pgLancamentos').querySelectorAll('button[data-tirar]')).forEach(function (b) {
       b.onclick = function () {
         var l = lancamentos.splice(Number(b.dataset.tirar), 1)[0];
         delete arquivos[l.chave];
+        delete paginaTrazida[l.chave];
         desenharLancamentos();
         guardarRascunho();
         if (l.origem) desenharLattes();
       };
     });
     mostrarPlacar();
+  }
+
+  // ------------------------------------------------- 1ª página do artigo
+  // Itens de produção que têm DOI: o sistema busca a primeira página (título e
+  // autores) pelo OpenAlex, no navegador (progressao-artigo.js). Quando não
+  // dá, diz por quê, e o docente anexa à mão.
+  var ITENS_COM_DOI = ['2.11', '2.12', '2.14', '2.20', '2.21', '2.22', '2.23', '2.24', '2.25'];
+
+  function blocoDoArtigo(l, k) {
+    var p = paginaTrazida[l.chave], a = l.artigo || {};
+    var h = '<div class="dupla">'
+      + '<label>DOI<input type="text" data-f="doi" value="' + escapar(l.doi || '') + '" placeholder="10.xxxx/…"></label>'
+      + '<label style="flex:0 1 9em">Páginas<select data-f="paginas">'
+      + '<option value="1"' + (String(l.paginas) !== '2' ? ' selected' : '') + '>só a 1ª</option>'
+      + '<option value="2"' + (String(l.paginas) === '2' ? ' selected' : '') + '>1ª e 2ª</option></select></label>'
+      + '<label style="flex:0 0 auto"><button type="button" class="secundario" data-buscar="' + k + '">'
+      + 'Buscar a 1ª página pelo DOI</button></label></div>';
+    if (l.artigoStatus) {
+      h += '<p class="prog-artigo' + (l.artigoErro ? ' erro' : '') + '">' + escapar(l.artigoStatus) + '</p>';
+    } else if (p) {
+      h += '<p class="prog-artigo ok">Primeira página trazida de <strong>' + escapar(a.fonte || '') + '</strong> ('
+        + escapar(p.name) + ')' + (a.url ? ' · <a href="' + escapar(a.url) + '" target="_blank" rel="noopener">PDF de origem</a>' : '')
+        + ' · <button type="button" class="secundario prog-mini" data-tirar-pagina="' + k + '">tirar</button><br>'
+        + '<span class="ajuda">Confira se a página mostra o título e os autores.'
+        + (a.aviso ? ' ' + escapar(a.aviso) : '') + '</span></p>';
+    }
+    return h;
+  }
+
+  function nomeDaPagina(doi) {
+    return 'primeira-pagina-' + String(doi).replace(/^https?:\/\/(dx\.)?doi\.org\//i, '')
+      .replace(/[^A-Za-z0-9.-]+/g, '-').slice(0, 60) + '.pdf';
+  }
+
+  /** Busca a 1ª página de um lançamento pelo DOI; devolve uma promessa. */
+  function buscarArtigo(l) {
+    if (!l) return Promise.resolve();
+    if (!String(l.doi || '').trim()) {
+      l.artigoStatus = 'Informe o DOI do artigo (está na página da revista ou no Lattes).';
+      l.artigoErro = true;
+      desenharLancamentos();
+      return Promise.resolve();
+    }
+    l.artigoStatus = 'Procurando a primeira página…';
+    l.artigoErro = false;
+    desenharLancamentos();
+    return carregarPdfLib().then(function (PDFLib) {
+      return window.ProgressaoArtigo.buscarPrimeiraPagina(l.doi, {
+        fetch: function (url) { return window.fetch(url); }, PDFLib: PDFLib, paginas: Number(l.paginas) || 1 });
+    }).then(function (r) {
+      if (r.erro) {
+        l.artigoStatus = r.motivo;
+        l.artigoErro = true;
+      } else {
+        paginaTrazida[l.chave] = new File([r.bytes], nomeDaPagina(l.doi), { type: 'application/pdf' });
+        l.artigo = { fonte: r.fonte, url: r.url, publicada: r.publicada, aviso: r.aviso };
+        l.artigoStatus = '';
+        l.artigoErro = false;
+      }
+      desenharLancamentos();
+      guardarRascunho();
+    }, function () {
+      l.artigoStatus = 'Não consegui buscar agora. Tente de novo ou anexe a primeira página.';
+      l.artigoErro = true;
+      desenharLancamentos();
+    });
   }
 
   function anexosDe(l) {
@@ -505,7 +605,9 @@
 
   el('pgGerar').onclick = function () {
     if (!escolhido) return;
-    var semArquivo = lancamentos.filter(function (l) { return !(arquivos[l.chave] || []).length; });
+    var semArquivo = lancamentos.filter(function (l) {
+      return !(arquivos[l.chave] || []).length && !paginaTrazida[l.chave];
+    });
     var semQtd = lancamentos.filter(function (l) {
       return l.id === R.ID_PROPOSTA ? !(String(l.descricao || '').trim() && Number(l.proposta) > 0)
                                     : !(Number(l.quantidade) > 0);
@@ -523,6 +625,7 @@
     dizer('pgAvisoPdf', '', 'Montando o PDF no seu computador…');
     var lista = [];
     lancamentos.forEach(function (l) {
+      if (paginaTrazida[l.chave]) lista.push({ l: l, f: paginaTrazida[l.chave] });
       (arquivos[l.chave] || []).forEach(function (f) { lista.push({ l: l, f: f }); });
     });
     carregarPdfLib().then(function (PDFLib) {
@@ -634,6 +737,9 @@
 
   // ------------------------------------------------------------ rascunho
   function guardarRascunho() {
+    // No navegador com IndexedDB, o pedido inteiro vai para o cofre (abaixo).
+    if (cofre) { salvarDepois(); return; }
+    if (compartilhado()) return;
     try {
       localStorage.setItem(CHAVE_RASCUNHO, JSON.stringify({
         nivel: el('pgNivel').value, desde: el('pgDesde').value, regime: el('pgRegime').value,
@@ -641,7 +747,7 @@
         lancamentos: lancamentos.map(function (l) {
           return { chave: l.chave, id: l.id, quantidade: l.quantidade, valor: l.valor, variante: l.variante,
                    descricao: l.descricao || '', proposta: l.proposta || '', origem: l.origem || '',
-                   detalhe: l.detalhe, tinhaArquivos: !!l.tinhaArquivos };
+                   doi: l.doi || '', detalhe: l.detalhe, tinhaArquivos: !!l.tinhaArquivos };
         })
       }));
     } catch (e) { /* navegador sem armazenamento: segue sem rascunho */ }
@@ -661,9 +767,177 @@
     mostrarRelatorio();
   }
 
-  function apagarTudo() {
-    try { localStorage.removeItem(CHAVE_RASCUNHO); } catch (e) { /* nada */ }
-    lancamentos = []; arquivos = {}; escolhido = null; dadosPessoa = null;
+  // ----------------------------------------------------- salvar o pedido
+  /** O que se guarda: carreira (sem SIAPE), interstício, licença, lançamentos. */
+  function estadoAtual() {
+    return {
+      carreira: { nivel: el('pgNivel').value, desde: el('pgDesde').value, regime: el('pgRegime').value,
+                  titulacao: el('pgTitulacao').value },
+      escolhido: escolhido, licenca: el('pgLicenca').value,
+      lancamentos: lancamentos.map(function (l) {
+        return { chave: l.chave, id: l.id, quantidade: l.quantidade, valor: l.valor, variante: l.variante,
+                 detalhe: l.detalhe, descricao: l.descricao || '', proposta: l.proposta || '',
+                 origem: l.origem || '', doi: l.doi || '', paginas: l.paginas || '1', artigo: l.artigo || null };
+      })
+    };
+  }
+
+  /** Os anexos como bytes, para o cofre e para o arquivo. */
+  function anexosAtuais() {
+    var lista = [];
+    lancamentos.forEach(function (l) {
+      if (paginaTrazida[l.chave]) lista.push({ l: l, f: paginaTrazida[l.chave], auto: true });
+      (arquivos[l.chave] || []).forEach(function (f) { lista.push({ l: l, f: f, auto: false }); });
+    });
+    return Promise.all(lista.map(function (x) {
+      return lerBytes(x.f).then(function (b) {
+        return { lancamento: x.l.chave, nome: x.f.name, tipo: x.f.type, bytes: b, auto: x.auto };
+      });
+    }));
+  }
+
+  var timerSalvar = null;
+  function salvarDepois() {
+    clearTimeout(timerSalvar);
+    timerSalvar = setTimeout(salvarAgora, 700);
+  }
+
+  function salvarAgora() {
+    if (!cofre || compartilhado()) return Promise.resolve();
+    if (!escolhido && !lancamentos.length) return Promise.resolve();
+    return anexosAtuais().then(function (a) { return cofre.guardar(estadoAtual(), a); }).then(function () {
+      var d = new Date();
+      dizer('pgSalvo', 'ok', 'Salvo neste navegador às ' + ('0' + d.getHours()).slice(-2) + 'h'
+        + ('0' + d.getMinutes()).slice(-2) + '.');
+    }, function () {
+      dizer('pgSalvo', 'erro', 'Não consegui salvar neste navegador (o espaço pode estar cheio). '
+        + 'Baixe o pedido para não perder o trabalho.');
+    });
+  }
+
+  /** Põe na tela um pedido salvo (do navegador ou de um arquivo). */
+  function aplicarSalvo(r) {
+    var e = r.estado || {}, c = e.carreira || {};
+    if (c.nivel) el('pgNivel').value = c.nivel;
+    if (c.desde) el('pgDesde').value = c.desde;
+    if (c.regime) el('pgRegime').value = c.regime;
+    if (c.titulacao) el('pgTitulacao').value = c.titulacao;
+    el('pgLicenca').value = e.licenca || '0';
+    lancamentos = (e.lancamentos || []).filter(function (l) { return R.item(l.id) || l.id === R.ID_PROPOSTA; });
+    escolhido = e.escolhido && R.passo(e.escolhido.de) ? e.escolhido : null;
+    arquivos = {}; paginaTrazida = {};
+    (r.anexos || []).forEach(function (a) {
+      var f = new File([a.bytes], a.nome, { type: a.tipo || 'application/octet-stream' });
+      if (a.auto) paginaTrazida[a.lancamento] = f;
+      else (arquivos[a.lancamento] = arquivos[a.lancamento] || []).push(f);
+    });
+    lancamentos.forEach(function (l) { l.tinhaArquivos = !!(arquivos[l.chave] || []).length; });
+    el('pgEmAndamento').hidden = true;
+    mostrarRelatorio();
+  }
+
+  function quando(iso) {
+    var d = new Date(iso);
+    return isNaN(d) ? '' : ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2)
+      + ' às ' + ('0' + d.getHours()).slice(-2) + 'h' + ('0' + d.getMinutes()).slice(-2);
+  }
+
+  /** Há pedido guardado neste navegador? Oferece continuar. */
+  function verificarEmAndamento() {
+    if (!cofre || compartilhado() || escolhido) return;
+    cofre.recuperar().then(function (r) {
+      if (!r || (!r.estado.escolhido && !(r.estado.lancamentos || []).length)) { el('pgEmAndamento').hidden = true; return; }
+      var e = r.estado;
+      el('pgEmAndamentoTexto').innerHTML = '<strong>Você tem um pedido em andamento</strong>: '
+        + escapar(e.escolhido ? R.assuntoDetalhado(e.escolhido.de, e.escolhido.para) : 'sem interstício escolhido')
+        + ', ' + (e.lancamentos || []).length + ' atividade(s), ' + (r.anexos || []).length + ' anexo(s), salvo em '
+        + escapar(quando(r.salvoEm)) + '.';
+      el('pgEmAndamento').hidden = false;
+      el('pgContinuar').onclick = function () { aplicarSalvo(r); dizer('pgSalvo', 'ok', 'Pedido retomado.'); };
+    }, function () { /* sem cofre utilizável: segue sem oferecer */ });
+  }
+
+  var confirmaOutro = false;
+  el('pgOutro').onclick = function () {
+    if (!confirmaOutro) {
+      confirmaOutro = true;
+      el('pgOutro').textContent = 'Clique de novo para apagar o pedido salvo';
+      return;
+    }
+    confirmaOutro = false;
+    el('pgOutro').textContent = 'Começar outro';
+    apagarTudo();
+  };
+
+  el('pgCompartilhado').onchange = function () {
+    try {
+      if (el('pgCompartilhado').checked) localStorage.setItem(CHAVE_COMPARTILHADO, 'sim');
+      else localStorage.removeItem(CHAVE_COMPARTILHADO);
+    } catch (e) { /* nada */ }
+    if (el('pgCompartilhado').checked) {
+      if (cofre) cofre.apagar();
+      try { localStorage.removeItem(CHAVE_RASCUNHO); } catch (e) { /* nada */ }
+      el('pgEmAndamento').hidden = true;
+      dizer('pgSalvo', 'ok', 'Este navegador não guarda o pedido. Para continuar depois, baixe o pedido num arquivo.');
+    } else {
+      salvarAgora();
+    }
+  };
+
+  el('pgBaixarPedido').onclick = function () {
+    if (!escolhido && !lancamentos.length) {
+      dizer('pgAvisoPedido', 'erro', 'Ainda não há pedido para baixar: escolha o interstício e lance as atividades.');
+      return;
+    }
+    dizer('pgAvisoPedido', '', 'Montando o arquivo…');
+    anexosAtuais().then(function (a) {
+      var z = P.pedidoParaZip(estadoAtual(), a);
+      var url = URL.createObjectURL(new Blob([z], { type: 'application/zip' }));
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = 'pedido-progressao-' + (escolhido ? escolhido.de + '-' + escolhido.para + '-' : '') + hojeISO() + '.zip';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+      dizer('pgAvisoPedido', 'ok', 'Pedido baixado (' + mb(z.length) + ', ' + a.length + ' anexo(s)). '
+        + 'Para continuar em outro computador, use "Abrir um pedido salvo".');
+    }, function () {
+      dizer('pgAvisoPedido', 'erro', 'Não consegui montar o arquivo do pedido.');
+    });
+  };
+
+  var confirmaAbrir = false;
+  el('pgAbrirPedido').onchange = function () {
+    var f = el('pgAbrirPedido').files[0];
+    if (!f || !R) return;
+    if (lancamentos.length && !confirmaAbrir) {
+      confirmaAbrir = true;
+      el('pgAbrirPedido').value = '';
+      dizer('pgAvisoPedido', 'erro', 'Abrir um pedido substitui o que está na tela. Escolha o arquivo de novo para confirmar.');
+      return;
+    }
+    confirmaAbrir = false;
+    lerBytes(f).then(P.pedidoDoZip).then(function (r) {
+      el('pgAbrirPedido').value = '';
+      limparLattes();
+      aplicarSalvo(r);
+      salvarAgora();
+      dizer('pgAvisoPedido', 'ok', 'Pedido aberto' + (r.salvoEm ? ' (salvo em ' + quando(r.salvoEm) + ')' : '')
+        + ': ' + lancamentos.length + ' atividade(s), ' + (r.anexos || []).length + ' anexo(s).');
+    }).catch(function (e) {
+      el('pgAbrirPedido').value = '';
+      dizer('pgAvisoPedido', 'erro', (e && e.message) || 'Não consegui abrir o arquivo.');
+    });
+  };
+
+  /**
+   * Limpa a TELA e a memória, sem apagar o pedido salvo. É o que o Sair
+   * chama (minha.js): na próxima entrada, a porta oferece continuar.
+   */
+  function limparTela(semOferecer) {
+    clearTimeout(timerSalvar);
+    lancamentos = []; arquivos = {}; paginaTrazida = {}; escolhido = null; dadosPessoa = null;
     if (urlPdf) { URL.revokeObjectURL(urlPdf); urlPdf = ''; }
     ['pgNivel', 'pgDesde', 'pgSiape', 'pgRegime', 'pgTitulacao', 'pgBusca', 'pgRetFim', 'pgRetAprov', 'pgRetPasso', 'pgRetProcesso']
       .forEach(function (id) { el(id).value = ''; });
@@ -673,8 +947,19 @@
     });
     ['pgAvisoCarreira', 'pgAvisoPdf', 'pgRetResultado', 'pgAvisoAlerta'].forEach(function (id) { dizer(id, '', ''); });
     el('pgAlerta').hidden = true;
+    ['pgAvisoPedido', 'pgSalvo'].forEach(function (id) { dizer(id, '', ''); });
     limparLattes();
     mostrarRelatorio();
+    if (semOferecer !== true) verificarEmAndamento();
+  }
+
+  /** Apaga TUDO deste computador: a tela, o rascunho e o pedido salvo. */
+  function apagarTudo() {
+    try { localStorage.removeItem(CHAVE_RASCUNHO); } catch (e) { /* nada */ }
+    var feito = cofre ? cofre.apagar() : Promise.resolve();
+    el('pgEmAndamento').hidden = true;
+    limparTela(true);      // acabou de apagar: não há o que oferecer
+    return feito;
   }
 
   // --------------------------------------------------------------- aviso
@@ -741,5 +1026,5 @@
     apagarTudo();
     dizer('pgAvisoCarreira', 'ok', 'Apagado deste computador.');
   };
-  window.limparProgressao = apagarTudo;
+  window.limparProgressao = limparTela;
 })();

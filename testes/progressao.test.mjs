@@ -333,7 +333,8 @@ test('tela: Sair limpa a porta, e o nome vem do meusDados que a área já faz', 
   assert.match(minha, /'porta-progressao'\]\.forEach/);
   assert.match(minha, /window\.limparProgressao\(\)/);
   assert.match(minha, /window\.progressaoComDados\(r\)/);
-  assert.match(TELA, /window\.limparProgressao = apagarTudo/);
+  // desde 07/10/2026 o Sair limpa só a tela: o pedido salvo fica (decisão da tesouraria)
+  assert.match(TELA, /window\.limparProgressao = limparTela/);
 });
 
 test('privacidade: nenhuma chamada ao servidor leva comprovante', () => {
@@ -414,6 +415,7 @@ test('"o que o Lattes não traz": todo item citado existe no barema, sem repeti�
 // real (06/10/2026), que não entra no repositório público.
 function lattes() {
   globalThis.window = globalThis;
+  vm.runInThisContext(fs.readFileSync(new URL('../assets/js/progressao-zip.js', import.meta.url), 'utf8'));
   vm.runInThisContext(fs.readFileSync(new URL('../assets/js/progressao-lattes.js', import.meta.url), 'utf8'));
   return globalThis.ProgressaoLattes;
 }
@@ -466,6 +468,8 @@ test('Lattes: sugestões pelo barema, com o período do interstício', async () 
   assert.ok(por('Artigo do ano de início').avisos.some((a) => /confira a data/i.test(a)));
   assert.ok(por('Artigo do meio do interstício').avisos.some((a) => /Qualis/.test(a)));
   assert.equal(por('Artigo antigo'), undefined);
+  assert.equal(por('Artigo do meio do interstício').doi, '10.9999/ficticio.2024.001');
+  assert.equal(por('Artigo do ano de início').doi, '');
   assert.ok(r.foraDoPeriodo >= 1);
   assert.equal(por('Rios & mares na escola').item, '2.20');      // completo, internacional
   assert.equal(por('Educação no campo').item, '2.23');           // resumo, nacional
@@ -491,4 +495,233 @@ test('Lattes: sugestões pelo barema, com o período do interstício', async () 
   const chaves = r.sugeridas.map((s) => s.chave);
   assert.equal(new Set(chaves).size, chaves.length);
   assert.match(por('Capítulo fictício').chave, /^lattes:/);
+});
+
+// ------------------------------------------------------------------ zip
+// O arquivo do pedido ("Baixar o pedido para continuar depois") e o .zip do
+// Lattes passam pelo mesmo leitor, sem dependência.
+import { execFileSync } from 'node:child_process';
+import os from 'node:os';
+import path from 'node:path';
+
+function noContexto(arquivo) {
+  globalThis.window = globalThis;
+  vm.runInThisContext(fs.readFileSync(new URL('../assets/js/' + arquivo, import.meta.url), 'utf8'));
+}
+function zipLib() { noContexto('progressao-zip.js'); return globalThis.ProgressaoZip; }
+
+test('zip: montar e ler de volta, com acento no nome e arquivo binário', async () => {
+  const Z = zipLib();
+  const bin = new Uint8Array(256); for (let i = 0; i < 256; i++) bin[i] = i;
+  const z = Z.montarZip([{ nome: 'pedido.json', bytes: new TextEncoder().encode('{"a":"ação"}') },
+                         { nome: 'anexos/1-diploma-ção.pdf', bytes: bin }]);
+  const lidos = await Z.lerZip(z);
+  assert.deepEqual(simples(lidos.map((x) => x.nome)), ['pedido.json', 'anexos/1-diploma-ção.pdf']);
+  assert.equal(new TextDecoder().decode(lidos[0].bytes), '{"a":"ação"}');
+  assert.deepEqual(Array.from(lidos[1].bytes), Array.from(bin));
+});
+
+test('zip: o arquivo montado abre no unzip do sistema, com CRC correto', () => {
+  const Z = zipLib();
+  const z = Z.montarZip([{ nome: 'pedido.json', bytes: new TextEncoder().encode('{"ok":true}') }]);
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'zip-'));
+  fs.writeFileSync(path.join(dir, 'p.zip'), z);
+  const saida = execFileSync('unzip', ['-t', path.join(dir, 'p.zip')]).toString();
+  assert.match(saida, /No errors detected/);
+});
+
+test('zip: o .zip do Lattes (deflate) continua lido', async () => {
+  const Z = zipLib();
+  const lidos = await Z.lerZip(zipDe('0000000000000000.xml', FIXTURE));
+  assert.equal(lidos[0].nome, '0000000000000000.xml');
+  assert.equal(Buffer.from(lidos[0].bytes).equals(FIXTURE), true);
+});
+
+// ------------------------------------------------- primeira página do artigo
+// Pelo DOI: o OpenAlex diz onde há PDF de acesso aberto, o navegador baixa e
+// a pdf-lib recorta a primeira página. Sai da máquina só o DOI (público).
+function artigoLib() { noContexto('progressao-artigo.js'); return globalThis.ProgressaoArtigo; }
+
+function fetchFalso(rotas) {
+  const chamadas = [];
+  const f = async (url) => {
+    chamadas.push(url);
+    const r = rotas[url];
+    if (r === undefined) throw new TypeError('Failed to fetch');        // como o CORS bloqueado
+    if (r instanceof Error) throw r;
+    const corpo = r.json ? new TextEncoder().encode(JSON.stringify(r.json)) : r.bytes || new Uint8Array();
+    return { ok: (r.status || 200) < 400, status: r.status || 200,
+             json: async () => r.json, arrayBuffer: async () => corpo.buffer.slice(corpo.byteOffset, corpo.byteOffset + corpo.byteLength) };
+  };
+  f.chamadas = chamadas;
+  return f;
+}
+const OA = (doi) => 'https://api.openalex.org/works/doi:' + encodeURIComponent(doi);
+
+test('artigo: acha o PDF aberto pelo DOI e recorta a 1ª página (ou as 2 primeiras)', async () => {
+  const A = artigoLib();
+  const pdf = await pdfDe(3);
+  const f = fetchFalso({
+    [OA('10.1590/abc')]: { json: { best_oa_location: { pdf_url: 'https://revista.exemplo/a.pdf' }, locations: [] } },
+    'https://revista.exemplo/a.pdf': { bytes: pdf } });
+  const r = await A.buscarPrimeiraPagina('https://doi.org/10.1590/abc', { fetch: f, PDFLib });
+  assert.equal(r.erro, undefined, r.motivo);
+  assert.equal((await PDFLib.PDFDocument.load(r.bytes)).getPageCount(), 1);
+  assert.equal(r.fonte, 'revista.exemplo');
+  assert.equal(r.url, 'https://revista.exemplo/a.pdf');
+  assert.equal(f.chamadas[0], OA('10.1590/abc'), 'o prefixo https://doi.org/ é tirado');
+  const r2 = await A.buscarPrimeiraPagina('10.1590/abc', { fetch: f, PDFLib, paginas: 2 });
+  assert.equal((await PDFLib.PDFDocument.load(r2.bytes)).getPageCount(), 2);
+});
+
+test('artigo: sem pdf no melhor local, tenta os outros; bloqueio e HTML viram motivo legível', async () => {
+  const A = artigoLib();
+  const pdf = await pdfDe(2);
+  const f = fetchFalso({
+    [OA('10.1/x')]: { json: { best_oa_location: { pdf_url: null },
+                              locations: [{ pdf_url: 'https://editora.exemplo/bloq.pdf' },
+                                          { pdf_url: 'https://repo.exemplo/html' },
+                                          { pdf_url: 'https://repo.exemplo/ok.pdf' }] } },
+    'https://editora.exemplo/bloq.pdf': { status: 403 },
+    'https://repo.exemplo/html': { bytes: new TextEncoder().encode('<html>login</html>') },
+    'https://repo.exemplo/ok.pdf': { bytes: pdf } });
+  const r = await A.buscarPrimeiraPagina('10.1/x', { fetch: f, PDFLib });
+  assert.equal(r.fonte, 'repo.exemplo');
+  const g = fetchFalso({
+    [OA('10.1/y')]: { json: { best_oa_location: { pdf_url: 'https://editora.exemplo/bloq.pdf' }, locations: [] } },
+    'https://editora.exemplo/bloq.pdf': { status: 403 } });
+  const r2 = await A.buscarPrimeiraPagina('10.1/y', { fetch: g, PDFLib });
+  assert.equal(r2.bytes, undefined);
+  assert.match(r2.motivo, /editora bloqueou/);
+  const h = fetchFalso({
+    [OA('10.1/z')]: { json: { best_oa_location: { pdf_url: 'https://repo.exemplo/html' }, locations: [] } },
+    'https://repo.exemplo/html': { bytes: new TextEncoder().encode('<html>login</html>') } });
+  assert.match((await A.buscarPrimeiraPagina('10.1/z', { fetch: h, PDFLib })).motivo, /não é um PDF|não devolveu um PDF/);
+  const cors = fetchFalso({
+    [OA('10.1/w')]: { json: { best_oa_location: { pdf_url: 'https://fechado.exemplo/a.pdf' }, locations: [] } } });
+  assert.match((await A.buscarPrimeiraPagina('10.1/w', { fetch: cors, PDFLib })).motivo, /não deixa|não permite/);
+});
+
+test('artigo: sem acesso aberto, DOI desconhecido ou vazio', async () => {
+  const A = artigoLib();
+  const f = fetchFalso({ [OA('10.1/fechado')]: { json: { best_oa_location: null, locations: [] } },
+                         [OA('10.1/nada')]: { status: 404 } });
+  assert.match((await A.buscarPrimeiraPagina('10.1/fechado', { fetch: f, PDFLib })).motivo, /acesso aberto/);
+  assert.match((await A.buscarPrimeiraPagina('10.1/nada', { fetch: f, PDFLib })).motivo, /não encontrou este DOI/);
+  const n = f.chamadas.length;
+  assert.match((await A.buscarPrimeiraPagina('  ', { fetch: f, PDFLib })).motivo, /Sem DOI/);
+  assert.equal(f.chamadas.length, n, 'sem DOI não chama a rede');
+});
+
+test('artigo: prefere a versão publicada; pré-print vem marcado como tal', async () => {
+  const A = artigoLib();
+  const pdf = await pdfDe(1);
+  const f = fetchFalso({
+    [OA('10.1/v')]: { json: { best_oa_location: { pdf_url: 'https://arxiv.exemplo/a.pdf', version: 'submittedVersion' },
+                              locations: [{ pdf_url: 'https://arxiv.exemplo/a.pdf', version: 'submittedVersion' },
+                                          { pdf_url: 'https://revista.exemplo/a.pdf', version: 'publishedVersion' }] } },
+    'https://arxiv.exemplo/a.pdf': { bytes: pdf }, 'https://revista.exemplo/a.pdf': { bytes: pdf } });
+  const r = await A.buscarPrimeiraPagina('10.1/v', { fetch: f, PDFLib });
+  assert.equal(r.fonte, 'revista.exemplo');
+  assert.equal(r.publicada, true);
+  const g = fetchFalso({
+    [OA('10.1/p')]: { json: { best_oa_location: { pdf_url: 'https://arxiv.exemplo/a.pdf', version: 'submittedVersion' }, locations: [] } },
+    'https://arxiv.exemplo/a.pdf': { bytes: pdf } });
+  const r2 = await A.buscarPrimeiraPagina('10.1/p', { fetch: g, PDFLib });
+  assert.equal(r2.publicada, false);
+  assert.match(r2.aviso, /pré-publicação|não é a versão publicada/);
+});
+
+// ------------------------------------------------------ salvar o pedido
+// Decisão da tesouraria (07/10/2026): o pedido salva sozinho neste navegador
+// (com os anexos) e também vira um arquivo que abre em qualquer computador.
+// Nada vai ao servidor; o SIAPE e o XML do Lattes não são guardados.
+function pedidoLib() { noContexto('progressao-zip.js'); noContexto('progressao-pedido.js'); return globalThis.ProgressaoPedido; }
+
+const ESTADO = {
+  carreira: { nivel: 'B1', desde: '2023-03-01', regime: 'DE', titulacao: 'Doutorado', siape: '1234567' },
+  escolhido: { de: 'B1', para: 'B2', tipo: 'progressao', inicio: '2023-03-01', fim: '2025-03-01', regime: 'DE' },
+  licenca: '2',
+  lancamentos: [
+    { chave: 'a', id: '2.11', quantidade: '1', detalhe: 'Artigo X (2024)', origem: 'lattes:ARTIGO-PUBLICADO:2024:Artigo X', doi: '10.1/x',
+      artigo: { fonte: 'arxiv.org', url: 'https://arxiv.org/a.pdf', publicada: false } },
+    { chave: 'b', id: '1.1', quantidade: '120', detalhe: '' },
+    { chave: 'c', id: 'X', descricao: 'Curadoria', proposta: '40' }
+  ]
+};
+
+test('pedido: vira arquivo e volta igual, com os anexos (dois num lançamento)', async () => {
+  const P = pedidoLib();
+  const pdf = await pdfDe(1);
+  const anexos = [{ lancamento: 'a', nome: 'primeira-pagina.pdf', tipo: 'application/pdf', bytes: pdf, auto: true },
+                  { lancamento: 'b', nome: 'aulas 2023.pdf', tipo: 'application/pdf', bytes: pdf },
+                  { lancamento: 'b', nome: 'aulas-2024.jpg', tipo: 'image/jpeg', bytes: new Uint8Array([1, 2, 3]) }];
+  const z = P.pedidoParaZip(ESTADO, anexos);
+  const r = await P.pedidoDoZip(z);
+  assert.deepEqual(simples(r.estado.lancamentos), simples(ESTADO.lancamentos));
+  assert.deepEqual(simples(r.estado.escolhido), simples(ESTADO.escolhido));
+  assert.equal(r.estado.licenca, '2');
+  assert.deepEqual(simples(r.anexos.map((a) => [a.lancamento, a.nome, a.tipo, a.bytes.length])),
+                   simples(anexos.map((a) => [a.lancamento, a.nome, a.tipo, a.bytes.length])));
+  assert.deepEqual(Array.from(r.anexos[2].bytes), [1, 2, 3]);
+  assert.deepEqual(simples(r.anexos.map((x) => !!x.auto)), [true, false, false], 'a página trazida pelo DOI volta como tal');
+});
+
+test('pedido: o arquivo não leva SIAPE', async () => {
+  const P = pedidoLib();
+  const z = P.pedidoParaZip(ESTADO, []);
+  const itens = await globalThis.ProgressaoZip.lerZip(z);
+  const json = new TextDecoder().decode(itens.find((i) => i.nome === 'pedido.json').bytes);
+  assert.doesNotMatch(json, /1234567|siape/i);
+  assert.equal((await P.pedidoDoZip(z)).estado.carreira.siape, undefined);
+});
+
+test('pedido: arquivo que não é pedido, ou de versão desconhecida, vira erro claro', async () => {
+  const P = pedidoLib();
+  await assert.rejects(P.pedidoDoZip(new Uint8Array([1, 2, 3])), /não é um pedido salvo/i);
+  const outro = globalThis.ProgressaoZip.montarZip([{ nome: 'x.txt', bytes: new Uint8Array([65]) }]);
+  await assert.rejects(P.pedidoDoZip(outro), /não é um pedido salvo/i);
+  const futuro = globalThis.ProgressaoZip.montarZip([{ nome: 'pedido.json',
+    bytes: new TextEncoder().encode(JSON.stringify({ formato: 'sindiufsb-progressao', versao: 99 })) }]);
+  await assert.rejects(P.pedidoDoZip(futuro), /versão mais nova/i);
+});
+
+test('cofre do navegador: guarda, recupera e apaga (armazenamento falso em memória)', async () => {
+  const P = pedidoLib();
+  const mapa = new Map();
+  const cofre = P.criarCofre({ get: async (k) => mapa.get(k), set: async (k, v) => { mapa.set(k, v); }, del: async (k) => { mapa.delete(k); } });
+  assert.equal(await cofre.recuperar(), null);
+  const pdf = await pdfDe(1);
+  await cofre.guardar(ESTADO, [{ lancamento: 'a', nome: 'p.pdf', tipo: 'application/pdf', bytes: pdf, auto: true }]);
+  const r = await cofre.recuperar();
+  assert.equal(r.estado.lancamentos.length, 3);
+  assert.equal(r.estado.carreira.siape, undefined, 'SIAPE não vai para o navegador');
+  assert.equal(r.anexos[0].bytes.length, pdf.length);
+  assert.equal(r.anexos[0].auto, true);
+  assert.ok(r.salvoEm);
+  await cofre.apagar();
+  assert.equal(await cofre.recuperar(), null);
+});
+
+test('tela: Sair limpa a tela mas não apaga o pedido salvo; "Apagar tudo" apaga', () => {
+  const tela = fs.readFileSync(new URL('../assets/js/progressao.js', import.meta.url), 'utf8');
+  assert.match(tela, /window\.limparProgressao = limparTela/);
+  const corpo = (nome) => { const i = tela.indexOf('function ' + nome + '('); return tela.slice(i, tela.indexOf('\n  }\n', i)); };
+  assert.doesNotMatch(corpo('limparTela'), /cofre\.apagar|apagarTudo\(|localStorage\.removeItem/);
+  assert.match(corpo('apagarTudo'), /cofre\.apagar/);
+  // computador compartilhado: a caixa existe e o salvamento a consulta
+  assert.match(TEMPLATE, /id="pgCompartilhado"/);
+  assert.match(corpo('salvarAgora'), /compartilhado\(\)/);
+});
+
+test('tela: a rede só é usada para as regras e, pelo módulo do artigo, para o DOI', () => {
+  const tela = fs.readFileSync(new URL('../assets/js/progressao.js', import.meta.url), 'utf8');
+  const fetches = [...tela.matchAll(/fetch\(([^)]*)\)/g)].map((m) => m[1]);
+  for (const f of fetches) assert.match(f, /script\.dataset\.|^u$|^url$/, 'fetch inesperado: ' + f);
+  assert.match(tela, /ProgressaoArtigo\.buscarPrimeiraPagina/);
+  for (const s of ['progressao-zip.js', 'progressao-pedido.js', 'progressao-artigo.js']) {
+    assert.ok(TEMPLATE.indexOf("/assets/js/" + s + "'") > 0, s + ' não está na página');
+    assert.ok(TEMPLATE.indexOf("/assets/js/" + s + "'") < TEMPLATE.indexOf("/assets/js/progressao.js'"), s + ' depois da tela');
+  }
+  assert.ok(TEMPLATE.indexOf("/assets/js/progressao-zip.js'") < TEMPLATE.indexOf("/assets/js/progressao-lattes.js'"));
 });
